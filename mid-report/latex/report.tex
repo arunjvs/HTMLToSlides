@@ -53,9 +53,11 @@ I wish you the best of success. \cite{test}
 
 \section{Related Work}
 There has been limited work that addresses the problem of automatic slides generation.
-We reviewed a couple of research papers published in this topic. We discuss a summary of the same
-below.
-
+Previous works include approaches like section-wise summarization \cite{sravanthi}, alignment methods for matching document regions with presentation regions \cite{brandon}, extracting topics and itemized elaborations from tagged documents \cite{utiyama}.
+Many of these systems use multiple ideas from Information Retrieval, such as TF-IDF weights, query expansion, query-specific summarization, POS-tagging, etc..
+Some of them are purely generative, while others learn models from an existing corpus of document-presentation pairs.
+These systems are tuned to work with different input formats such as PDF, XML, \LaTeX\ and PPT, each of which preserve a varying amount of semantic and structural information about the original text.
+In the following two subsections, we review two papers \cite{sravanthi},\cite{brandon} which particularly deal with technical papers.
 
 \subsection{SlidesGen}
 The first work we review is by Sravanthi et al. \cite{sravanthi}. They propose an
@@ -113,11 +115,12 @@ The paper finally discusses the issues in alignment of sentences and generation 
 They also evaluate their slides manually with multiple users, taking their feedback.
 Most users gave a satisfaction level of more than 8/10 to the slides generated.
 
+\subsection{}
+
+
 {\small
 \bibliographystyle{plain}
 \bibliography{ref}
 }
 
 \end{document}
-
-
