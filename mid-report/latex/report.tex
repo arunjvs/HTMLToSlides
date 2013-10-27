@@ -31,10 +31,10 @@
 \maketitle
 
 
-\begin{abstract}
+%\begin{abstract}
 %\boldmath
-The abstract goes here.
-\end{abstract}
+%The abstract goes here.
+%\end{abstract}
 % This preserves the distinction between vectors and scalars. However,
 % if the conference you are submitting to favors bold math in the abstract,
 % then you can use LaTeX's standard command \boldmath at the very start
@@ -42,14 +42,37 @@ The abstract goes here.
 % math in the abstract anyway.
 
 
-\section{Introduction}
+%\section{Introduction}
 % no \IEEEPARstart
-This demo file is intended to serve as a ``starter file''
-for IEEE conference papers produced under \LaTeX\ using
-IEEEtran.cls version 1.7 and later.
+%This demo file is intended to serve as a ``starter file''
+%for IEEE conference papers produced under \LaTeX\ using
+%IEEEtran.cls version 1.7 and later.
 % You must have at least 2 lines in the paragraph with the drop letter
 % (should never be an issue)
-I wish you the best of success.
+%I wish you the best of success.
+
+\section{Motivation}
+Presenting information using slides is an effective way for audience retention.
+Presenters take the aid of slides for presenting research papers in conferences, for
+explaining them in classrooms and for other academic purposes. But creating slides from
+the research papers is a time consuming task for the presenter. So, it would be a great
+benefit for them if there is an easy way for generating the slides from the research
+papers. Also, sometimes people want to go through the research papers just to understand
+the overview of them. Slides provide an easier way for them to understand the overview of
+the topic. This gives rise to need for a tool which automatically generates slides from
+research papers. Automatic generation of slides from research paper is an easier task
+compared to generation of slides from some random document because research papers have
+an almost similar structure and we can address the problem of automatic generation of slides
+from research papers by exploiting the structure of the research papers. Once this problem
+is addressed, this work can be easily extended to automatically generate slides from other
+structured entities like book chapters etc.
+
+\section{Problem Definition}
+Given an HTML version of a research paper which is in accordance with the conference/journal
+proceedings, a slideshow is created which contains an summarized version of the paper.
+This Slideshow will contain the important points, tables, graphs, figures which helps to
+explain the paper. This may not serve as a final presentation but provides a good starting
+point for preparing it.
 
 \section{Related Work}
 There has been limited work that addresses the problem of automatic slides generation.
