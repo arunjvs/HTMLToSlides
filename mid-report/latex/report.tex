@@ -53,11 +53,16 @@ I wish you the best of success. \cite{test}
 
 \section{Related Work}
 There has been limited work that addresses the problem of automatic slides generation.
-Previous works include approaches like section-wise summarization \cite{sravanthi}, alignment methods for matching document regions with presentation regions \cite{brandon}, extracting topics and itemized elaborations from tagged documents \cite{utiyama}.
-Many of these systems use multiple ideas from Information Retrieval, such as TF-IDF weights, query expansion, query-specific summarization, POS-tagging, etc..
-Some of them are purely generative, while others learn models from an existing corpus of document-presentation pairs.
-These systems are tuned to work with different input formats such as PDF, XML, \LaTeX\ and PPT, each of which preserve a varying amount of semantic and structural information about the original text.
-In the following two subsections, we review two papers \cite{sravanthi},\cite{brandon} which particularly deal with technical papers.
+Previous works include approaches like section-wise summarization \cite{sravanthi},
+alignment methods for matching document regions with presentation regions \cite{brandon},
+extracting topics and itemized elaborations from tagged documents \cite{utiyama}.
+Many of these systems use multiple ideas from Information Retrieval, such as TF-IDF weights,
+query expansion, query-specific summarization, POS-tagging, etc..
+Some of them are purely generative, while others learn models from an existing corpus of
+document-presentation pairs. These systems are tuned to work with different input formats
+such as PDF, XML, \LaTeX\ and PPT, each of which preserve a varying amount of semantic and
+structural information about the original text. In the following two subsections, we review
+two papers \cite{sravanthi},\cite{brandon} which particularly deal with technical papers.
 
 \subsection{SlidesGen}
 The first work we review is by Sravanthi et al. \cite{sravanthi}. They propose an
@@ -115,7 +120,29 @@ The paper finally discusses the issues in alignment of sentences and generation 
 They also evaluate their slides manually with multiple users, taking their feedback.
 Most users gave a satisfaction level of more than 8/10 to the slides generated.
 
-\subsection{}
+\subsection{Alignment Methods}
+This paper by Brandon et. al. \cite{brandon} takes a different approach to slide generation,
+inspired by the human throught process while making a slide out of a paper.
+They focus their efforts on \textit{alignment} methods - first breaking up the document and
+presentation into regions and then performing a matching on them.
+\textit{Slide regions} include bullets, headings, and other text spans, while \textit{Paper regions}
+include paragraphs, section headings, and list items.
+
+They generate their corpus of 296 paper-presentation pairs from workshops of technical conferences,
+through simple searching. The papers were PDF format, and presentation were a mixture of PDF and PPT.
+Before working with them, they convert them into custom XML formats, which represent relevant parts of
+the original data as logical regions (orthographic boundaries). They prefer such physical regions over
+semantic regions for its simplicity to implement and verify.
+
+The alignment problem now reduces to an IR query, where the query is a slide region (which is the
+section/subsection the slide is related to), and the documents are the target regions from the paper.
+They compare two TF-IDF based scoring methods, with and without query expansion, resulting in 4
+alignment methods.
+
+The procedure of scoring is as follows. For each token in each region TF-IDF is computed, where TF is
+the 
+
+
 
 
 {\small
