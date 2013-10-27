@@ -4,4 +4,4 @@ all:
 	pdflatex report.tex
 	pdflatex report.tex
 run:
-	evince report.tex
+	evince report.pdf
