@@ -49,13 +49,13 @@ for IEEE conference papers produced under \LaTeX\ using
 IEEEtran.cls version 1.7 and later.
 % You must have at least 2 lines in the paragraph with the drop letter
 % (should never be an issue)
-I wish you the best of success. \cite{test}
+I wish you the best of success.
 
 \section{Related Work}
 There has been limited work that addresses the problem of automatic slides generation.
 Previous works include approaches like section-wise summarization \cite{sravanthi},
 alignment methods for matching document regions with presentation regions \cite{brandon},
-extracting topics and itemized elaborations from tagged documents \cite{utiyama}.
+extracting topics and itemized elaborations from tagged documents.
 Many of these systems use multiple ideas from Information Retrieval, such as TF-IDF weights,
 query expansion, query-specific summarization, POS-tagging, etc..
 Some of them are purely generative, while others learn models from an existing corpus of
@@ -140,9 +140,27 @@ They compare two TF-IDF based scoring methods, with and without query expansion,
 alignment methods.
 
 The procedure of scoring is as follows. For each token in each region TF-IDF is computed, where TF is
-the 
+the frequency of the token in the region and DF is the number of regions containing the token's stem.
+The slide region is tokenized and POS tagged to remove non-content words. Each token in the query is
+stemmed and then may or may not be query-expanded depending on the method. A score is then calculated
+for each target region with the query. Two scoring methods were used - one uses the average TF-IDF
+score of the search terms relative to the target region, and the other uses the quantity of the matched
+terms.
 
+The evaluation of their methods gives critical insights. First, a vast majority of the slide regions are
+not alignable (zero score with all target regions) - meaning that a lot of information in slides is not
+present in the paper - contrary to their hypothesis. Then they define an \textit{alignable} accuracy against
+the \textit{raw} accuracy, considering only alignable slide regions. They find that the best algorithm
+on an average gives an average 75\% alignable accuracy, but only 50\% raw accuracy. Query expansion seems
+to have little or negative impact on the aligners and that the second scoring method is better than
+the first.
 
+After more results, they conclude that the data indicates that the task of presentation generation
+is highly dependent on the end purpose the presentation will serve, as well as the target audience and other
+factors. Also query expansion generally degraded performance, possibly because authors tend to use wording in
+slides similar to their paper, and that using synonyms for query expansion is not aggressive enough, and may
+require hypernyms, immediate hyponyms, and other semantically related terms. Also a possible loss of accuracy
+could be polysemy of words, causing query expansion to be incorrect and insensitive to context.
 
 
 {\small
