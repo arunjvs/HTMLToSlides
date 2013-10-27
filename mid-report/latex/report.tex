@@ -185,6 +185,47 @@ slides similar to their paper, and that using synonyms for query expansion is no
 require hypernyms, immediate hyponyms, and other semantically related terms. Also a possible loss of accuracy
 could be polysemy of words, causing query expansion to be incorrect and insensitive to context.
 
+\section{Method}
+An outline of our method is as follows. It's divided into the following stages:
+\subsection{Parsing and Preprocessing}
+	We convert the HTML DOM tree of the research paper into a standard XML with specific tags for
+	abstract, sections etc.
+	Since most of the pages in the dataset follow a fixed schema with definite text and tags,
+	we can easily create such a representation of the paper. The schema is similar to as in
+	\cite{sravanthi}.
+
+\subsection{Slides Generation}
+	We use an approach similar to \cite{sravanthi}. Our final set of slides will consist of
+	pre-defined set of sections, such as Introduction, Related Work, Model (method), Experiments,
+	Results and Conclusion, which are common in most technical papers. 
+
+	As per \cite{sravanthi}, we use the QueSTS based summarization approach for the central part of
+	the paper, consisting of the methods proposed, experiments and results. This is because this constitutes
+	the bulk of the paper, and simple keyword based retrieval might not extract all the 
+	relevant information. The QueSTS model also requires keywords though, which are extracted from
+	the keywords section of the research paper itself (if present).
+	
+	For the other sections, such as Introduction, related work etc, we follow the method as discussed in
+	both \cite{brandon} and \cite{sravanthi}. We match the sentences in Introduction with abstract, and 
+	select the ones with high similarity score.
+	
+	For the conclusion section of the paper, again we use a hybrid approach. We define query terms 
+	such as "concludes", "presents" etc and from the title, and generate the slides as per 
+	Algorithm 1 given in \cite{sravanthi}.
+	
+\subsubsection*{Adding Graphics}
+	We include the inline graphic elements (such as equations) that are a part of the selected sentences.
+	We also include all graphics that is referred to in a selected sentence (such as "refer equation 1.2")
+	
+	For other stand-alone images, we match the keywords with the caption, and include the image if the
+	caption matches.
+	
+\subsection{Post Processing}
+	Finally we use \LaTeX\ to render the slides. For each section we have at least one slide.
+	Then we decide the number of slides based on the number of sentences selected, and all
+	selected sentences appear as bulleted text.
+	The final output is in the same order as the paper, and the graphical etc elements are
+	nested in the sections they appear in.
 
 {\small
 \bibliographystyle{plain}
