@@ -23,7 +23,7 @@
 		<line ref="" img=""></line>
 		<section name="Some Other Heading">
 			<line ref="" img=""></line>
-			<line ref="" img="" listindex=""></line>
+			<line ref="" img=""></line>
 		</section>
 	</section>
 
@@ -38,10 +38,10 @@
 	</keywords>
 
 	<images>
-		<image id="1" src="abc.jpg" alt="Figure 1"/>
+		<image id="1" src="abc.jpg" alt="Figure 1" caption="Figure 1. This image shows..."/>
 	</images>
 
 	<references>
-		<reference id="1">Anderson, R., Button, G. and Sharrock, W., "Supporting the Design Process Within an Organisational Context", Proc. European Conf. Computer-Supported Cooperative Work ECSCW'93, Milano, Italy, September 1993.</reference>
+		<reference id="1">Anderson  R., Button, G. and Sharrock, W., &quot;Supporting the Design Process Within an Organisational Context&quot;</reference>
 	</references>
 </doc>
