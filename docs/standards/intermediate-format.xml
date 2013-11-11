@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doc>
+	<about>
+		<title></title>
+		<authors>
+			<author name="" email="" organization=""/>
+			<author name="" email="" organization=""/>
+		</authors>
+	</about>
+
+	<section name="Abstract">
+		<line ref="" img=""></line>
+		<line ref="" img=""></line>
+	</section>
+
+	<section name="Introduction">
+		<line ref="" img=""></line>
+		<line ref="" img=""></line>
+	</section>
+
+	<section name="Some Heading">
+		<line ref="" img=""></line>
+		<line ref="" img=""></line>
+		<section name="Some Other Heading">
+			<line ref="" img=""></line>
+			<line ref="" img="" listindex=""></line>
+		</section>
+	</section>
+
+	<section name="Conclusions">
+		<line ref="" img=""></line>
+		<line ref="" img=""></line>
+	</section>
+
+	<keywords>
+		<keyword>Keyword1</keyword>
+		<keyword>Keyword2</keyword>
+	</keywords>
+
+	<images>
+		<image id="1" src="abc.jpg" alt="Figure 1"/>
+	</images>
+
+	<references>
+		<reference id="1">Anderson, R., Button, G. and Sharrock, W., "Supporting the Design Process Within an Organisational Context", Proc. European Conf. Computer-Supported Cooperative Work ECSCW'93, Milano, Italy, September 1993.</reference>
+	</references>
+</doc>
