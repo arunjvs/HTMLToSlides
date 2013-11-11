@@ -205,6 +205,7 @@ class Parser(object):
     return False
 
   def imgLineMatcher(self, imgAlt, line):
+    if(imgAlt==""): return False
     if(imgAlt.lower() in line.lower()): return True
     return False
 
