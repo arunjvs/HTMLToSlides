@@ -7,24 +7,44 @@ __license__ = "GPL"
 import re, sys
 
 class Parser(object):
-  """Parser class to convert a paper in standard html to structure xml"""
+  """Parser class to convert a paper in standard html to structured xml"""
   def __init__(self, htmlFile, xmlFile):
     htmlFileHandle = open(htmlFile, "r")
-    self.html = self.htmlNormalizer(htmlFileHandle.read())
     self.FoundAbout = False
     self.Keywords = []
-    self.References = []
     self.Images = []
+    self.References = []
+    self.html = self.htmlNormalizer(htmlFileHandle.read())
     htmlFileHandle.close()
     self.xmlFileHandle = open(xmlFile, "w")
 
+  def run(self):
+    self.xmlFileHandle.write('<?xml version="1.0" encoding="utf-8"?>\n')
+    self.xmlFileHandle.write('<doc>\n')
+    self.sectionSplitter(self.html, 1, 1)
+    self.xmlFileHandle.write('\t<keywords>\n')
+    for keyword in self.Keywords:
+      self.xmlFileHandle.write('\t\t<keyword>%s</keyword>\n'%keyword)
+    self.xmlFileHandle.write('\t</keywords>\n')
+    self.xmlFileHandle.write('\t<images>\n')
+    for image in self.Images:
+      self.xmlFileHandle.write('\t\t<image id="%s" src="%s" alt="%s" caption="%s"/>\n'%(image[0],image[1],image[2],image[3]))
+    self.xmlFileHandle.write('\t</images>\n')
+    self.xmlFileHandle.write('\t<references>\n')
+    for reference in self.References:
+      self.xmlFileHandle.write('\t\t<reference id="%s">%s</reference>\n'%(reference[0],reference[1]))
+    self.xmlFileHandle.write('\t</references>\n')
+    self.xmlFileHandle.write('</doc>\n')
+    self.xmlFileHandle.close()
+    return 0
+
   def htmlNormalizer(self, s):
+    #Remove comments
+    s = re.sub('\<\!\-\-.*?\-\-\>', '', s, flags=re.DOTALL)
     #Extract body
     s = re.search('\<\s*[bB][oO][dD][yY](\s+[^\>]*)?\>(.*?)\<\s*\/\s*[bB][oO][dD][yY]\s*\>', s, re.DOTALL)
     if (not s): return ""
     s = s.group(2)
-    #Remove comments
-    s = re.sub('\<\!\-\-.*?\-\-\>', '', s, flags=re.DOTALL)
     #Remove dirty header
     removeTagsWithInnerHTMLAtBeginning = ["table"]
     for tag in removeTagsWithInnerHTMLAtBeginning:
@@ -32,12 +52,12 @@ class Parser(object):
       regex = '^\s*\<\s*'+caseInvariantRegex+'(\s+[^\>]*)?\>(.*?)\<\s*\/\s*'+caseInvariantRegex+'\s*\>'
       s = re.sub(regex, ' ', s, flags=re.DOTALL)
     #Remove dirty html with inner text
-    removeTagsWithInnerHTML = ["blockquote", "pre", "script", "sup", "sub"] + ["ol", "dl", "ul"]#TBR
+    removeTagsWithInnerHTML = ["blockquote", "pre", "script", "sup", "sub"]
     for tag in removeTagsWithInnerHTML:
       caseInvariantRegex = ''.join(['['+c+c.upper()+']' for c in tag])
       regex = '\<\s*'+caseInvariantRegex+'(\s+[^\>]*)?\>(.*?)\<\s*\/\s*'+caseInvariantRegex+'\s*\>'
       s = re.sub(regex, ' ', s, flags=re.DOTALL)
-    #Condense multiple spaces
+    #Condense multiple whitespaces to single space
     s = re.sub('\s+', ' ', s)
     #Remove dirty html tags
     removeTags = [["a",""],
@@ -58,45 +78,79 @@ class Parser(object):
                   ["tr", "\n"],
                   ["tt", ""],
                   ["u", ""],
-                  ["img", ""]#TBR
+                  ["ol","\n"],
+                  ["ul","\n"],
+                  ["dl","\n"],
+                  ["li","\n"],
+                  ["dt"," "],
+                  ["dd","\n"]
                  ]
     for tag in removeTags:
       caseInvariantRegex = ''.join(['['+c+c.upper()+']' for c in tag[0]])
       regex = '\<\s*\/?\s*' + caseInvariantRegex + '(\s+[^\>]*)?\>'
       s = re.sub(regex, tag[1], s)
-    #Condense multiple newlines
+    #Get images and captions
+    imageCaptions = ["figure", "image", "fig", "graph", "table"]
+    imageCaptionsRegex = "|".join(["".join(['['+c+c.upper()+']' for c in cap]) for cap in imageCaptions])
+    regex = '\<\s*\/?\s*[iI][mM][gG](\s+[^\>]*)?\/?\>(\s*((' + imageCaptionsRegex + ')\s*[\.0-9a-zA-Z])+[^\n]*)?'
+    s = re.sub(regex, self.imgSplitter, s)
+    #Condense multiple spaces and newlines independently to preserve semantic seperation
+    s = re.sub(' +', ' ', s)
     s = re.sub('\s*\n\s*', '\n', s)
     s = s.strip()
     return s
 
-  def titleNormalizer(self, s):
-    s = re.sub('^[^a-zA-Z]*','',s)
-    s = re.sub('\s+', ' ', s)
-    s = s.strip()
-    if(len(s.split())==1): s=s.title()
+  def xmlNormalizer(self, s):
+    s = re.sub('\<[^\>]*\>', '', s)
+    remapEncodings = [
+      #These stay as it is (http://en.wikipedia.org/wiki/List_of_XML_and_HTML_character_entity_references):
+      ['"', '&quot;'],['\'', '&apos;'],['& ', '&amp; '],['<', '&lt;'],['>', '&gt;'],
+      #These get replaced with closest ascii:
+      ['&#128;', 'E'],
+      ['&#129;', ' '],
+      ['&#134;', 'T'],
+      ['&#140;', 'CE'],
+      ['&#145;', '\''],
+      ['&#146;', '\''],
+      ['&#147;', '"'],
+      ['&#148;', '"'],
+      ['&#153;', '(TM)'],
+      ['&#160;', ' '],
+      ['&#169;', '(C)'],
+      ['&#170;', 'a'],
+      ['&#174;', '(R)'],
+      ['&#176;', 'o'],
+      ['&#185;', '1'],
+      ['&#228;', 'a'],
+      ['&#241;', 'n'],
+      ['&#252;', 'u'],
+      ['&#59;', ';'],
+      ['&alpha;', 'a'],
+      ['&auml;', 'a'],
+      ['&ccedil;', 'c'],
+      ['&eacute;', 'e'],
+      ['&ecirc;', 'e'],
+      ['&egrave;', 'e'],
+      ['&iuml;', 'i'],
+      ['&nbsp;', ' '],
+      ['&ouml;', 'o'],
+      ['&szlig;', 'B'],
+      ['&uuml;', 'u']
+    ]
+    for remap in remapEncodings:
+      s = s.replace(remap[0], remap[1])
+    s = re.sub('\s+', ' ', s).strip()
     return s
 
-  def lineSplitter(self, s, sLevel):
-    lines = [line.strip() for line in s.split(".") if re.search('\S',line)]
-    lines2 = []
-    for line in lines:
-      if(len(lines2)>0 and (len(line)<7 or len(line.split())<2 or line[0]==',')): lines2[-1]=lines2[-1]+'.'+line+'.'
-      else: lines2.append(line+'.')
-    lines2 = [re.sub('\.\.','.',line.strip()) for line in lines2 if re.search('\S',line)]
-    lines2 = [re.sub('\s+',' ',line) for line in lines2 if line!="."]
-    for line in lines2:
-      self.xmlFileHandle.write('\t'*sLevel+'<line ref="%s" img="%s">%s</line>\n'%("","",line))
-
-  def authorSplitter(self, s):
-    authors = [["author1","author1@example.com","MIT"], ["author2","author2@example.com","CMU"]]
-    for author in authors:
-      self.xmlFileHandle.write('\t\t\t<author name="%s" email="%s" organization="%s"/>\n'%(author[0],author[1],author[2]))
-
-  def keywordSplitter(self, s):
-    self.Keywords += [re.sub('[\.]','',k.strip()) for k in s.split(",")]
-
-  def referencesSplitter(self, s):
-    "Hehehe"
+  def titleNormalizer(self, s):
+    nonTitles = {"a", "and", "at", "by", "for", "from", "in", "is", "of", "on", "the", "to"}
+    s = re.sub('^[^a-zA-Z]*','',s)
+    s = re.sub('\s+', ' ', s)
+    title = []
+    for word in s.strip().split():
+      if(word.lower() not in nonTitles): title.append(word.title())
+      else: title.append(word.lower())
+    return self.xmlNormalizer(" ".join(title))
 
   def sectionSplitter(self, s, hLevel, sLevel):
     caseInvariantRegex='[hH]'+str(hLevel)
@@ -125,25 +179,87 @@ class Parser(object):
       sections = sections[1:]
     self.lineSplitter(s[0:sections_start], sLevel)
     for section in sections:
-      if   (section[0]=="Keywords"): self.keywordSplitter(s[section[1]:section[2]])
-      elif (section[0]=="References"): self.referencesSplitter(s[section[1]:section[2]])
+      if   (section[0]==""): self.sectionSplitter(s[section[1]:section[2]], hLevel+1, sLevel)
+      elif (section[0]=="Keywords"): self.keywordSplitter(s[section[1]:section[2]])
+      elif (section[0]=="References"): self.referenceSplitter(s[section[1]:section[2]])
       else:
         self.xmlFileHandle.write('\t'*sLevel+'<section name="%s">\n'%(section[0]))
         self.sectionSplitter(s[section[1]:section[2]], hLevel+1, sLevel+1)
         self.xmlFileHandle.write('\t'*sLevel+'</section>\n')
 
-  def run(self):
-    self.xmlFileHandle.write('<?xml version="1.0" encoding="utf-8"?>\n')
-    self.xmlFileHandle.write('<doc>\n')
-    self.sectionSplitter(self.html, 1, 1)
-    self.xmlFileHandle.write('\t<keywords>\n')
-    for keyword in self.Keywords:
-      self.xmlFileHandle.write('\t\t<keyword>%s</keyword>\n'%keyword)
-    self.xmlFileHandle.write('\t</keywords>\n')
-    self.xmlFileHandle.write('</doc>\n')
-    self.xmlFileHandle.close()
-    return 0
+  def authorSplitter(self, s):#Use xmlnormalizer
+    authors = [["author1","author1@example.com","MIT"], ["author2","author2@example.com","CMU"]]
+    for author in authors:
+      self.xmlFileHandle.write('\t\t\t<author name="%s" email="%s" organization="%s"/>\n'%(author[0],author[1],author[2]))
 
+  def lineSmoothener(self, l, r):
+    if(len(r)<7): return True
+    if(len(l)<5): return True
+    if(len(r.split())<2): return True
+    if(not re.match('[A-Z]',r[0])): return True
+    if(re.match('\s[^\.]$',l)): return True
+    if(l.count('(')!=l.count(')')): return True
+    if(l.count('[')!=l.count(']')): return True
+    if(l.count('{')!=l.count('}')): return True
+    if((l.count('&quot;') % 2)==1): return True
+    return False
+
+  def imgLineMatcher(self, imgAlt, line):
+    if(imgAlt.lower() in line.lower()): return True
+    return False
+
+  def lineRefSplitter(self, r):
+    self.ref += r.group(1).split(",")
+    return ""
+
+  def lineSplitter(self, s, sLevel):
+    if(sLevel<2): return
+    if('\n' in s):
+      for multiline in s.split('\n'): self.lineSplitter(multiline, sLevel)
+      return
+    s = self.xmlNormalizer(s)
+    lines_broken = [line.strip() for line in s.split(". ") if re.search('\S',line)]
+    lines_smoothened = []
+    for line in lines_broken:
+      if(len(lines_smoothened)>0 and self.lineSmoothener(lines_smoothened[-1], line)):
+        lines_smoothened[-1] = lines_smoothened[-1]+'. '+line
+      else:
+        lines_smoothened.append(line)
+    lines = [re.sub('\.+','.',(line.strip()+'.')) for line in lines_smoothened if re.search('\S',line)]
+    lines = [re.sub('\s+',' ',line) for line in lines if line!="."]
+    for line in lines:
+      img=",".join([image[0] for image in self.Images if self.imgLineMatcher(image[2],line)])
+      self.ref=[]
+      line = re.sub('\[([ 0-9\,]*)\]', self.lineRefSplitter, line)
+      ref=",".join([r.strip() for r in self.ref if re.search('\S',r)])
+      self.xmlFileHandle.write('\t'*sLevel+'<line ref="%s" img="%s">%s</line>\n'%(ref,img,line))
+
+  def keywordSplitter(self, s):
+    self.Keywords += [self.xmlNormalizer(re.sub('[\.]','',k.strip())) for k in s.split(",")]
+
+  def imgSplitter(self, r):
+    imgId = str(len(self.Images)+1)
+    imgSrc = ""
+    imgAlt = ""
+    imgCaption = ""
+    imgSrcMatch = re.search('[sS][rR][cC]\s*=\s*[\'"]([^\'"]*)[\'"]', r.group(1))
+    if(imgSrcMatch): imgSrc = imgSrcMatch.group(1).replace('"','&quot;')
+    imgAltMatch = re.search('[aA][lL][tT]\s*=\s*[\'"]([^\'"]*)[\'"]', r.group(1))
+    if(imgAltMatch): imgAlt = self.xmlNormalizer(imgAltMatch.group(1))
+    if(r.group(2)): imgCaption = self.xmlNormalizer(r.group(2))
+    if(r.group(3) and imgAlt==""): imgAlt = self.xmlNormalizer(re.sub('\.','',r.group(3)))
+    self.Images += [[imgId, imgSrc, imgAlt, imgCaption]]
+    return r.group(2)
+
+  def referenceSplitter(self, s):
+    refs = [ref.strip() for ref in s.split("\n") if re.search('\S',ref)]
+    refID=1
+    for ref in refs:
+      ref = re.sub('^'+str(refID)+'\s*\.\s*', '', ref)
+      self.References += [[str(refID), self.xmlNormalizer(ref)]]
+      refID+=1
+
+#Command line boilerplate
 if (__name__=="__main__"):
   if(len(sys.argv)!=3):
     print("usage: %s htmlFile xmlFile" %sys.argv[0])
