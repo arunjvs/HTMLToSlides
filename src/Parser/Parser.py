@@ -139,7 +139,7 @@ class Parser(object):
     self.xmlFileHandle.write('\t<keywords>\n')
     for keyword in self.Keywords:
       self.xmlFileHandle.write('\t\t<keyword>%s</keyword>\n'%keyword)
-    self.xmlFileHandle.write('\t<keywords>\n')
+    self.xmlFileHandle.write('\t</keywords>\n')
     self.xmlFileHandle.write('</doc>\n')
     self.xmlFileHandle.close()
     return 0
