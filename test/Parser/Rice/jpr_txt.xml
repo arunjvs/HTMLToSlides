@@ -22,7 +22,7 @@
 		<line ref="" img="">We further document the evolution of the design and implementation of our application, and some of the lessons learned.</line>
 		<line ref="" img="">In addition, we also cover a number of topics which are not mentioned in the CHI proceedings version of this paper.</line>
 		<line ref="" img="">These are the use of user preferences, the impact of Java, and ways in which HTML could easily be changed to support this sort of application better.</line>
-		<section name="the Application">
+		<section name="The Application">
 			<line ref="1" img="">Our application  is a system for browsing, creating, and editing Ontologies.</line>
 			<line ref="3" img="">An ontology is a formal specification that defines the representational vocabulary in some domain of discourse .</line>
 			<line ref="2" img="">While our ontologies are used for knowledge sharing and agent interoperability , they share many properties in common with class libraries, object-oriented specifications, object-oriented simulation components, database schema definitions, and knowledge bases.</line>
@@ -412,7 +412,7 @@
 				<line ref="" img="">However, we have noticed that users feel a need to log out, even when they are told explicitly that it is not necessary.</line>
 				<line ref="" img="">We have therefore provided a command to give the user the illusion of logging out.</line>
 			</section>
-			<section name="the Usage of User Preferences">
+			<section name="The Usage of User Preferences">
 				<line ref="" img="">It is often assumed that preferences in applications are not of significant utility because few users actually change them.</line>
 				<line ref="" img="">If we look at active users, whom we define as those who have executed at least 50 commands, we find that some 41% of our users have changed at least one preference.</line>
 				<line ref="" img="7">Figure 5 plots the distribution of the number preferences modified against the number of requests performed by each user.</line>
@@ -427,7 +427,7 @@
 			</section>
 		</section>
 	</section>
-	<section name="the Future">
+	<section name="The Future">
 		<line ref="" img="">The web is an ever-changing medium, and both the technology and standards are advancing very rapidly.</line>
 		<line ref="" img="">We must therefore consider what we would do (or would have done) if Java or some similarly capable remote scripting facility were to be reliable and powerful enough to use for our application.</line>
 		<line ref="" img="">Certainly, had Java been ready for serious use a year ago we would have been very tempted to use it to get around some of the severe constraints of HTML.</line>

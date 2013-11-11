@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doc>
+	<about>
+		<title>Beating the Limitations of Camera-Monitor Mediated Telepresence With Extra Eyes</title>
+		<authors>
+			<author name="author1" email="author1@example.com" organization="MIT"/>
+			<author name="author2" email="author2@example.com" organization="CMU"/>
+		</authors>
+	</about>
+	<section name="Abstract">
+		<line ref="" img="">In physical presence, you are most aware of your immediate surroundings, such as what is at your feet or who is beside you, and less aware of objects further away.</line>
+		<line ref="" img="">In telepresence, almost the opposite is true.</line>
+		<line ref="" img="">Due to the nature of the medium, you are most aware of what is in front, often at a distance, as dictated by the limited view of the camera.</line>
+		<line ref="" img="">Even where remote camera control is possible, the range of exploration is limited and the logistics of control are typically awkward and slow.</line>
+		<line ref="" img="">All of this adds up to a pronounced loss of awareness of the periphery in telepresence.</line>
+		<line ref="" img="">The research described here attempts to compensate for these problems through two mechanisms.</line>
+		<line ref="" img="">First, we provide telepresence users with two separate views, one wide-angle and the other, a controllable, detailed view.</line>
+		<line ref="" img="">To simplify navigation, the two views are seamlessly linked together, so that selecting a region of one will have an effect in the other.</line>
+		<line ref="" img="">Second, we utilize sensor information from the remote location to provide the user with notification of relevant events that may require attention.</line>
+		<line ref="" img="">Together, these tools significantly enhance users' awareness of their telepresence surroundings.</line>
+	</section>
+	<section name="Introduction">
+		<line ref="" img="">Normal human vision can be conceived as consisting of two highly mobile cones of view.</line>
+		<line ref="" img="">One is the focused foveal cone, one degree wide, while the second is the peripheral cone, or global field of view, spanning approximately 170 degrees [1].</line>
+		<line ref="" img="">Excellent spatial resolution is provided by the first, while the second, lower resolution view, provides us with stimulus that acts to redirect our attention.</line>
+		<line ref="" img="">Camera-monitor mediated vision, in contrast, suffers in resolution and due to the size of the display, uses limited azimuth of the visual field.</line>
+		<line ref="" img="">Watching television, for instance, typically involves the foveal cone only.</line>
+		<line ref="" img="">The narrow channel of information, both in the sense of bandwidth and field of view, imposes limitations on the ability to explore, follow conversations, check reactions, and generally sense significant actions in a remote space, such as people passing by or entering.</line>
+		<line ref="" img="">In such situations, users must choose between a global and a focused view.</line>
+		<line ref="" img="">With the former, resolution is sacrificed to permit a wide field of view and easy change of gaze direction.</line>
+		<line ref="" img="">If only the focused view is provided, users obtain details but no peripheral awareness.</line>
+		<line ref="" img="">This is typical of most videoconference settings [5] [11].</line>
+		<line ref="" img="">One approach to support both the foveal and peripheral cones is with multiple views.</line>
+		<line ref="" img="">The problems with this approach are well understood.</line>
+		<line ref="" img="">The Multiple Target Video (MTV) system of Gaver et.al.[12] first proposed the use of multiple cameras as a means of providing more flexible access to remote working environments.</line>
+		<line ref="" img="">Users were offered sequential access to several different views of a remote space.</line>
+		<line ref="" img="">However, as the authors noted, a static configuration of cameras will never be suitable for all tasks.</line>
+		<line ref="" img="">Furthermore, switching between views introduces confusing spatial discontinuities.</line>
+		<line ref="" img="">A further study (MTV II) by Heath et.al.[15] attempted to address this latter issue by providing several monitors, so that every camera view was simultaneously available.</line>
+		<line ref="" img="">While this new configuration was more flexible, the inability of static cameras to provide complete access to a remote space still remained a problem.</line>
+		<line ref="" img="">Furthermore, the various views were independent of one another, and the relationship between them was not made explicit.</line>
+		<line ref="" img="">Consequently, spatial discontinuities persisted.</line>
+		<line ref="" img="">Another approach involved the Virtual Window concept [10], which uses the video image of a person's head to navigate a motorized camera in a remote location.</line>
+		<line ref="" img="">Our user experience with this technique [7] revealed a significant improvement to the user's sense of engagement in meetings.</line>
+		<line ref="" img="">Unfortunately, when the camera was focused on a small area, the loss of global context often made the user unaware of important activity taking place out of view.</line>
+		<line ref="" img="">To compensate for the limitations on vision imposed by camera-monitor mediated telepresence, the work discussed here offers to: 1.</line>
+		<line ref="" img="">Provide both a global (peripheral) and a detail (focused) view, simultaneously.</line>
+		<line ref="" img="">We note that this approach has already been used extensively in the Ontario Telepresence Project [2] [3] [17] by combining the two views through a picture-in-picture device.</line>
+		<line ref="" img="">The same approach with multiple views was also proposed by Kuzuoka et.al.[16].</line>
+		<line ref="" img="">However, as will be discussed later, providing a link between the two views is not only critical for usability, but also supports the goal of multiple views while avoiding the pitfalls of spatial discontinuities inherent in the MTV studies [12] [15].2.</line>
+		<line ref="" img="">Provide a navigation mechanism using these views, allowing users to redirect their view in both direction and scale, through a simple user interface.</line>
+		<line ref="" img="">However, even with these two goals satisfied, the user is still sensorally deprived to the extent that it may inhibit social interaction.</line>
+		<line ref="" img="">Therefore, our third goal is as follows: 3.</line>
+		<line ref="" img="">Provide a sensory surrogate or prosthesis to compensate for the limited scope of visual information.</line>
+	</section>
+	<section name="Supporting Foveal and Peripheral Cones">
+		<line ref="" img="">It has been suggested by several vision researchers that a brain mechanism exists to drive foveating saccades of the eye in response to stimulus in the periphery region [14] [19].</line>
+		<line ref="" img="">In the discussion of their model of saccadic eye movement, Tsotsos et al.comment that these saccades play an important role in the exploration of the visual world [18].</line>
+		<line ref="" img="">Supporting evidence for this comes from neurophysiology.</line>
+		<line ref="" img="">A region known as PO, which receives a representation of the periphery of the visual field, has been identified in the brains of primates [4].</line>
+		<line ref="" img="">Deprived of this information, individuals suffering from tunnel vision, or a loss of vision outside the fovea, exhibit severe problems navigating through their physical surroundings, even when these surroundings are familiar to them [13].</line>
+		<line ref="" img="">With this in mind, it becomes readily apparent that camera-monitor mediated telepresence is bound to suffer unless peripheral vision can be supported concurrently with a detailed, foveal view.</line>
+		<section name="Overlaid Multiple Views">
+			<line ref="" img="">As an initial attempt to provide this support, we developed a prototype system, consisting of a large and small display, as shown in Figure 1.</line>
+			<line ref="" img="">The large screen display provides the user with a wide angle view of the remote space while the small display provides a high resolution view of the area of interest.</line>
+			<line ref="" img="">With the camera orientations fixed and the proper geometric positioning of the two displays, spatial discontinuities are minimized.</line>
+			<line ref="" img="">The sensation of increased peripheral awareness obtained by this system is very powerful.</line>
+			<line ref="" img="">We note that this prototype requires two high-resolution displays, one of them quite large, in order to achieve a significant effect.</line>
+			<line ref="" img="">As this may be prohibitively expensive for most videoconference users, we would like to unify the two views into a single display.</line>
+			<line ref="" img="">Unfortunately, even with a large screen display, the limited resolution would make the quality of the foveal region unacceptable.</line>
+			<line ref="" img="">Another approach is required.</line>
+		</section>
+		<section name="Disjointed Multiple Views">
+			<line ref="" img="">Another approach to supporting both the foveal and peripheral views is to display the two separately on the same screen.</line>
+			<line ref="" img="">Since the views are disjointed, each can have sufficient size and resolution, even with the limitations of current technology.</line>
+			<line ref="" img="">Our implementation of this system is shown in Figure 2.</line>
+			<line ref="" img="">The top portion of the display provides a foveal or detail view, obtained from a user-controlled motorized camera, while the lower portion provides the peripheral or global view from a fixed, wide-angle camera.</line>
+			<line ref="" img="">Since the views are independent of each another, there is no consistent geometric relationship between the two.</line>
+			<line ref="" img="">This can result in an inability to locate the position of the detailed region within the peripheral view, once more bringing us back to the problem of spatial discontinuities.</line>
+			<line ref="" img="">Navigation under these conditions is typically difficult and slow.</line>
+			<line ref="" img="">This is especially severe when the scene being viewed is relatively homogeneous (e.g.through tele-education, a large class of students).</line>
+			<line ref="" img="">Normal human vision does not suffer from this problem because the direction of the fovea explicitly dictates the peripheral view.</line>
+		</section>
+		<section name="Linking Multiple Views">
+			<line ref="" img="">To address the lack of a geometric relationship between the two views, we indicate the detailed region within the global view by means of a yellow bounding box (detail frame), as shown in Figure 3.</line>
+			<line ref="" img="">The enclosed region corresponds exactly to what is displayed in the detail view.</line>
+			<line ref="" img="">As the detail view changes, the bounding box on the global view adjusts accordingly.</line>
+			<line ref="" img="">Because the two views are logically linked, users can select a desired region by sweeping out a bounding box or simply point-and-click on the global view.&nbsp;In the former case, the detail view is defined by the size of the bounding box, while in the latter, the detail view is centered at the selected position and displayed at the maximum zoom.</line>
+			<line ref="" img="">These interaction techniques with the global view permit a far more efficient navigation mechanism than the effectively blind view selection offered by both the original MTV system [12] and the Virtual Window system [10].</line>
+			<line ref="" img="">In addition to control via the global view, the detail view can be manipulated directly through the scroll bars, which provide tilt and pan control of the motorized camera.</line>
+			<line ref="" img="">It is also possible to adjust the zoom factor of the detail view by pressing the left or right mouse button, or obtain a wide view by selecting the wide button.</line>
+			<line ref="" img="">To provide a linkage between the global and detail views, we require a mapping between the coordinate systems of each, dependent on the properties of the different cameras.</line>
+			<line ref="" img="">We first define a global coordinate system, which covers the entire area visible to both cameras.</line>
+			<line ref="" img="">Next, we define models for each camera, which consist of a view model, and in the case of the motorized camera, a transformation function.</line>
+			<line ref="" img="">The models describe the relationship between pixel coordinates of each camera and the global coordinate system.</line>
+			<line ref="" img="">In the case of our fixed wide-angle camera, this is simply a one-to-one mapping.</line>
+			<line ref="" img="">The transformation function for the motorized camera maps pixel coordinates to the appropriate motor signals.</line>
+			<line ref="" img="">The models and relationships are described in Figure 4.</line>
+			<line ref="" img="">When a user selects an area of the global view, the pixel coordinates of this region are first translated into global coordinates through the wide angle view model, and then into pixel coordinates of the detail view.</line>
+			<line ref="" img="">The detail pixel coordinates are then mapped into motor signals via the transformation function.</line>
+			<line ref="" img="">Finally, the motor signals are sent to the detail camera.</line>
+			<line ref="" img="">At the same time, the updated location and dimensions of the bounding box are computed, and displayed on the global view.</line>
+			<line ref="" img="">Similarly, when a user specifies an area of the detail view directly, the pixel coordinates of this region are transformed into motor signals for the camera, and to global coordinates describing the new bounding box.</line>
+		</section>
+	</section>
+	<section name="Sensory Surrogate">
+		<section name="Sensory Surrogate for Environmental Awareness">
+			<line ref="" img="">There exists no substitute for physical presence that offers the fidelity of rapidly directable stereo vision and spatially sensitive binaural audio, as manifested by the human senses.</line>
+			<line ref="" img="">To help bridge the gap between physical presence and telepresence in this regard, our Extra Eyes system provides users with a sensory surrogate to increase their awareness of the remote environment.</line>
+			<line ref="" img="">The surrogate monitors background information obtained by sensors and reports on relevant events through the use of sound, text, and graphics, or a combination of the three.</line>
+			<line ref="" img="">In this manner, background processing by the computer is used to improve the user's foreground awareness.</line>
+			<line ref="" img="">Sensors in the room [6] monitor the status of presentation technology such as the VCR, document camera, and digital whiteboard, as well as the entry of new individuals as depicted in Figure 5.</line>
+			<line ref="" img="">When an event occurs, it triggers an alert-action sequence.</line>
+			<line ref="" img="">The alert corresponds to the screen message displayed (e.g."Someone has entered the room.Do you wish to view the doorway?"), as well as the appearance of a blue bounding box (alert box) in the corresponding region of the global view, as shown in Figure 3.</line>
+			<line ref="" img="">If the user acknowledges the alert by pushing the OK button or selecting the alert box, then an appropriate action is executed by the system (e.g.control the motorized camera to display the doorway).</line>
+			<line ref="" img="">Another possible alert message is "The VCR is now playing.</line>
+			<line ref="" img="">Do you wish to view the tape?" with the associated action of switching the user's view to the VCR output.</line>
+		</section>
+		<section name="Sensory Surrogate for Social Awareness">
+			<line ref="" img="">We have also applied the sensory surrogate concept to increasing social awareness among individuals sharing the media space of the Ontario Telepresence Project [17].</line>
+			<line ref="" img="">The Postcards system (see Figure 6), based on Rank Xerox EuroPARC's Portholes [8], captures snapshots from each user's office at set intervals and distributes these to members of the media space.</line>
+			<line ref="" img="">A sensory surrogate in the Postcards system compares every two consecutive frames from each office to determine if there is activity there.</line>
+			<line ref="" img="">This is done by counting the number of pixels that have changed by more than a certain threshold amount between the two frames.</line>
+			<line ref="" img="">Although the algorithm is susceptible to false detection of activity due to camera perturbations, it has worked reasonably well in our environment.</line>
+			<line ref="" img="">Stored knowledge of activity allows Postcards to determine whether individuals are in or out, or have recently entered or vacated their offices.</line>
+			<line ref="" img="">Users can take advantage of this background monitoring feature by asking the system to sense activity and notify them when any number of individuals are simultaneously present in their offices.</line>
+			<line ref="" img="">This permits informal group meetings to be established with a minimum of effort, freeing the user from the mundane task of repeatedly checking to see who is available.</line>
+		</section>
+	</section>
+	<section name="Evaluation">
+		<section name="User Study">
+			<line ref="" img="">We evaluated the performance of Extra Eyes through the following user study.</line>
+			<line ref="" img="">Three television monitors were arranged in a remote location, as shown in Figure 7.</line>
+			<line ref="" img="">Letters of the alphabet were displayed on a randomly chosen monitor, one at a time.</line>
+			<line ref="" img="">The user's task was to use the Extra Eyes system to identify these letters as they appeared, as quickly as possible, while minimizing the number of errors.</line>
+			<line ref="" img="">Each letter would remain on the monitor until the user had identified it, by typing its corresponding key.</line>
+			<line ref="" img="">Once the letter was identified, it would be replaced by another letter on a different monitor.</line>
+			<line ref="" img="">The font size was sufficiently small so that a zoom factor near the maximum was required for legibility.</line>
+			<line ref="" img="">We tested each of our seven subjects on the following conditions, the order being randomly varied, with 20 repetitions per condition: 1.</line>
+			<line ref="" img="">No Global: Only the detail view is visible.</line>
+			<line ref="" img="">This situation is equivalent to typical telepresence systems.2.</line>
+			<line ref="" img="">No Global + Text: Same as 1.</line>
+			<line ref="" img="">In addition, a text alert indicates the display on which the current letter appears.3.</line>
+			<line ref="" img="">Unlinked: Both the global and detail views are simultaneously visible, but the two views are not linked (i.e.neither view has effect on the other).</line>
+			<line ref="" img="">This is equivalent to the MTV system.4.</line>
+			<line ref="" img="">Linked: Both the global and detail views are simultaneously visible and linked.5.</line>
+			<line ref="" img="">Linked + Text: Same as 4.</line>
+			<line ref="" img="">In addition, a text alert indicates the display on which the current letter appears.6.</line>
+			<line ref="" img="">Linked + Action: Same as 5.</line>
+			<line ref="" img="">In addition, an alert box appears, and the user can invoke the action corresponding to the alert by pushing the OK button or by clicking anywhere within the alert box.</line>
+			<line ref="" img="">The action causes the camera to point directly to the new letter with maximum zoom factor.</line>
+		</section>
+		<section name="Discussion and Results of User Study">
+			<line ref="" img="">For the first three conditions, users exhibited two strategies to identify the various letters.</line>
+			<line ref="" img="">When no information beyond that of the detail view was available, users consistently zoomed out to obtain a wide angle view, then panned and tilted the camera to center the letter, before zooming in again.</line>
+			<line ref="" img="">This zoom-out strategy, represented by the solid line in the space-scale diagram [9] of Figure 8a, requires over three camera operations, on average, to identify each letter.</line>
+			<line ref="" img="">When an alert message was added, indicating the display on which the new letter appears, users tended to change their strategy.</line>
+			<line ref="" img="">Knowing the approximate location of the desired monitor from past experience gathered during the study, users often tried to find this monitor by repeatedly panning and tilting the camera, as shown by the solid line in Figure 8b.</line>
+			<line ref="" img="">This strategy is quite similar to searching for an object in a familiar room, while in the dark.</line>
+			<line ref="" img="">Because users cannot accurately select a desired position with the pan-tilt strategy, this method often requires more operations than the zoom-out strategy.</line>
+			<line ref="" img="">The same pan-tilt strategy was used when the global view was provided, but not linked to the detail view.</line>
+			<line ref="" img="">For the remaining three conditions, users were able to identify the letters with only a single camera operation.</line>
+			<line ref="" img="">Figure 9 and Figure 10 present the results of our user study, indicating the average number of camera operations users required to identify each letter, as well as the average completion time with 95% confidence error bars, with each of the six experimental conditions.</line>
+			<line ref="" img="">Analysis of variance (ANOVA) showed that both number of operations and trial completion times were significantly affected by the experimental conditions.</line>
+			<line ref="" img="">For number of operations, F(5, 30)=55.2, p&lt;0.001.</line>
+			<line ref="" img="">For completion time, F(5, 30)=40.1, p&lt;0.001.</line>
+			<line ref="" img="">As measured by number of operations (Table A1 in the Appendix), Fisher's protected LSD posthoc analyses showed that all linked conditions were significantly different from the Unlinked and NoGlobal conditions (p&lt;0.05).</line>
+			<line ref="" img="">However, there is no significant difference among linked conditions.</line>
+			<line ref="" img="">The difference between Unlinked and NoGlobal, as well as Unlinked and NoGlobal+Text is also insignificant.</line>
+			<line ref="" img="">As measured by completion times (Table A2 in the Appendix), Fisher's protected LSD posthoc analyses showed that all conditions were significantly different from each other (p&lt;0.05), except Linked+Action vs.</line>
+			<line ref="" img="">Linked+Text condition (p=0.64) and NoGlobal vs.</line>
+			<line ref="" img="">Unlinked (p=0.66).</line>
+			<line ref="" img="">Based on these results, we can draw the following conclusions.</line>
+			<section name="Conclusion 1: Linkage Between Views is Very Important">
+				<line ref="" img="">When the two views were linked, navigation in the remote environment via selection in the global view was effortless.</line>
+				<line ref="" img="">Any desired (visible) target could be selected directly with a single camera operation, as indicated by the dashed lines of Figures 8a and 8b (see also Figure 9).</line>
+				<line ref="" img="">In this case, the previous indirect strategies of zoom-out and pan-tilt, which require almost twice as much time as direct selection, were never used.</line>
+				<line ref="" img="">Users expressed their opinion that the direct selection mechanism was more natural than the indirect methods.</line>
+				<line ref="" img="">Indeed, all linked conditions were significantly better than the unlinked one in terms of both number of operations and trial completion time.</line>
+				<line ref="" img="">Further user feedback was also highly informative.</line>
+				<line ref="" img="">Some commented that the detail frame was useful as an indication of direction of camera motion.</line>
+				<line ref="" img="">Furthermore, when the two views were not linked, users had to remain conscious of their current position in order to reach the desired view.</line>
+				<line ref="" img="">This was a result of spatial discontinuities [12].</line>
+				<line ref="" img="">Linkage between the two views reduced the effect of these discontinuities, because a user action on one view has a direct effect on the other.</line>
+			</section>
+			<section name="Conclusion 2: Sensory Information is Useful">
+				<line ref="" img="">The time improvement from linked views to linked views with a text alert (p&lt;0.05, see Table A2) indicates the added value of sensory information.</line>
+				<line ref="" img="">As most users explained, the alert allowed them to reduce the size of the visual search area.</line>
+				<line ref="" img="">Users also appreciated the audio feedback of a beep, provided simultaneously with an alert message, indicating that a new letter was about to appear.</line>
+				<line ref="" img="">We note that sensory information may have compensated for the low update rate (approximately 1-2 frames/s in our present implementation) of the global view.</line>
+				<line ref="" img="">In many instances, the indication of various alerts preceded the appearance of a new letter on the global view by one second or more.</line>
+				<line ref="" img="">This enabled users to begin their navigation toward the desired monitor before the letter was actually visible.</line>
+				<line ref="" img="">Although the differences in time and number of operations between Linked+Text and Linked+Action were not statistically significant, users indicated that the graphic alerts were more useful than text messages.</line>
+				<line ref="" img="">The graphic alerts completely specify the relevant visual regions, as opposed to text alerts, which require the user to read and then perform a search.</line>
+				<line ref="" img="">Many users simply did not read the text alerts, preferring instead to watch only the graphics display.</line>
+			</section>
+		</section>
+	</section>
+	<section name="Further Issues">
+		<line ref="" img="">Having described Extra Eyes and our preliminary evaluation of this system, we now turn to some other issues.</line>
+		<line ref="" img="">The global view provided by our present system can not capture a view of the entire room.</line>
+		<line ref="" img="">Other designers may prefer to use multiple cameras, or a very wide angle lens, possibly a fisheye, for this task.</line>
+		<line ref="" img="">In the former case, some form of image processing will be required to combine the images, while in the latter, unwarping to compensate for image distortion will be necessary.</line>
+		<line ref="" img="">Detractors may argue that transmitting video for the global view is too expensive.</line>
+		<line ref="" img="">Either more bandwidth is required, or the frame rate of the detail view will suffer.</line>
+		<line ref="" img="">We suggest that since the global view is only required to provide a sense of peripheral awareness, both its frame rate and resolution can be relatively low.</line>
+		<line ref="" img="">In fact, we reduced our global view to a quarter size (160 x 120 pixels), and found that users were still very aware of activities occurring in the periphery.</line>
+		<line ref="" img="">If the global view is transmitted at this size, along with a full-frame detail view, both at the same rate, then the decrease in frame rate of the detail view would be less than 7%, assuming constant bandwidth consumption.</line>
+		<line ref="" img="">We strongly believe that the benefit of peripheral awareness justifies this minor expense.</line>
+	</section>
+	<section name="Future Work">
+		<line ref="" img="">While the sense of peripheral awareness offered by a fixed global view is a helpful navigation tool, it does not accurately replicate the mechanics of human vision, in which the periphery is dictated by the orientation of the fovea.</line>
+		<line ref="" img="">A future version of Extra Eyes should remedy this shortcoming, either by attaching the global camera to the motorized detail camera, or by using another motorized camera for the global view, synchronized with the detail camera.</line>
+		<line ref="" img="">This improvement is presently being applied to our initial large-screen prototype, discussed earlier.</line>
+		<line ref="" img="">To maximize effectiveness, we are locating the smaller display near the center of the large screen.</line>
+		<line ref="" img="">This way, the foveal and peripheral cones will maintain the correct geometric relationship at all times.</line>
+		<line ref="" img="">We are presently combining such a system with the Virtual Window head-tracking mechanism, and look forward to reporting on its results in the near future.</line>
+		<line ref="" img="">An alternative route to pursue may be to make use of image processing techniques, such as those of Warp California's Virtual TV (VTV) system, to selectively unwarp any portion of the image from a fisheye lens.</line>
+		<line ref="" img="">As higher resolution and lower cost frame grabbers become available, this technology will offer many advantages over motor-driven cameras.</line>
+	</section>
+	<section name="Conclusions">
+		<line ref="" img="">We have crossed the complexity barrier of current camera-monitor mediated telepresence applications.</line>
+		<line ref="" img="">To beat the limitations imposed by this barrier, we propose a new design to support views of the foveal and peripheral cones simultaneously.</line>
+		<line ref="" img="">To minimize the effects of spatial discontinuities, we also provide a seamless linkage between the two views.</line>
+		<line ref="" img="">Furthermore, a sensory surrogate is needed to increase the remote user's sense of awareness.</line>
+		<line ref="" img="">Acting together, as they do in the Extra Eyes system, these techniques serve dramatically to provide users with increased accessibility to remote locations.</line>
+	</section>
+	<section name="Acknowledgments">
+		<line ref="" img="">The authors would like to thank William Hunt and Shumin Zhai of the University of Toronto, Abigail Sellen of Rank Xerox EuroPARC and Masayuki Tani of Hitachi Research Laboratory, for their invaluable suggestions and contributions to this paper.</line>
+		<line ref="" img="">We would also like to thank John Tsotsos of the University of Toronto for helping us sift through the relevant literature on biological vision.</line>
+		<line ref="" img="">This research has been undertaken as part of the Ontario Telepresence Project.</line>
+		<line ref="" img="">Support has come from the Government of Ontario, the Information Technology Research Center of Ontario, the Telecommunications Research Institute of Ontario, the Natural Science and Engineering Research Council of Canada, Hitachi Ltd., Bell Canada, Xerox PARC, British Telecom, Alias|Wavefront, Hewlett Packard, Sun Microsystems, the Arnott Design Group and Adcom Electronics.</line>
+		<line ref="" img="">This support is gratefully acknowledged.</line>
+	</section>
+	<section name="Appendix">
+	</section>
+	<keywords>
+		<keyword>Telepresence</keyword>
+		<keyword>teleconferencing</keyword>
+		<keyword>CSCW</keyword>
+		<keyword>multimedia</keyword>
+	</keywords>
+	<images>
+		<image id="0" src="ky_fg1.gif" alt="Figure 1" caption=""/>
+		<image id="1" src="ky_fg2.gif" alt="Figure 2" caption=""/>
+		<image id="2" src="ky_fg3.gif" alt="Figure 3" caption=""/>
+		<image id="3" src="ky_fg4.gif" alt="Figure 4" caption=""/>
+		<image id="4" src="ky_fg5.gif" alt="Figure 5" caption=""/>
+		<image id="5" src="ky_fg6.gif" alt="Figure 6" caption=""/>
+		<image id="6" src="ky_fg7.gif" alt="Figure 7" caption=""/>
+		<image id="7" src="ky_fg8.gif" alt="Figure 8" caption=""/>
+		<image id="8" src="ky_fg9.gif" alt="Figure 9" caption=""/>
+		<image id="9" src="ky_fg10.gif" alt="Figure 10" caption="Figure 9 and Figure 10 present the results of our user study, indicating the average number of camera operations users required to identify each letter, as well as the average completion time with 95% confidence error bars, with each of the six experimental conditions."/>
+		<image id="10" src="ky_fg11.gif" alt="Table A1" caption=""/>
+		<image id="11" src="ky_fg12.gif" alt="Table A2" caption=""/>
+	</images>
+	<references>
+		<reference id="1">Barlow, H.B. and Mollon, J.D., The Senses, Cambridge Texts in the Physiological Sciences, 1982, Cambridge University Texts.</reference>
+		<reference id="2">Buxton, W., Integrating the Periphery and Content: A New Model of Telematics, in Proc. GI&apos;95 (Quebec PQ, May 1995), Canadian Human-Computer Communications Society, 239-246.</reference>
+		<reference id="3">Buxton, W., Telepresence: Integrating Shared Task and Person Spaces, in Proc. GI&apos;92 (Vancouver BC, May 1992), Canadian Human-Computer Communications Society, 123-129.</reference>
+		<reference id="4">Colby, C.L., Gattass, R., Olson, C.R. and Gross, C.G., Topographical Organization of Cortical Afferents to Extrastriate Visual Area PO in the Macaque: A Dual Tracer Study, Journal of Comparative Neurology, Vol. 269, 1988, 392-413.</reference>
+		<reference id="5">Cool, C., Fish, R.S., Kraut, R.E. and Lowery, C.M., Interactive Design of Video Communication Systems, in Proc. CSCW&apos;92 (Toronto ON, Oct. 1992), ACM Press, 25-32.</reference>
+		<reference id="6">Cooperstock, J.R., Tanikoshi, K., Beirne,G., Narine, T. and Buxton, W., Evolution of a Reactive Environment, in Proc. CHI&apos;95 (Denver CO, May 1995), ACM Press, 170-177.</reference>
+		<reference id="7">Cooperstock, J.R., Tanikoshi, K. and Buxton, W., Turning Your Video Monitor into a Virtual Window, Proc. of IEEE PACRIM, Visualization and Signal Processing (Victoria BC, May 1995).</reference>
+		<reference id="8">Dourish, P. and Bly, S., Portholes: Supporting Awareness in a Distributed Work Group, in Proc. CHI&apos;92 (Monterey CA, May 1992), ACM Press, 541-547.</reference>
+		<reference id="9">Furnas, G. and Bederson, B., Space-Scale Diagrams: Understanding Multiscale Interfaces, in Proc. CHI&apos;95 (Denver CO, May 1995), ACM Press, 234-241.</reference>
+		<reference id="10">Gaver, W., Smets, G. and Overbeeke, K., A Virtual Window on Media Space, in Proc. CHI&apos;95 (Denver CO, May 1995), ACM Press, 257-264.</reference>
+		<reference id="11">Gaver, W., Realizing A Video Environment: EuroPARC&apos;s RAVE System, in Proc. CHI&apos;92 (Monterey CA, May 1992), ACM Press, 27-35.</reference>
+		<reference id="12">Gaver, W., Sellen, A., Heath, C. and Luff, P., One is not Enough: Multiple Views in a Media Space, in Proc. INTERCHI&apos;93 (Amsterdam Netherlands, April 1993), ACM Press, 335-341.</reference>
+		<reference id="13">Grusser, O. and Landis, T., Visual Agnosias and Other Disturbances of Visual Perception and Cognition, Visual and Visual Dysfunction, Volume 12, CRC Press.</reference>
+		<reference id="14">Hallett, P., Primary and Secondary Saccades to Goals Defined by Instructions, Vision Research 18, 1978, 1279-1296.</reference>
+		<reference id="15">Heath, C., Luff, P. and Sellen, A., Reconsidering the Virtual Workplace: Flexible Support for Collaborative Activity, to appear in Proc. ECSCW &apos;95 (Stockholm Sweden, September 1995)</reference>
+		<reference id="16">Kuzuoka, H., Kosuge, T. and Tanaka, M., GestureCam: A Video Commutation System for Sympathetic Remote Collaboration, in Proc. CSCW&apos;94 (Chapel Hill NC, Oct. 1994), ACM Press, 35-43.</reference>
+		<reference id="17">Riesenbach, R., The Ontario Telepresence Project, in Conference Companion CHI&apos;94 (Boston MA, April 1994), ACM Press, 173-174.</reference>
+		<reference id="18">Tsotsos, J. K., Culhane, S. M., Wai, W., Y., K., Lai, Y., Davis, N., and Nuflo, F., Modeling Visual Attention via Selective Tuning. To appear in Journal of Artificial Intelligence.</reference>
+		<reference id="19">Whittaker, S. and Cummings, R., Foveating Saccades, Vision Research 30 (9), 1990, 1363-1366.</reference>
+	</references>
+</doc>

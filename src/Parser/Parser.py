@@ -148,7 +148,7 @@ class Parser(object):
     s = re.sub('\s+', ' ', s)
     title = []
     for word in s.strip().split():
-      if(word.lower() not in nonTitles): title.append(word.title())
+      if(len(title)==0 or word.lower() not in nonTitles): title.append(word.title())
       else: title.append(word.lower())
     return self.xmlNormalizer(" ".join(title))
 
