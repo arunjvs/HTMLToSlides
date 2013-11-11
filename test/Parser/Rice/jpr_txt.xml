@@ -70,7 +70,7 @@
 			<line ref="" img="">A centralized server model also means that we can make changes and upgrades to the server at a single site (or small number of controlled sites); the new, improved software is instantly accessible to all users.</line>
 			<line ref="" img="">In short, we decided that it would be cheaper to provide free computational resources to our entire user community than to develop shrink-wrap software and distribute it to them.</line>
 			<line ref="" img="">Our challenge was to design a user interface that operates under the constraints of the web, remains intuitive and natural to users, and provides full access to the application.</line>
-			<section name="Support for Na&iuml;ve Users">
+			<section name="Support for Naive Users">
 				<line ref="" img="">In order to achieve our goal of broad impact, we worked to make our application intuitive and usable to anyone familiar with web browsers (e.g., Netscape Navigator or Mosaic) so that a new user could pick up and productively use our application without any formal training or preparation.</line>
 				<line ref="" img="">We explicitly addressed this by the following means: HTML used for documentation: Our application has no manual at all per se.</line>
 				<line ref="" img="">All documentation is provided on-line using the same browser that the user already employs to operate the application.</line>
@@ -86,7 +86,7 @@
 				<line ref="" img="">This allows users who are familiar with hypertext documents and browsers to make an easy transition into our interactive application.</line>
 			</section>
 			<section name="Support for Power Users">
-				<line ref="" img="">Although we were keen to expand our user community as much as possible, we were aware that experienced ontology developers would not want to be held back by an interface that was optimized for na&iuml;ve users.</line>
+				<line ref="" img="">Although we were keen to expand our user community as much as possible, we were aware that experienced ontology developers would not want to be held back by an interface that was optimized for naive users.</line>
 				<line ref="" img="">It is very important to us to support power users.</line>
 				<line ref="" img="">The vast majority of meaningful ontologies are developed by such users, even if these ontologies are then used by the less experienced as building blocks.</line>
 				<line ref="" img="">The issue of power user support was eventually resolved by providing a powerful user preference facility.</line>
@@ -240,7 +240,7 @@
 				<line ref="" img="">Furthermore, when this mapped graphic approach is used, the browser is not able to provide feedback to the user about which regions of the bitmap will result in commands being executed.</line>
 				<line ref="" img="">In contrast, we chose to use the native window system's submit buttons for our interface.</line>
 				<line ref="" img="">Our application was going to be complex enough without the user having to relearn what a button is supposed to look like.</line>
-				<line ref="" img="">The constraint of supporting na&iuml;ve users meant that we could not allow any user interface tricks such as having extremely stylized icons that cause differing behavior depending on where on the icon the user clicks.</line>
+				<line ref="" img="">The constraint of supporting naive users meant that we could not allow any user interface tricks such as having extremely stylized icons that cause differing behavior depending on where on the icon the user clicks.</line>
 				<line ref="" img="">While such approaches allow very terse and dense displays that efficiently take advantage of the available screen real-estate and bandwidth, they would be difficult for members of our target community to understand and learn.</line>
 			</section>
 		</section>
@@ -437,5 +437,9 @@
 		<keyword>HTML</keyword>
 		<keyword>HTTP</keyword>
 		<keyword>Java</keyword>
-	<keywords>
+    </keywords>
+    <images>
+    </images>
+    <references>
+    </references>
 </doc>
