@@ -84,7 +84,7 @@ class Generator(object):
         return collection
 
     def escape_special_characters(self, text):
-        character_mapping = ["%"]
+        character_mapping = ["%", "#"]
         for character in character_mapping:
             text = text.replace(character, "\\" + character)
         return text
@@ -105,6 +105,11 @@ class Generator(object):
                 total_chars = 0
             total_chars = total_chars + len(line)
             lines_considered += [line]
+        if len(lines_considered) > 0:
+            slide = Slide(title,
+                          [BulletList(lines_considered)]
+                         )
+            slides += [slide]
         return slides
 
     def get_slides_for_images(self, image_ids):
