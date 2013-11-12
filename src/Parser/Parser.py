@@ -195,9 +195,11 @@ class Parser(object):
   def lineSmoothener(self, l, r):
     if(len(r)<7): return True
     if(len(l)<5): return True
-    if(len(r.split())<2): return True
+    if(len(r.split())<3): return True
+    if(len(l.split())<3): return True
     if(not re.match('[A-Z]',r[0])): return True
     if(re.match('\s[^\.]$',l)): return True
+    if((l.split()[-1]).lower() in ["eg", "e.g", "vs"]): return True
     if(l.count('(')!=l.count(')')): return True
     if(l.count('[')!=l.count(']')): return True
     if(l.count('{')!=l.count('}')): return True

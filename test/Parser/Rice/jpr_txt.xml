@@ -139,8 +139,7 @@
 				<line ref="" img="">This was not a tenable option because of the diversity of platforms in our user community.</line>
 				<line ref="" img="">We simply could not build a &quot;PC-only&quot;, or &quot;SUN/OS-only&quot; application.</line>
 				<line ref="" img="">Our new approach of keeping control of the software, and shipping a network service seemed the best way for us to overcome the difficulties of shipping software, while being able to impact a wide user community.</line>
-				<line ref="" img="1">Figure 1.</line>
-				<line ref="" img="">The final design (left) used a row of icons (top) for important or frequently used operations, and pop-up menus preceeded by submit buttons (e.g., &quot;File&quot; top left) as labels.</line>
+				<line ref="" img="1">Figure 1. The final design (left) used a row of icons (top) for important or frequently used operations, and pop-up menus preceeded by submit buttons (e.g., &quot;File&quot; top left) as labels.</line>
 				<line ref="" img="">Selecting the `?&apos; help command (top center left) takes the user to a page explaining all applicable commands, and with a labeled explanation of the page (right).</line>
 				<line ref="" img="">The command widgets on the help page are real.</line>
 				<line ref="" img="">Selecting one of these widgets will execute the command in the context of the page that the user was on.</line>
@@ -194,8 +193,7 @@
 			<line ref="" img="">There is no way to combine either submit button or anchor behavior with a pop-up menu to provide the sort of command selection model that is present in so many user interfaces (e.g., the Macintosh menu bar).</line>
 			<line ref="" img="">There is no way to associate a &quot;right button&quot; menu with items, nor is there a way to provide constraints on selection elements (e.g., toggling &quot;show text files&quot; causes a scrolling list of files to filter out non-text files).</line>
 			<line ref="" img="">There is also no way to include iconic elements in menus or scrollable lists. (See here for a comparison of the widget set under different platforms).</line>
-			<line ref="" img="2">Figure 2.</line>
-			<line ref="" img="">In early designs, radio buttons were used to select an argument (left).</line>
+			<line ref="" img="2">Figure 2. In early designs, radio buttons were used to select an argument (left).</line>
 			<line ref="" img="">Selecting an operation from a pop-up menu and clicking on a submit button (top left) inserted suitable edit widgets into the flow of the page at the selected location (right).</line>
 			<line ref="" img="">A slide show of the actual mockup HTML pages can be found here.</line>
 			<section name="Multiple Browsers">
@@ -318,8 +316,7 @@
 			<line ref="" img="">a submit button and pop-up menu combination for commands.</line>
 			<line ref="" img="">text widget and submit button combinations for value elicitation, and.</line>
 			<line ref="" img="">tool bar icons presenting important, general commands.</line>
-			<line ref="" img="5">Figure 3.</line>
-			<line ref="" img="">The final version uses edit widgets in front of all editable objects, and &quot;+&quot; widgets wherever an addition is possible (left).</line>
+			<line ref="" img="5">Figure 3. The final version uses edit widgets in front of all editable objects, and &quot;+&quot; widgets wherever an addition is possible (left).</line>
 			<line ref="" img="">In this example, we show editing the Slot-Value-Type facet value of Thesis.University from Institution to University.</line>
 			<line ref="" img="">Selecting an edit pencil inserts the necessary widgets to elicit or modify the value in context (middle).</line>
 			<line ref="" img="">The user has entered University instead of Institution.</line>
@@ -360,8 +357,7 @@
 			<line ref="10" img="">We considered using a graphical rendering of the hierarchy , but this had several problems: transmitting large images is too slow; it is not possible to position the image so that a particular object is visible; the browser cannot tell which portions of the image are links, and the browser may not be able to display graphical data.</line>
 			<line ref="" img="">We chose to provide a hierarchical browsing mechanism with the same sort of triangular open/close widgets that are found in the Macintosh file system.</line>
 			<line ref="" img="6">The system uses a heuristic method to compute the appropriate initial set of objects to display in the &quot;open&quot; state (figure 4).</line>
-			<line ref="" img="6">Figure 4.</line>
-			<line ref="" img="">The hierarchical class browser shows large graphs of objects in a compact form.</line>
+			<line ref="" img="6">Figure 4. The hierarchical class browser shows large graphs of objects in a compact form.</line>
 			<line ref="" img="">Triangular widgets open and close subgraphs. &quot;Focus&quot; widgets move the selected object to the root of the displayed tree.</line>
 			<line ref="" img="">We found that however hard we might try, our application always produced pages that were multiple screens in height.</line>
 			<line ref="" img="">Consequently, we replicated the menu bar at the bottom of the page so that the user could scroll to the nearest end of the document in order to select one of these more global commands.</line>
@@ -420,8 +416,7 @@
 				<line ref="" img="">Some preferences have been modified by only one user, one has been set by 47 users.</line>
 				<line ref="" img="">From the graph we can see that although power users are changing more preferences, as one would expect, they are changing a focused set of preferences.</line>
 				<line ref="" img="">We conclude from this that although there is a fairly large number of preferences, the number is not wildly in excess of the number needed to represent the degree of customization required by our users.</line>
-				<line ref="" img="7">Figure 5.</line>
-				<line ref="" img="">The average number of preference variables set by each user plotted against the total number of non-trivial requests made by each user to our server.</line>
+				<line ref="" img="7">Figure 5. The average number of preference variables set by each user plotted against the total number of non-trivial requests made by each user to our server.</line>
 				<line ref="" img="">If we look at the actual preferences that are being set, we see that a number of the selections clearly represent a particular user&apos;s personal preference for some particular look and feel, other preference selections are clustered around, for example, a number of preferences that allow the user to control the bandwidth used in communicating with our server.</line>
 				<line ref="" img="">Indeed, we have found that the issue of bandwidth is sufficiently important to our users that we label any preference that might impact bandwidth with a splash graphic.</line>
 			</section>
