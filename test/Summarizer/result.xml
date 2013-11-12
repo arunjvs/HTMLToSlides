@@ -33,36 +33,19 @@
 	<section name="Problem Analysis and Design">
 		<line img="" ref="">In this section we begin to describe how we addressed the problem of delivering our network-based application, and how we designed it.</line>
 		<section name="Objectives">
-			<line img="" ref="">Our goal was to create a general environment to facilitate the development and sharing of ontologies.</line>
-			<line img="" ref="">Such an environment must assist the user in the basic development tasks of browsing, creating, maintaining, sharing, and using ontologies.</line>
-			<line img="" ref="">We also realized that many of our users want to develop ontologies through a consensus process; therefore, we needed to provide tools to help people collaborate during development.</line>
-			<line img="" ref="">From the outset, we wanted to make our potential user community as large as possible.</line>
-			<line img="" ref="">The target community is diverse and includes academics, industrial researchers, and government employees.</line>
 			<line img="" ref="">Once we had established our web-based system, our user community grew from a handful to hundreds in the space of a few months.</line>
 			<line img="" ref="">Our burgeoning user community was an additional incentive to use the web.</line>
 			<line img="" ref="">Furthermore, distributed access eliminates the need for our users to have high-end hardware systems or expensive licenses for the proprietary software systems that we used to develop our application more efficiently.</line>
-			<line img="" ref="">A centralized server model also means that we can make changes and upgrades to the server at a single site (or small number of controlled sites); the new, improved software is instantly accessible to all users.</line>
-			<line img="" ref="">In short, we decided that it would be cheaper to provide free computational resources to our entire user community than to develop shrink-wrap software and distribute it to them.</line>
 			<line img="" ref="">Our challenge was to design a user interface that operates under the constraints of the web, remains intuitive and natural to users, and provides full access to the application.</line>
 			<section name="Support for NaiVe Users">
-				<line img="" ref="">In order to achieve our goal of broad impact, we worked to make our application intuitive and usable to anyone familiar with web browsers (e.g., Netscape Navigator or Mosaic) so that a new user could pick up and productively use our application without any formal training or preparation.</line>
-				<line img="" ref="">We explicitly addressed this by the following means:.</line>
 				<line img="" ref="">HTML used for documentation: Our application has no manual at all per se.</line>
-				<line img="" ref="">All documentation is provided on-line using the same browser that the user already employs to operate the application.</line>
-				<line img="" ref="11,15">Guided tour: One important aspect of the documentation is a guided tour , which takes the new user through a credible editing scenario, motivating the different features of the system.</line>
 				<line img="" ref="">In-context, automatically-generated help: Unlike applications such as Microsoft Word 6.0, in which documentation is available only in an idiosyncratic hypertext browser, our application uses the same hypertext browser uniformly for all of its interface.</line>
-				<line img="" ref="">This means that help and documentation are seamlessly integrated with the rest of the system.</line>
-				<line img="" ref="">Indeed, the help facility builds help pages in real-time so as to give the most focused and helpful response in the user's context.</line>
-				<line img="1" ref="">A novel feature of the help facility is that the commands available to the user are echoed as widgets on the help page (figure 1 right).</line>
-				<line img="" ref="">If the user clicks on the widget in the help page which has accompanying explanatory text and links to worked examples, then the command associated with that widget is activated just as if it were invoked on the page from which the user made the help request.</line>
 				<line img="" ref="">Familiar interface: There was no existing interface metaphor for ontology editing.</line>
 				<line img="" ref="">We selected a document metaphor (as opposed to a two dimensional representation as a directed graph, for example) so that the application could be smoothly integrated into the HTML world.</line>
-				<line img="" ref="">This allows users who are familiar with hypertext documents and browsers to make an easy transition into our interactive application.</line>
-			</section>
+				</section>
 			<section name="Support for Power Users">
 				<line img="" ref="">Although we were keen to expand our user community as much as possible, we were aware that experienced ontology developers would not want to be held back by an interface that was optimized for naive users.</line>
 				<line img="" ref="">It is very important to us to support power users.</line>
-				<line img="" ref="">The vast majority of meaningful ontologies are developed by such users, even if these ontologies are then used by the less experienced as building blocks.</line>
 				<line img="" ref="">The issue of power user support was eventually resolved by providing a powerful user preference facility.</line>
 				<line img="" ref="">This allows the experienced user to tailor the look and feel as well as the set of commands exposed at any given time.</line>
 			</section>
@@ -73,83 +56,22 @@
 			</section>
 			<section name="Trustworthiness">
 				<line img="" ref="">Because we were intending to provide a multi-user shared resource, it was essential for the user community to find our application both reliable and trustworthy.</line>
-				<line img="" ref="">Otherwise, they would not use it to develop confidential or proprietary ontologies.</line>
 				<line img="" ref="">To this end, our application supports a user and group model similar to that provided by operating systems and password protection to ensure privacy and security.</line>
 				<line img="" ref="">Ontologies are protected by maintaining multiple versions to which the user can revert if necessary.</line>
-				<line img="" ref="">At a finer granularity, a multi-level Undo/Redo feature allows the user to repair any mistakes.</line>
 				<line img="" ref="">A sophisticated compare facility, which compares semantic units rather than text, allows the user to see exactly what has changed; an analysis facility tells the user what ought to be changed.</line>
 			</section>
 			<section name="Overcome Previous Difficulties">
-				<line img="" ref="">Our previous software delivery attempts had been plagued by long release cycles, installation difficulties, and problems with patch distribution.</line>
-				<line img="" ref="">Users had to acquire expensive proprietary software and high-end hardware to run the system.</line>
-				<line img="" ref="">This was very unpopular, and substantially reduced the impact of our work by excluding PC and Mac users from the user community.</line>
-				<line img="" ref="">We needed an approach that would overcome all of these problems.</line>
 				<line img="" ref="">There are a number of possible ways to deliver applications to a user community.</line>
-				<line img="" ref="">In the past, we had always built our software to be as portable as possible, testing it on a number of platforms and with a number of different compilers from different vendors.</line>
-				<line img="" ref="">This approach was necessary because our user community always wanted us to ship source code to them so that they could modify and experiment with our software.</line>
-				<line img="" ref="">The cost of testing and ensuring cross-platform portability proved to be very high.</line>
-				<line img="" ref="">Users would often employ versions of operating systems, platforms or compilers to which we had no access.</line>
-				<line img="" ref="">One way to address this problem would have been to offer only shrink-wrap software releases to our users.</line>
-				<line img="" ref="">This was not a tenable option because of the diversity of platforms in our user community.</line>
 				<line img="" ref="">We simply could not build a "PC-only", or "SUN/OS-only" application.</line>
 				<line img="" ref="">Our new approach of keeping control of the software, and shipping a network service seemed the best way for us to overcome the difficulties of shipping software, while being able to impact a wide user community.</line>
-				<line img="1" ref="">Figure 1. The final design (left) used a row of icons (top) for important or frequently used operations, and pop-up menus preceeded by submit buttons (e.g., "File" top left) as labels.</line>
-				<line img="" ref="">Selecting the `?' help command (top center left) takes the user to a page explaining all applicable commands, and with a labeled explanation of the page (right).</line>
-				<line img="" ref="">The command widgets on the help page are real.</line>
-				<line img="" ref="">Selecting one of these widgets will execute the command in the context of the page that the user was on.</line>
-				<line img="" ref="">Tears in the figure elide material extraneous to this discussion.</line>
 				<line img="" ref="">Note: this figure is very wide and might require horizontal scrolling to see the right-hand part of the figure.</line>
-				<line img="" ref="">A slide show examplifying the Help feature can be found here.</line>
-			</section>
+				</section>
 		</section>
 		<section name="Constraints Imposed by Html and Http">
-			<line img="" ref="">There are only two ways for the browser to transmit information to the server (i.e., the application).</line>
 			<line img="" ref="">Selecting an anchor transmits a request to follow a hypertext link.</line>
-			<line img="" ref="">Pressing a submit button transmits the widget state.</line>
-			<line img="" ref="">Until a submit button is pushed, it is not possible for the server to determine anything about intermediate activities that a user might perform such as typing text into an input field, toggling radio buttons or check boxes, selecting items from menus, moving the mouse, and so on.</line>
-			<line img="" ref="">The only way for the server to transmit information to a browser is in response to a submit or select action initiated by the user.</line>
-			<line img="" ref="">Moreover, there is a fundamental difference between the type of interaction supported by HTML and the forms of interaction with which we are all accustomed in graphical user interfaces.</line>
-			<line img="" ref="">In GUIs, operations typically take the form of the user selecting an operand or operands through direct manipulation and then applying an operator by means of a menu selection or keyboard accelerator.</line>
-			<line img="" ref="">In HTML-based user interfaces, there is no notion of selecting objects pre se.</line>
-			<line img="" ref="">There are, in effect, two disjoint forms of interaction:.</line>
-			<line img="" ref="">The page that the user is on is viewed as an implicit operand, and therefore the user can select a command to apply to that operand.</line>
-			<line img="" ref="">The user can change the current operand by clicking on an object and going to the page for that object, where the object the user selected will become the current implicit operand for further commands.</line>
-			<line img="" ref="">The semantics of a simple link can be locally changed so that a particular command is applied to the operand named in the link.</line>
-			<line img="" ref="">This has the consequence of potentially confusing the user because web users are very strongly conditioned to expect that a normal link will take the user to the object selected.</line>
 			<line img="" ref="">In effect, an HTML interface can allow the user to apply a number of different commands to a single object, or a single command to a one of a number of different objects.</line>
-			<line img="" ref="">Commands that take multiple operands are much harder to implement.</line>
 			<line img="" ref="">Consequently, it is currently impossible to implement many features of sophisticated user interfaces over the web.</line>
-			<line img="" ref="">In particular, tightly coupled interfaces that provide immediate feedback to the user are not possible.</line>
-			<line img="" ref="">For instance, given an initial menu selection, it is not possible for the application to gray out options that are incompatible with it.</line>
-			<line img="" ref="">Furthermore, there can be no direct manipulation of objects such as one might find in a graphical class browser.</line>
-			<line img="" ref="">Finally, it is not possible for the application to preempt the browser's activity or provide any asynchronous communication.</line>
-			<line img="" ref="">For example, it is not possible to notify the user asynchronously about the results of a background task or remind the user to save work.</line>
-			<line img="" ref="">Delivering notifications of collaborators' work on shared data is another problem.</line>
-			<line img="" ref="">Since several people simultaneously edit the same ontology, we need to provide some way for users to be made aware of the changes made by others.</line>
-			<line img="" ref="">Today's HTTP makes this difficult because it does not allow a server to send unsolicited notifications to the client.</line>
-			<line img="" ref="">We work around this limitation by presenting pending notifications at the top of the page in a dialog.</line>
-			<line img="" ref="">The notification includes a textual description of the changes being made by collaborators on shared data, and a link is provided that will take the user to the modified object.</line>
-			<line img="" ref="">Within a shared session, users share the same undo history so that a user can undo damage performed by a less enlightened user.</line>
-			<line img="" ref="">A command is also provided to make announcements to users so that they can be forewarned of a change to come and be given a suitable justification.</line>
-			<line img="" ref="">An improvement to the HTTP standard to accomodate asynchronous notifications would be preferred (some are being proposed).</line>
-			<line img="" ref="">Bandwidth is a key constraint.</line>
-			<line img="" ref="">Each user action (submit or select) causes an entire new page to be transmitted back to the browser over the network.</line>
-			<line img="" ref="">There is no method for the application to cause an incremental update of a portion of the display.</line>
-			<line img="" ref="">Even on high-bandwidth local area networks, transmitting and rendering large pages is time consuming; for distant browsers it becomes the dominant cost.</line>
-			<line img="" ref="">The application has very little control over appearance.</line>
-			<line img="" ref="">HTML explicitly cedes rendering decisions to browsers.</line>
 			<line img="" ref="">This has many advantages for browsing hypertext documents, but it proves awkward for interface design.</line>
-			<line img="" ref="">There is little control over the location of displayed objects on the finally rendered page.</line>
-			<line img="" ref="">In particular, if a page is too large to fit on a single screen, there is no way of controlling how and to where the browser will scroll the page.</line>
-			<line img="" ref="">This registration problem can be very difficult to work around and frustrating for users (see section 3.4).</line>
-			<line img="" ref="">The widget set available through HTML's forms capability is extremely restricted.</line>
-			<line img="" ref="">It includes only pop-up menus, single/multiple selection scrolling lists, submit buttons, checkboxes, radio buttons, mapped images, and text type-in widgets (see figures 1 and 2).</line>
-			<line img="" ref="">There is no way to combine either submit button or anchor behavior with a pop-up menu to provide the sort of command selection model that is present in so many user interfaces (e.g., the Macintosh menu bar).</line>
-			<line img="" ref="">There is no way to associate a "right button" menu with items, nor is there a way to provide constraints on selection elements (e.g., toggling "show text files" causes a scrolling list of files to filter out non-text files).</line>
-			<line img="" ref="">There is also no way to include iconic elements in menus or scrollable lists. (See here for a comparison of the widget set under different platforms).</line>
-			<line img="2" ref="">Figure 2. In early designs, radio buttons were used to select an argument (left).</line>
-			<line img="" ref="">Selecting an operation from a pop-up menu and clicking on a submit button (top left) inserted suitable edit widgets into the flow of the page at the selected location (right).</line>
-			<line img="" ref="">A slide show of the actual mockup HTML pages can be found here.</line>
 			<section name="Multiple Browsers">
 				<line img="" ref="">A growing number of web browsers from a variety of institutions and vendors make non-standard extensions to the published protocols.</line>
 				<line img="" ref="">These browsers provide different levels of support for features in the protocols.</line>
@@ -158,11 +80,6 @@
 			<section name="Time-Travel in the Interface">
 				<line img="" ref="">A unique feature of web browsers is that they cache previously seen pages and allow the user to revisit these cached pages without notifying the server.</line>
 				<line img="" ref="">In interactive applications delivered on the web, these "previously seen pages" can represent earlier states in a dialog with the user.</line>
-				<line img="" ref="">As a consequence, the browser allows the user to travel back in time to an earlier interaction state and attempt to execute the commands as they were presented then.</line>
-				<line img="" ref="">Since the state of the data on the server may have changed as a result of the user's interactions with the server, incoherent transactions can result.</line>
-				<line img="" ref="">There are two alternative ways for applications to handle this.</line>
-				<line img="" ref="">Applications must either support time-travel, or they must always reflect the most recent state.</line>
-				<line img="" ref="">For example, suppose that a user engages in a dialog to delete an object and then backs up to a page on which the object is still present.</line>
 				<line img="" ref="">If the user selects the deleted object as represented on that page, the application should either undo the deletion or report an error in a graceful way.</line>
 				<line img="" ref="">Our application chooses the latter approach.</line>
 			</section>
@@ -173,16 +90,9 @@
 			<line img="" ref="">The steps we took included: minimizing the number of intermediate states in complex command execution, minimizing the number of distinct types of pages, the number of distinct widgets, working to achieve consistent appearance across browsers, but working within the widgets provided by the native window systems.</line>
 			<line img="" ref="">In this section we discuss these issues in more detail.</line>
 			<section name="Minimize Intermediate Pages and Number of Clicks">
-				<line img="" ref="">The restrictions on the widget set force complex interactions to be broken down into a sequence of simple ones punctuated by submit actions and the transmission of intermediate pages.</line>
-				<line img="" ref="">To simplify the execution of complex commands, we chose (1) to minimize the number of actions that the user must perform, and (2) to minimize the number of pages presented during the course of the interaction.</line>
-				<line img="" ref="">It is important to minimize these because of the cognitive effort required to parse and understand a new page, because displaying a new page makes it change registration (see section 3.4), and because transmitting and rendering a page may take several seconds.</line>
-				<line img="" ref="">The desire to minimize the number of clicks and intermediate pages has some consequences.</line>
 				<line img="" ref="">Because we want to minimize the number of clicks that a user performs, we are inclined to make pages richer (and potentially more confusing) to a user.</line>
 				<line img="" ref="">Our application consists of the display and editing of a hierarchy of objects; classes exist within ontologies, classes have slots (attributes), and those slots can themselves have facets (attributes of attributes).</line>
-				<line img="" ref="">We could have chosen to present a different page for each slot and for each facet in any given class.</line>
-				<line img="" ref="">Instead, we display all of the slots and facets of a class on a single page.</line>
 				<line img="" ref="">A user can therefore edit a facet value directly on a class without going through any intermediate pages.</line>
-				<line img="" ref="">This design helps to satisfy our goal of minimizing the number of clicks and intermediate pages, but at the expense of making the pages larger and more complex.</line>
 				<line img="" ref="">The user is presented with considerably more information than may be of interest, and the user is more likely to have to scroll in order to see what is of interest.</line>
 			</section>
 			<section name="Edit-In-Place Metaphor">
@@ -201,23 +111,16 @@
 			</section>
 			<section name="Consistency Across Browsers">
 				<line img="" ref="">We wanted our user interface to work in the same way across all platforms and browsers.</line>
-				<line img="" ref="">This would minimize training and documentation problems.</line>
-				<line img="" ref="">We explicitly chose to limit use of undocumented or non-portable extensions provided by different browsers.</line>
 				<line img="" ref="">One significant exception to this decision is HTML tables, which provide a much better way to present tabulated information than is otherwise possible.</line>
 				<line img="" ref="13">We use HTML tables when communicating with a Netscape browser  and use PREformatted text (a fixed-width font display mode) for other browsers.</line>
-				<line img="" ref="">We explicitly decided to support multiple browsers.</line>
 				<line img="" ref="">Some user interfaces on the web are almost unusable without using Netscape.</line>
-				<line img="" ref="">We did not want to limit our user community in this way, and so preserved a consistent look and feel across platforms and browsers.</line>
-			</section>
+				</section>
 			<section name="Native Window System'S Submit Buttons">
 				<line img="" ref="">Many developers choose to exercise artistic control over the look and feel of their web pages by using custom bitmapped graphics for buttons instead of the native look and feel that the web browsers provide.</line>
-				<line img="" ref="">Consequently, their web pages look more uniform across platforms, but users must learn to recognize buttons anew for each of these idiosyncratic applications.</line>
-				<line img="" ref="">Furthermore, when this mapped graphic approach is used, the browser is not able to provide feedback to the user about which regions of the bitmap will result in commands being executed.</line>
 				<line img="" ref="">In contrast, we chose to use the native window system's submit buttons for our interface.</line>
 				<line img="" ref="">Our application was going to be complex enough without the user having to relearn what a button is supposed to look like.</line>
 				<line img="" ref="">The constraint of supporting naive users meant that we could not allow any user interface tricks such as having extremely stylized icons that cause differing behavior depending on where on the icon the user clicks.</line>
-				<line img="" ref="">While such approaches allow very terse and dense displays that efficiently take advantage of the available screen real-estate and bandwidth, they would be difficult for members of our target community to understand and learn.</line>
-			</section>
+				</section>
 		</section>
 	</section>
 	<section name="Evolution of Design">
@@ -225,117 +128,28 @@
 		<line img="" ref="">In this section we describe the evolution of our design and our software, and show how we changed our user interface as we learned more about the application and received user feedback.</line>
 		<line img="" ref="">One of the significant advantages of our implementation approach - a central server and standard browsers, coupled with a dynamic, rapid-prototyping implementation infrastructure - was that we could rapidly receive user feedback and introduce changes in response, often within a few minutes or hours.</line>
 		<line img="" ref="">This meant that as soon as the server was established, our design progressed very rapidly.</line>
-		<line img="" ref="">In this section we describe several of the significant events in this evolutionary process.</line>
 		<section name="Early Design and Mockup">
-			<line img="" ref="">We were fortunate to start this project with a preexisting substrate.</line>
-			<line img="" ref="3">Earlier work had enhanced Ontolingua , our ontology development tool so that ontologies could be compiled into static hyperwebs (see here for more on this process and examples).</line>
-			<line img="" ref="">These hyperwebs displayed the concepts in the ontology with one concept per page.</line>
 			<line img="" ref="">Our first step, therefore was to take pages of hypertext generated by this compilation process and manually edit them so as to mock up the editing interface.</line>
 			<line img="" ref="">This process of developing mockups lasted about two weeks and went through multiple iterations, experimenting with different ways to handle the perceived problems of having a simple user interface that was nevertheless powerful.</line>
-			<line img="" ref="">Early designs experimented with putting edit widgets next to each of the potentially modifiable objects in the page being displayed.</line>
-			<line img="" ref="">Selecting one of these edit widgets would take you to a different mockup page with, for example, a text widget allowing the user to edit the selected value.</line>
-			<line img="" ref="">These mockups can be seen here.</line>
 			<line img="" ref="">The whole mockup process was performed by editing these HTML files to refine the design.</line>
-			<line img="" ref="">We tried several different approaches to provide the functionality of a right button command menu, which is not supported by HTML.</line>
-			<line img="2" ref="">For example, in one mockup, there was a radio button in front of each editable object, and at the top of the page was a pop-up menu of operations to be applied to the object selected with the radio button (figure 2).</line>
-			<line img="" ref="">A "Do It" submit button caused the execution of the selected operation.</line>
-			<line img="" ref="">This method requires three different widget selections which involved mouse travel from the selected object back to the top of the page and often required the user to scroll the viewport.</line>
-			<line img="" ref="">This would have been burdensome on our users.</line>
 			<line img="" ref="">We addressed this problem by using a single intermediate page for edit operations, and by limiting the expressiveness of the user interface - we do not allow the user to execute all conceivably legal operations at any given point.</line>
-			<line img="" ref="">We eventually settled on a design in which a small edit widget would be placed next to any editable object.</line>
-			<line img="" ref="">Selecting this widget would take the user to a page just like the current page, only with suitable edit widgets replacing the value that was selected, and allowing the user to select between a number of possible edit options.</line>
-			<line img="" ref="">In our application, it is necessary to be able both to create new objects (e.g., classes) and also to add objects to existing objects (e.g., add a property or value to a given object).</line>
-			<line img="" ref="">Finding a good way to represent this proved tricky, and we experimented with several methods.</line>
-			<line img="" ref="">For example, we tried using a "dummy" entry for values, so that for every list of values there would be an extra one at the beginning (or end) in italics that was a place holder for a new value to be added (this is an example of this design mockup).</line>
-			<line img="" ref="">This was found to be confusing, and was soon dropped in favor of the design described in the next section.</line>
-		</section>
+			</section>
 		<section name="Early Implementation">
-			<line img="" ref="">Moving on from our mockups, our initial implementation of the editing environment attempted to implement the design that we had mocked up as closely as possible, but we rapidly ran into difficulties.</line>
-			<line img="" ref="">For example, in the mockups, quite by chance, we had selected an object which had only one value for each of the attributes being displayed.</line>
-			<line img="" ref="">This encouraged us to position a single edit widget in front of the set of attribute values in order to elicit and/or modify all of the values simultaneously in one text widget.</line>
-			<line img="" ref="">We soon discovered that the more general case of there being several attribute values was very common and the single text widget approach was confusing to our users.</line>
-			<line img="" ref="">Problems with eliciting multiple values in a single text widget were compounded by our desire to edit values in context, which made us want to minimize the size of the text widget.</line>
-			<line img="" ref="">Values were sometimes scrolled out of the user's viewport, which resulted in erroneous editing operations and much confusion.</line>
-			<line img="" ref="">Early user feedback quickly caused us to change our design in favor of eliciting or editing only one attribute value at a time.</line>
-			<line img="5" ref="">This had the side-effect of increasing screen clutter by putting individual edit widgets in front of every editable value (figure 3 left).</line>
-			<line img="" ref="">The next problem that arose was that users were confused by the methods for creating and adding objects and values.</line>
-			<line img="" ref="">They often added values that were illegal or non-existent objects.</line>
-			<line img="" ref="">The number of possible legal values for attributes in the system is typically too large to enumerate explicitly.</line>
-			<line img="" ref="">Because of this, we developed a sophisticated, context-dependent completion facility, which space prevents us from describing here.</line>
-			<line img="5" ref="">After a few iterations we ended up with a design which we have broadly kept since this early stage (see figure 3).</line>
-			<line img="" ref="">In this design, we distinguish between five different types of widget:.</line>
-			<line img="" ref="">the simple hyperlink, which always takes the user to a page showing the selected object.</line>
-			<line img="" ref="">edit widgets, represented by pencil icons that allow the user to edit an existing value and addition widgets, which are represented by icons such as.</line>
-			<line img="" ref="">Only one type of object can be added at each location; the type is indicated by the icon.</line>
-			<line img="" ref="">a submit button and pop-up menu combination for commands.</line>
-			<line img="" ref="">text widget and submit button combinations for value elicitation, and.</line>
-			<line img="" ref="">tool bar icons presenting important, general commands.</line>
-			<line img="5" ref="">Figure 3. The final version uses edit widgets in front of all editable objects, and "+" widgets wherever an addition is possible (left).</line>
-			<line img="" ref="">In this example, we show editing the Slot-Value-Type facet value of Thesis.University from Institution to University.</line>
-			<line img="" ref="">Selecting an edit pencil inserts the necessary widgets to elicit or modify the value in context (middle).</line>
-			<line img="" ref="">The user has entered University instead of Institution.</line>
-			<line img="" ref="">The user can remove screen clutter by inhibiting all edit widgets (right).</line>
-			<line img="" ref="">Here is a detailed worked example of an editing session using the ontology editor, showing a number of the features of the editor.</line>
 			<line img="" ref="">Although we went to considerable effort to make the user interface clear and intuitive, it was still novel in many ways.</line>
-			<line img="" ref="">To familiarize new users with the meaning of the various icons and edit widgets they might see, we introduced a "Welcome" page which displays the icon images together with a brief explanation.</line>
-			<line img="" ref="">Users can suppress this page once they are familiar with its contents.</line>
-			<line img="" ref="">By this point, we were able to edit values and create new objects in our system, but we were unable to save our changes.</line>
 			<line img="" ref="">Our user interface mockups had focused exclusively on the different ways to edit objects in the system - they completely neglected the sorts of operations that are typically found on the "File" menu of a normal user interface.</line>
-			<line img="" ref="">This presented us with a problem.</line>
-			<line img="" ref="">We already had a row of buttons at the top of the page that would provoke the creation of new objects.</line>
-			<line img="" ref="">When we added the options that were necessary for typical file menu operations we found that we had a glut of buttons.</line>
-			<line img="" ref="">The number of buttons would only increase as the system became more sophisticated.</line>
-			<line img="" ref="">At this point, we had to make a significant compromise.</line>
-			<line img="" ref="">Again, because HTML does not support pop-up submit buttons, we were unable to implement the obvious and familiar behavior of a menu bar.</line>
-			<line img="" ref="">The only "correct" model for command menus in HTML is the exhaustive enumeration of the commands as submit buttons.</line>
-			<line img="" ref="">This was untenable because of the number of commands we needed to support (typically around 40 per page).</line>
-			<line img="" ref="">As an alternative, we partitioned the commands into broad classes and put the commands on menus.</line>
-			<line img="1" ref="">In front of each menu we placed the name of the menu as a submit button (see figure 1, top left).</line>
-			<line img="" ref="">This meant that the user had to select an option from the menu and then click on the submit button to execute the selected operation.</line>
-			<line img="" ref="">This is non-standard, but we found that our users got used to it fairly quickly, probably because we went to significant effort to make sure that the system would always put the most likely choice as the default option on the menu.</line>
-			<line img="" ref="">Thus, a single pointer operation often suffices.</line>
-			<line img="" ref="">Because we could not predict whether our users would find the factoring of commands onto menus with submit buttons described above reasonable, we introduced a user preferences mechanism that allowed the user to control, among other things, the look and feel of these menu commands.</line>
-			<line img="" ref="">In practice, most users ended up accepting our default setting for the command menu's look and feel.</line>
-			<line img="" ref="">The desire for menu flexibility was the impetus for us to introduce a user preferences facility, but this feature has become ever more important in our system.</line>
 			<line img="" ref="">Users connect to our application from all around the world from sites with widely differing quality of network connectivity.</line>
-			<line img="" ref="">Consequently it is very important to support options that let the user trade prettiness or verbosity for bandwidth.</line>
-			<line img="" ref="">The issue of how much power to give to the user came up with the introduction of this command menu model.</line>
-			<line img="" ref="">Our system is non-modal in the sense that it is always theoretically legal to jump to (say) a class creation dialog from the middle of a different object creation dialog.</line>
 			<line img="" ref="">By default, we choose to hide this fact from users in order to simplify the appearance of the user interface.</line>
-			<line img="" ref="">However, power users resent such restrictions, and so we have had to add extra preferences to allow our power users full access to all applicable commands, irrespective of their current context.</line>
-		</section>
+			</section>
 		<section name="Problems of Scale">
 			<line img="" ref="">By the time the system had reached this level of sophistication, we had made our application available to the public, and around one hundred users had tried it out.</line>
-			<line img="" ref="">We quickly found that users were unable to visualize large ontologies with hundreds or thousands of concepts.</line>
-			<line img="" ref="">This is a problem analogous to browsing a flat file system with hundreds or thousands of files.</line>
-			<line img="" ref="10">We considered using a graphical rendering of the hierarchy , but this had several problems: transmitting large images is too slow; it is not possible to position the image so that a particular object is visible; the browser cannot tell which portions of the image are links, and the browser may not be able to display graphical data.</line>
-			<line img="" ref="">We chose to provide a hierarchical browsing mechanism with the same sort of triangular open/close widgets that are found in the Macintosh file system.</line>
-			<line img="6" ref="">The system uses a heuristic method to compute the appropriate initial set of objects to display in the "open" state (figure 4).</line>
-			<line img="6" ref="">Figure 4. The hierarchical class browser shows large graphs of objects in a compact form.</line>
-			<line img="" ref="">Triangular widgets open and close subgraphs. "Focus" widgets move the selected object to the root of the displayed tree.</line>
 			<line img="" ref="">We found that however hard we might try, our application always produced pages that were multiple screens in height.</line>
 			<line img="" ref="">Consequently, we replicated the menu bar at the bottom of the page so that the user could scroll to the nearest end of the document in order to select one of these more global commands.</line>
 			<line img="" ref="">User feedback has caused us to spend more effort on displaying large ontologies.</line>
-			<line img="" ref="">We have recently addressed this by factoring pages showing large ontologies automatically.</line>
-			<line img="" ref="">We have also introduced a method of focusing the hierarchical browsing tool onto subgraphs of the class lattice, and for using this same hierarchical browsing technique to look at attributes as well as classes and instances.</line>
-		</section>
+			</section>
 		<section name="Breakdown of the Edit-In-Place Model">
-			<line img="" ref="">Our early design criteria had called for trying to preserve the illusion that there were only a few different types of pages: one for ontologies, one for the library, and one for frame objects.</line>
-			<line img="5" ref="">Edit widgets would be inserted in-place to preserve the look and feel of these pages (see figure 3).</line>
-			<line img="" ref="">When it came to object creation, we did not, of course, have an object to display.</line>
 			<line img="" ref="">When the user selected a creation operation, we presented the user with a fake page representing an object of the type being created, with a text widget into which the user could enter the new object's name.</line>
-			<line img="" ref="">This preserved a uniform look and feel for all of our pages.</line>
-			<line img="" ref="">We rapidly discovered that this approach confused our users.</line>
-			<line img="" ref="">Their cognitive model of object creation was sufficiently different from normal editing and browsing operations that being presented with a fake page for the object to be created was confusing.</line>
-			<line img="" ref="">The users clearly liked to think of the creation pages as being (pseudo) modal dialogs, and didn't want to view the creation page as an ersatz, incomplete object.</line>
 			<line img="" ref="">Another problem with the edit-in-place model of interaction is that HTML and HTTP give no effective control over viewport positioning.</line>
 			<line img="" ref="">This means that when the user selects an edit operation, we have no choice but to refresh the whole page (unlike a more tightly-coupled user interface in which the system might push existing text aside in order to make room for the edit widgets).</line>
-			<line img="" ref="">Although it is possible to tell the browser where to scroll to on the new page, this is very coarse-grained control.</line>
-			<line img="" ref="">Browsers differ significantly in their scrolling behavior, and this typically results in a loss of registration of the user's viewport, and therefore the loss of the user's cognitive focus.</line>
-			<line img="" ref="">In practice we suspect that it might be better not to use this edit-in-place model, but rather to use simple pages that give the illusion of modal dialogs.</line>
-			<line img="" ref="">This is an open design question and needs further investigation.</line>
-			<line img="" ref="">Registration of the display is only reliable when the whole HTML page is less than one screen in height.</line>
-			<line img="" ref="">Because browsers cannot inform the server of the browser's window size or exact viewport position within a document, this problem cannot be solved in general.</line>
 			<line img="" ref="">Furthermore, our application typically generates HTML pages more than one screen high.</line>
 		</section>
 		<section name="Observations on User Interaction">
@@ -343,37 +157,22 @@
 			<line img="" ref="">Together with informal observation of local users, we have observed several surprising characteristics of system usage.</line>
 			<section name="Reluctance to Click">
 				<line img="" ref="">We have noticed that users are reluctant to experiment freely within the application.</line>
-				<line img="" ref="">This becomes an issue when users are unable to understand an icon or command.</line>
-				<line img="" ref="">They do not try it to see what it will do.</line>
-				<line img="" ref="">This surprised us.</line>
-				<line img="" ref="">We had expected that users would experiment freely because the network connection isolates them from most problems.</line>
-				<line img="" ref="">There are several possible explanations for their behavior: They may be avoiding wasting their time.</line>
 				<line img="" ref="">Some browsers are difficult to interrupt if an address is not well formed, a server refuses to respond or responds slowly, or if a large document is transmitted.</line>
-				<line img="" ref="">They may be trying to protect their work.</line>
 				<line img="" ref="">Many web-based applications are brittle and crash unexpectedly.</line>
-				<line img="" ref="">Few applications provide as many safeguards as ours does against irrecoverable damage.</line>
-				<line img="" ref="">They may also be trying to protect the work of other users by following only understood paths.</line>
 				<line img="" ref="">It would be interesting to find out why users are so reluctant to experiment, since this could have significant impact on the design of networked application user interfaces if this behavior proved to be widespread.</line>
 			</section>
 			<section name="Logging Out">
 				<line img="" ref="">We have observed that our users have a powerful desire to be able to log out of our system.</line>
 				<line img="" ref="">Because a user's connection with our application lasts only as long as each individual request from the browser - typically only a second or two - and because the user could walk away, leaving the browser at any time - we have had to engineer the system so that logging out is not necessary.</line>
 				<line img="" ref="">The system has a set of timeouts and defaults that allow it to recover quiescent resources.</line>
-				<line img="" ref="">However, we have noticed that users feel a need to log out, even when they are told explicitly that it is not necessary.</line>
 				<line img="" ref="">We have therefore provided a command to give the user the illusion of logging out.</line>
 			</section>
 			<section name="The Usage of User Preferences">
-				<line img="" ref="">It is often assumed that preferences in applications are not of significant utility because few users actually change them.</line>
 				<line img="" ref="">If we look at active users, whom we define as those who have executed at least 50 commands, we find that some 41% of our users have changed at least one preference.</line>
 				<line img="7" ref="">Figure 5 plots the distribution of the number preferences modified against the number of requests performed by each user.</line>
-				<line img="" ref="">There are 47 preference variables in the system of which 42 have been modified by at least one user (here is an example page showing the preferences dialog).</line>
 				<line img="" ref="">Some preferences have been modified by only one user, one has been set by 47 users.</line>
-				<line img="" ref="">From the graph we can see that although power users are changing more preferences, as one would expect, they are changing a focused set of preferences.</line>
-				<line img="" ref="">We conclude from this that although there is a fairly large number of preferences, the number is not wildly in excess of the number needed to represent the degree of customization required by our users.</line>
 				<line img="7" ref="">Figure 5. The average number of preference variables set by each user plotted against the total number of non-trivial requests made by each user to our server.</line>
-				<line img="" ref="">If we look at the actual preferences that are being set, we see that a number of the selections clearly represent a particular user's personal preference for some particular look and feel, other preference selections are clustered around, for example, a number of preferences that allow the user to control the bandwidth used in communicating with our server.</line>
-				<line img="" ref="">Indeed, we have found that the issue of bandwidth is sufficiently important to our users that we label any preference that might impact bandwidth with a splash graphic.</line>
-			</section>
+				</section>
 		</section>
 	</section>
 	<section name="The Future">
@@ -381,170 +180,24 @@
 		<line img="" ref="">We must therefore consider what we would do (or would have done) if Java or some similarly capable remote scripting facility were to be reliable and powerful enough to use for our application.</line>
 		<line img="" ref="">Certainly, had Java been ready for serious use a year ago we would have been very tempted to use it to get around some of the severe constraints of HTML.</line>
 		<line img="" ref="">In this section, we detail some of the issues surrounding the use of client-side applets, and we then enumerate some of the simple changes that could be made to HTML to make this sort of application much easier and better.</line>
-		<line img="" ref="">Please note that although in this section we refer to Java, the reader should treat this as a generic reference for some facility that allows the portable specification of client-side applets.</line>
-		<line img="" ref="">At present, it would appear that Java will win this war, but this is by no means certain.</line>
 		<section name="Java and Client-Side Scripting">
-			<line img="" ref="">In order to develop Java programs of any real sophistication, one needs programming tools such as debuggers.</line>
-			<line img="" ref="">These are not currently available.</line>
-			<line img="" ref="">We clearly expect this problem to be solved in time.</line>
-			<line img="" ref="">Although Java allows one to embed applications within a browser, there is currently no documented, cross-platform and cross-browser API that allows one to interface to the browser.</line>
-			<line img="" ref="">This makes it difficult to add to the browser's menu bar, or to interface to the underlying operating system's drag-and-drop capability, both of which are clearly desirable.</line>
 			<line img="" ref="">Using Java would allow one to circumvent a number of the constraints in the widget set that HTML imposes.</line>
-			<line img="" ref="">For example, one could have dialogs that could update and constrain themselves dynamically in response to user selections.</line>
-			<line img="" ref="">However, because these widgets would not be "standard" or familiar to the user, any extra widgets that we provided would impose an extra cognitive burden on the user and a documentation burden on the implementors.</line>
-			<line img="" ref="">We would probably only use such widget set extensions when the resulting widgets were much more obvious than the alternatives in plain HTML.</line>
-			<line img="" ref="">The use of Java would result in a heterogeneous implementation resulting inevitably in increased costs.</line>
-			<line img="" ref="">Given that a significant motivation for our application was reducing cost, we would be reluctant to do anything that would increase implementation cost without a very clear benefit to our user community.</line>
-			<line img="" ref="">Our goal of making our application available to the widest possible audience would require that Java was entirely ubiquitous.</line>
 			<line img="" ref="">It would have to be supported by a wide variety of browsers, from Netscape and NetCruiser to Lynx.</line>
-			<line img="" ref="">From our point of view it is not acceptable to assume that the fact that the majority of our users currently use Netscape is enough to allow us to make our application be Netscape-only.</line>
-			<line img="" ref="">At present, users can still access our system through a TTY-based browser such as Lynx.</line>
 			<line img="" ref="">If we were to make Java an important part of our application, we would either exclude such users or we would have to support both plain HTML interaction and Java as well, which would result in a duplication of effort, and increased development and maintenance costs.</line>
-			<line img="" ref="">Any computation performed on the client side increases the computational demands on the user's machine.</line>
-			<line img="" ref="">We want to be as inclusive as possible in our user community, so we are reluctant to run substantial code on the client side.</line>
-			<line img="" ref="">Of course, in some cases, the reduced network traffic resulting from running applets on the client side would compensate for the extra computational burden on the client side.</line>
-			<line img="" ref="">Even with the use of Java, the vast majority of our computation would be performed on the server, not only because of the need to support collaborative work, but also because the user can easily build up multi-megabyte state.</line>
-			<line img="" ref="">Shipping this much state over the net is impractical.</line>
-			<line img="" ref="">Even for operations such as user input completion, the number of options that the user can select is much too large to transmit to the client machine.</line>
-			<line img="" ref="">This makes it impossible to use Java to provide tightly-coupled completion, even though this would be one of the most obviously desirable benefits of a more powerful widget set.</line>
-			<line img="" ref="">The use of Java to do anything non-trivial would probably require establishing an extra stream between the client and server machines above and beyond the HTTP connection.</line>
-			<line img="" ref="">This is likely to cause significant problems because a number of our users operate from behind firewalls that would not permit this sort of connection.</line>
 			<line img="" ref="">Moreover, the ephemeral connections of HTML/HTTP provide a certain degree of resiliency that would be lost by the need to keep open persistent network connections over possibly unreliable networks.</line>
 		</section>
 		<section name="Html: Problems and Solutions">
-			<line img="" ref="">HTML could be extended to privide better support for more sophisticated applications, making user interaction more satisfactory and implementation cheaper and simpler.</line>
-			<line img="" ref="">Please note that although we show some examples of how one might like to represent some of these ideas, some of these examples violate the current lexis and syntax rules of HTML.</line>
-			<line img="" ref="">To address all of these issues, a proper rewrite of HTML would be required.</line>
-			<line img="" ref="">Sadly, we are probably stuck with all of the warts of HTML.</line>
-			<line img="" ref="">HTML only supports a single mouse event.</line>
-			<line img="" ref="">If we could also support a pop-up menu of options from any given link, we could support far more sophisticated context-specific behavior, and we could avoid a lot of intermediate pages.</line>
-			<line img="" ref="">For example, we might like to be able to say:.</line>
-			<line img="" ref="">This would insert a normal link on the word "Color".</line>
-			<line img="" ref="">On some browsers, using the right mouse button would pop-up a menu with the three options "Red", "Green" and "Blue".</line>
 			<line img="" ref="">Selecting one of these options would take the user to red.html, green.html, or blue.html respectively.</line>
-			<line img="" ref="">A different link color or underline could be used to indicate anchors that have alternatives.</line>
-			<line img="" ref="">In text-based and mouseless browsers, a keystroke would be used to pop up the menu.</line>
-			<line img="" ref="">It is not currently possible to have a button on the screen that looks like a submit button, but is actually implemented as a link.</line>
-			<line img="" ref="">This makes it harder to keep a uniform look-and-feel in applications that intermingle links with submit buttons, and for which the distinction between links and submit buttons may not be obvious.</line>
-			<line img="" ref="">One can use ISMAPed images for this purpose, but one then divorces oneself from the native window system's widget set, making the application harder to learn.</line>
-			<line img="" ref="">This problem could easily be overcome by extending the INPUT HTML element to allow the user to say:.</line>
-			<line img="" ref="">This would insert a button labeled "My Button".</line>
-			<line img="" ref="">Selecting the button would have the same effect as one would expect from clicking on a normal link, taking the user to the page denoted by "URL-for-my-button.html".</line>
-			<line img="" ref="">The action associated with a form is restricted in two serious ways.</line>
-			<line img="" ref="">First, there can be only one such action attribute URL - you cannot associate an overriding URL with different submit buttons.</line>
-			<line img="" ref="">Second, it is not possible to associate a scroll position with either a form or a submit button.</line>
-			<line img="" ref="">One could clearly overcome these restrictions by allowing the user to say:.</line>
-			<line img="" ref="">This would insert a button labeled "My Button" in the page.</line>
-			<line img="" ref="">Selecting this button would override the action attribute URL associated with the form, but would still transmit the values associated with all of the other widgets in the form.</line>
-			<line img="" ref="">One would modify the specification of HTML so that scroll positions in forms would be handled correctly.</line>
-			<line img="" ref="">The correct semantics would be for the browser to strip out the scroll position before sending the form, and scrolling as appropriate upon receipt of the resulting page. Supplying.</line>
-			<line img="" ref="">would result in the browser scrolling to the anchor named "scroll-to-here" in the page resulting from the URL specified in the action attribute of the form itself.</line>
-			<line img="" ref="">HTML provides very poor control over the scroll position of the browser.</line>
-			<line img="" ref="">Not only does the browser not inform the server of the current scroll position, but HTML also only provides a very coarse-grained control of scrolling.</line>
-			<line img="" ref="">It would be very useful if the browser were to insert a header field such as.</line>
-			<line img="" ref="">where &lt;&lt;name&gt;&gt; indicates the closest named anchor to the home position of the user's viewport, +/- indicates a "+" or "-" character, and &lt;&lt;nlines&gt;&gt; would be the number of lines from that anchor to the home position of the viewport.</line>
-			<line img="" ref="">Obviously, because HTML cedes formatting decisions to the browser, this would still be only an approximation to the viewport's position, but it would still be useful.</line>
-			<line img="" ref="">An application could increase the resolution required simply by inserting more named anchors.</line>
-			<line img="" ref="">A server cannot cause the browser to scroll to a particular location.</line>
-			<line img="" ref="">This means that it is often necessary for the server to force a redirection on the browser that would otherwise not be necessary simply in order to scroll to the desired position in the page.</line>
-			<line img="" ref="">If the server could send a.</line>
-			<line img="" ref="">header to the browser, these redirections would be obviated.</line>
-			<line img="" ref="">It is not possible to control the position (or even presence) of scroll bars on TEXTAREA widgets.</line>
-			<line img="" ref="">This is a particular problem because the default of most widget sets is to put the vertical scroll bar on the right of the text widget and the horizontal scroll bar on the bottom.</line>
-			<line img="" ref="">For large TEXTAREAs, this often results in the vertical scroll bar being scrolled off the right of the user's viewport, and the horizontal scroll bar being scrolled off the bottom of the viewport.</line>
-			<line img="" ref="">Adding an attribute to the TEXTAREA and INPUT/TYPE=TEXT widget elements of the form:.</line>
-			<line img="" ref="">where.</line>
-			<line img="" ref="">would allow the user to specify the positions and absence of scroll bars.</line>
-			<line img="" ref="">For some applications it may be desirable to have scroll bars on all four sides of a viewport.</line>
-			<line img="" ref="">There is no way to augment the global (application) menu bar.</line>
-			<line img="" ref="">It would be very desirable to be able to say:.</line>
-			<line img="" ref="">This would insert a command called "Class" on the "Create" submenu of a menu item called "Ontology Editor" that would be added to the browser's menu bar.</line>
-			<line img="" ref="">Selecting this command would have the effect of performing a submit on the name called "Class".</line>
-			<line img="" ref="">In this example, a transition to a submenu is shown with a "|" character.</line>
-			<line img="" ref="">Clearly, one would want this facility to support the TYPE=URL attribute option mentioned above as well.</line>
-			<line img="" ref="">Many browsers provide feedback to the user about the link under the user's mouse by displaying the URL of the link at the bottom of the window.</line>
-			<line img="" ref="">In the early days of HTML this was adequate because URLs typically named documents, and the names of those documents usually gave some hint as to the content.</line>
-			<line img="" ref="">In non-trivial applications, however, URLs are automatically generated, often having names such as "item-124874638".</line>
-			<line img="" ref="">These names do not provide adequate hints about the content of the page pointed to by the link.</line>
-			<line img="" ref="">Submit buttons are even worse in this respect because they don't cause any URL information to appear at the bottom of the window.</line>
-			<line img="" ref="">The anchor (A), OPTION and INPUT elements should be enhanced to support documentation.</line>
-			<line img="" ref="">For example, it would be most useful to be able to say:.</line>
-			<line img="" ref="">There is no way to declare the canonical URL for a page.</line>
-			<line img="" ref="">When a user clicks on a link or submit button, the browser records on its history the URL that the user selected.</line>
-			<line img="" ref="">However, if the user clicked on a submit button that caused the system to create a new object, for example, one would like to take the user to the page for the new object.</line>
-			<line img="" ref="">If one does this without forcing a redirection, the browser thinks that the user is on a page named by the form's action attribute URL.</line>
-			<line img="" ref="">This means that if the user reloads the page either the form submission will reposted, or the browser will complain that the resubmission is not allowed.</line>
-			<line img="" ref="">Similar problems arise if the user attempts to add the page to the browser's hotlist.</line>
-			<line img="" ref="">Although this problem can be solved by the use of a redirection, it would be much simpler if the browser could insert in the HTML text an element something like:.</line>
-			<line img="" ref="">This would tell the browser that whatever it might have thought the URL for the current page was, the real URL is in fact "some-URL".</line>
-			<line img="" ref="">There is no way to gray-out either graphics or menu options in HTML.</line>
-			<line img="" ref="">This means that the service implementor is forced to generate two sets of graphics; one for active commands, and one for any inapplicable commands.</line>
-			<line img="" ref="">This doubles the network traffic associated with downloading the graphics as well as increasing the human effort required to create the service.</line>
-			<line img="" ref="">What is more, because many browsers do not support unbordered, anchored images, one has to supply grayed out graphics that guess the width of the borders of anchored images (typically two pixels) in order to maintain registration.</line>
-			<line img="" ref="">It would be helpful if one could tell the browser to do its own graying out of images:.</line>
-			<line img="" ref="">A browser could easily overlay a gray stipple pattern on the image to be grayed out, or could gray the color values in the color map of the image to achieve the required effect.</line>
-			<line img="" ref="">Similarly, it would be useful to be able to make menu options unselectable/grayed out:.</line>
-			<line img="" ref="">This would have the obvious benefits of alerting the user of the existence of inapplicable commands and preserving registration.</line>
-			<line img="" ref="">There is no control of how links get marked as visited.</line>
-			<line img="" ref="">In a number of browsers, visited links get marked in red or purple.</line>
-			<line img="" ref="">This is a useful mechanism, but if the page denoted by a particular link has some ephemeral or time-dependent content, it is deceptive to the user to mark the link as visited.</line>
-			<line img="" ref="">Similarly, if a link actually takes you to a page on which you create a new object, you probably wouldn't want to make the link appear to be visited.</line>
-			<line img="" ref="">A related problem arises with unbordered images.</line>
-			<line img="" ref="">Current browsers do not indicate if such a link has been visited.</line>
-			<line img="" ref="">It would be helpful, therefore, if one could add an attribute to IMG items that would tell the browser to use a suitable browser-specific way to indicate that a link has been visited:.</line>
-			<line img="" ref="">and to prevent a link from being marked as visited:.</line>
-			<line img="" ref="">Browsers should be sensitive to the Expires: header field so that a link would no longer be marked as visited once its expiration date had been passed.</line>
-			<line img="" ref="">This is not a matter of HTML specification, but is rather an issue of good client implementation.</line>
-			<line img="" ref="">There is no way to associate keyboard accelerators with submit buttons or links.</line>
-			<line img="" ref="">This makes it much harder for power users to use HTML-based systems effectively.</line>
-			<line img="" ref="">Obviously, keyboards vary, as does the availability of modifier keys, but most browsers could bind an "Alt" or "Option" key sequence.</line>
-			<line img="" ref="">This would allow:.</line>
-			<line img="" ref="">which would bind Option/Alt-D to the submit button named "Do it".</line>
-			<line img="" ref="">Clearly, some canonical representation would be needed for keys such as Space, Enter and Return.</line>
-			<line img="" ref="">The case of binding the Enter or Return key is an interesting special case of binding the default selection.</line>
-			<line img="" ref="">Window systems typically have a way to indicate which selection will be made or operation performed if the user hits the Enter key.</line>
-			<line img="" ref="">It would be useful if the submit button or link bound to the Enter key would be labelled in the normal way for the native window system as being the default selection.</line>
-			<line img="" ref="">There is no guarantee that a given browser will be able to support scrolling in pop-up menus.</line>
-			<line img="" ref="">This is typically a problem with the widget set being used by the implementors of X-based browsers.</line>
-			<line img="" ref="">However, this is a major restriction for application designers, since there is no way for a server to tell just how many items a client will be able to cram into a menu before it truncates them (if at all).</line>
-			<line img="" ref="">The only obvious solutions to this would be either to specify in the standard that compliant browsers must support scrolling in pop-up menus, or failing this, that the browser would render a pop-up menu with too many options as a non pop-up scrolling menu.</line>
 			<line img="" ref="">A major problem with delivering a complex application over the web is that almost everything on the page is anchored.</line>
 			<line img="" ref="">This means that the size of the document that is actually transmitted to the user in bytes is typically very much larger than would be expected for a document of that apparent size.</line>
-			<line img="" ref="">This presents serious bandwidth problems for users who are connecting over slow lines.</line>
-			<line img="" ref="">One can circumvent this problem to an extent by using a clever coding scheme to minimize the lengths of URLs.</line>
-			<line img="" ref="">However, HTML is an intrinsically verbose protocol, and some aspects of the protocol actively punish users of more complex user interfaces.</line>
-			<line img="" ref="">For example, if you use anchored images to insert widgets, you will probably want to make these images unbordered.</line>
-			<line img="" ref="">However, this means that you have to pay an extra nine bytes for each such image to switch off the border.</line>
-			<line img="" ref="">HTML would be much enhanced by a pair of simple extensions.</line>
-			<line img="" ref="">First one could overload the BASE element to allow the specification of defaults for such properties as image borderedness.</line>
-			<line img="" ref="">This would not be a major change given that BASE is already being overloaded to support mechanisms such as frames in Netscape.</line>
-			<line img="" ref="">The second change would be to support a simple text substitution mechanism.</line>
-			<line img="" ref="">If, for example, one could say something like the following:.</line>
-			<line img="" ref="">then one could have the client replace all instances of &lt;1&gt; with &lt;IMG SRC= "/images/gadget.gif" BORDER=0&gt;.</line>
 			<line img="" ref="">This could greatly compress the HTML generated by a complex application.</line>
-			<line img="" ref="">No graphics can be embedded in pop-up menus.</line>
-			<line img="" ref="">This is an annoying non-regularity in HTML.</line>
-			<line img="" ref="">There is no control over client-side caching in HTML/HTTP beyond the use of the Expires:, If-Modified-Since:, and Date: header fields.</line>
-			<line img="" ref="">These would probably be sufficient for most purposes if it were not the case that some clients have user preference options that effectively allow the user to override this mechanism.</line>
-			<line img="" ref="">For example, in Netscape, the user can set a "Verify Document" preference to "Once per session", "Never", or "Every time".</line>
-			<line img="" ref="">Unless the user sets this cache preference to "Every time", an application such as ours will not work correctly.</line>
-			<line img="" ref="">HTTP very much needs a way to solve this problem, either by requiring compliant clients to take notice of the above header fields, or by at least having a header field that would announce to the server what the user's cache preference setting is.</line>
-			<line img="" ref="">Such a header field would at least allow a server to notify a user that a given service is likely to be unusable without a change of preferences.</line>
-			<line img="" ref="">There is no way in HTML to implement a pop-up submit button.</line>
-			<line img="" ref="">The irony of this is that associating an action with a menu selection is probably the most common form of interaction that users have with menus.</line>
-			<line img="" ref="">Applications would be much simpler if it were to be possible to have a real menu bar (properly documented as described above) with submit actions embedded within the menus.</line>
-		</section>
+			</section>
 	</section>
 	<section name="Conclusions">
 		<line img="" ref="">We have shown how we were able to deliver a sophisticated, yet intuitive, interactive application as a network service.</line>
 		<line img="" ref="">An off-the-shelf web browser provides the user's interaction medium.</line>
-		<line img="" ref="">Leveraging standard browsers attracts a large user community, improves the rate of user acceptance, avoids software installation and distribution problems, and dramatically reduces turnaround time for software development.</line>
 		<line img="" ref="">The key contribution of this paper is to describe the constraints imposed on user interface design by this interaction medium, outline the tradeoffs in this design space, and motivate the choices we made in order to deliver our application over the web.</line>
-		<line img="" ref="">We further outlined the lessons we learned and the design changes we made as the interface evolved in response to user feedback.</line>
-		<line img="" ref="">These issues are crucial because the growing popularity of the web ensures that this form of software delivery will become ever more wide-spread.</line>
-		<line img="" ref="">This application is available on the web at:.</line>
-		<line img="" ref="">http://www-ksl-svc.stanford.edu:5915/.</line>
-	</section>
+		</section>
 	<section name="Acknowledgments">
 		<line img="" ref="">The authors gratefully acknowledge the support of the following funding agencies: NASA Ames Research Center under contract NCC2-537, ARPA and NASA/ARC under contract NAG2-581 (ARPA order 8607), and CommerceNet under contract CN-1094 (TRP #F33615-94-4413).</line>
 		<line img="" ref="">Numerous people in our user community were both influential and helpful in the development of this application, particularly Wanda Pratt, Rupert Brauch, and Richard Fikes.</line>

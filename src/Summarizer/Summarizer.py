@@ -28,10 +28,19 @@ class Summarizer(object):
     
     def summarize(self):
         root_element = self.tree.getroot();
+        self.keywords = self.getAllKeywords(root_element)
         intro_element = root_element.find(".//section[@name='Introduction']")
         abstract_element = root_element.find(".//section[@name='Abstract']")
         abstract_text = self.mergeLines(abstract_element)
         self.sumIntro(abstract_text, intro_element)
+        conclusion_elt = root_element.find(".//section[@name='Conclusions']")
+        self.sumConclusion(conclusion_elt)
+        
+        for section in root_element.findall(".//section"):
+            if section not in [intro_element, 
+                               abstract_element, 
+                               conclusion_elt]:
+                self.sumModelSection(section)
         
         self.tree.write("../../test/Summarizer/result.xml")
     
@@ -39,10 +48,35 @@ class Summarizer(object):
         '''
         @param abstract_text: string. All the abstract as one large string
         @param intro_element: etree.Element. The root introduction element
-        @return: etree.Element. The intro_element modified
+        @return: void. The intro_element is modified
         '''
         self.sumSectionsRecursive(abstract_text, intro_element, 2)
         
+    def sumConclusion(self, concl_elt):
+        '''
+        @param concl_elt: etree.Element. The conclusion section element
+        @return: void. The above element is modified
+        '''
+        ref_text = "proposed concluded system model argue better result " + \
+                   "present experiment shown key contribution show describe" + \
+                   "outline deliver"
+        
+        self.sumSectionsRecursive(ref_text, concl_elt, 3)
+    
+    def sumModelSection(self, section):
+        '''
+        @param section: etree.Element. Some section from model
+        @return: void. Summarizes the section using keywords
+        '''
+        self.sumSectionsRecursive(" ".join(self.keywords), section, 4)
+    
+    def getAllKeywords(self, root_element):
+        '''
+        @return: A list of all keywords specified in the paper
+        '''
+        kwd_elt = root_element.find("keywords")
+        return [kwd.text for kwd in kwd_elt]
+    
     def sumSectionsRecursive(self, ref_text, element, topn):
         '''
         @summary: Summarizes each section in the given element recursively
@@ -50,6 +84,7 @@ class Summarizer(object):
         @param ref_text: String. The text to compare to
         @param topn: Integer. Number of top elements to preserve, rest delete
         @param element: etree.Element. The tree of elements to summarize
+        @return: void
         '''
         subsecs = element.findall("section")
         for subsec in subsecs:
@@ -63,12 +98,15 @@ class Summarizer(object):
     def mergeLines(self, element):
         '''
         @param element: etree.Element. Element with lines
-        @return: string. All the lines concatinated with " "
+        @return: string. All the lines (even in subsecs) concatinated with " "
         '''
-        lines = element.findall("line")
+        # all line elements under it (even in subsections)
+        lines = element.findall(".//line")
         return " ".join([line.text for line in lines])
         
     def computeTFIDFScores(self, corpus, strings_list):
+        # TODO: Use NLTK Stemming, lemmatizing (rgirdhar) 
+        # http://scikit-learn.org/stable/modules/feature_extraction.html
         '''
         @param corpus: String. A corpus to compare each string in the list
         @param strings_list: List<String>. 
@@ -83,7 +121,8 @@ class Summarizer(object):
         for i in range(len(strings_list)):
             res.append( (np.dot(corpus_vec, tfidf.A[i]) , 
                          i) )
-        return sorted(res, reverse = True)
+        # sort descending by score, ascending by index
+        return sorted(res, key = lambda x: (-x[0], x[1]))
    
 if __name__ == '__main__':     
     ob = Summarizer("../../test/Parser/Rice/jpr_txt.xml")
