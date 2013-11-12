@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import os
+import re
 import sys
 import xml.etree.ElementTree as ET
 from latexslides import *
@@ -82,6 +83,12 @@ class Generator(object):
             collection += self.get_slides_for_section(section_element)
         return collection
 
+    def escape_special_characters(self, text):
+        character_mapping = ["%"]
+        for character in character_mapping:
+            text = text.replace(character, "\\" + character)
+        return text
+
     def get_slides_for_lines(self, title, lines):
         slides = []
         number_of_lines = len(lines)
@@ -103,10 +110,11 @@ class Generator(object):
     def get_slides_for_images(self, image_ids):
         slides = []
         for image_id in image_ids:
-            title = self.images[image_id]["caption"]
+            title = self.escape_special_characters(self.images[image_id]["caption"])
             figure_path = self.images[image_id]["src"]
             slide = Slide(title=title,
-                          figure=figure_path
+                          figure=figure_path,
+                          figure_fraction_width = 0.5
                          )
             slides += [slide]
         return slides
@@ -119,9 +127,9 @@ class Generator(object):
         for line in section_element.findall("line"):
             image_id = line.get("img")
             if image_id is not None and len(image_id) != 0:
-                image_ids += [image_id]
+                image_ids += image_id.split(",")
             if line.text is not None and len(line.text) != 0:
-                lines += [line.text]
+                lines += [self.escape_special_characters(line.text)]
         slides += self.get_slides_for_lines(title, lines)
         slides += self.get_slides_for_images(image_ids)
         for subsection_element in section_element.findall("section"):
