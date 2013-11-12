@@ -90,7 +90,7 @@
 			<line ref="" img="">A centralized server model also means that we can make changes and upgrades to the server at a single site (or small number of controlled sites); the new, improved software is instantly accessible to all users.</line>
 			<line ref="" img="">In short, we decided that it would be cheaper to provide free computational resources to our entire user community than to develop shrink-wrap software and distribute it to them.</line>
 			<line ref="" img="">Our challenge was to design a user interface that operates under the constraints of the web, remains intuitive and natural to users, and provides full access to the application.</line>
-			<section name="Support for Na&Iuml;Ve Users">
+			<section name="Support for NaiVe Users">
 				<line ref="" img="">In order to achieve our goal of broad impact, we worked to make our application intuitive and usable to anyone familiar with web browsers (e.g., Netscape Navigator or Mosaic) so that a new user could pick up and productively use our application without any formal training or preparation.</line>
 				<line ref="" img="">We explicitly addressed this by the following means:.</line>
 				<line ref="" img="">HTML used for documentation: Our application has no manual at all per se.</line>

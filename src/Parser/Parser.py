@@ -138,7 +138,7 @@ class Parser(object):
       ['&uuml;', 'u']
     ]
     for remap in remapEncodings:
-      s = s.replace(remap[0], remap[1])
+      s = re.sub(re.escape(remap[0]), remap[1], s, flags=re.IGNORECASE)
     s = re.sub('\s+', ' ', s).strip()
     return s
 
