@@ -33,16 +33,16 @@
 	<section name="Problem Analysis and Design">
 		<line img="" ref="">In this section we begin to describe how we addressed the problem of delivering our network-based application, and how we designed it.</line>
 		<section name="Objectives">
-			<line img="" ref="">Once we had established our web-based system, our user community grew from a handful to hundreds in the space of a few months.</line>
+			<line img="" ref="">From the outset, we wanted to make our potential user community as large as possible.</line>
 			<line img="" ref="">Our burgeoning user community was an additional incentive to use the web.</line>
 			<line img="" ref="">Furthermore, distributed access eliminates the need for our users to have high-end hardware systems or expensive licenses for the proprietary software systems that we used to develop our application more efficiently.</line>
 			<line img="" ref="">Our challenge was to design a user interface that operates under the constraints of the web, remains intuitive and natural to users, and provides full access to the application.</line>
 			<section name="Support for NaiVe Users">
-				<line img="" ref="">HTML used for documentation: Our application has no manual at all per se.</line>
 				<line img="" ref="">In-context, automatically-generated help: Unlike applications such as Microsoft Word 6.0, in which documentation is available only in an idiosyncratic hypertext browser, our application uses the same hypertext browser uniformly for all of its interface.</line>
 				<line img="" ref="">Familiar interface: There was no existing interface metaphor for ontology editing.</line>
 				<line img="" ref="">We selected a document metaphor (as opposed to a two dimensional representation as a directed graph, for example) so that the application could be smoothly integrated into the HTML world.</line>
-				</section>
+				<line img="" ref="">This allows users who are familiar with hypertext documents and browsers to make an easy transition into our interactive application.</line>
+			</section>
 			<section name="Support for Power Users">
 				<line img="" ref="">Although we were keen to expand our user community as much as possible, we were aware that experienced ontology developers would not want to be held back by an interface that was optimized for naive users.</line>
 				<line img="" ref="">It is very important to us to support power users.</line>
@@ -69,7 +69,7 @@
 		</section>
 		<section name="Constraints Imposed by Html and Http">
 			<line img="" ref="">Selecting an anchor transmits a request to follow a hypertext link.</line>
-			<line img="" ref="">In effect, an HTML interface can allow the user to apply a number of different commands to a single object, or a single command to a one of a number of different objects.</line>
+			<line img="" ref="">This has the consequence of potentially confusing the user because web users are very strongly conditioned to expect that a normal link will take the user to the object selected.</line>
 			<line img="" ref="">Consequently, it is currently impossible to implement many features of sophisticated user interfaces over the web.</line>
 			<line img="" ref="">This has many advantages for browsing hypertext documents, but it proves awkward for interface design.</line>
 			<section name="Multiple Browsers">
@@ -117,7 +117,7 @@
 				</section>
 			<section name="Native Window System'S Submit Buttons">
 				<line img="" ref="">Many developers choose to exercise artistic control over the look and feel of their web pages by using custom bitmapped graphics for buttons instead of the native look and feel that the web browsers provide.</line>
-				<line img="" ref="">In contrast, we chose to use the native window system's submit buttons for our interface.</line>
+				<line img="" ref="">Consequently, their web pages look more uniform across platforms, but users must learn to recognize buttons anew for each of these idiosyncratic applications.</line>
 				<line img="" ref="">Our application was going to be complex enough without the user having to relearn what a button is supposed to look like.</line>
 				<line img="" ref="">The constraint of supporting naive users meant that we could not allow any user interface tricks such as having extremely stylized icons that cause differing behavior depending on where on the icon the user clicks.</line>
 				</section>
@@ -164,12 +164,12 @@
 			<section name="Logging Out">
 				<line img="" ref="">We have observed that our users have a powerful desire to be able to log out of our system.</line>
 				<line img="" ref="">Because a user's connection with our application lasts only as long as each individual request from the browser - typically only a second or two - and because the user could walk away, leaving the browser at any time - we have had to engineer the system so that logging out is not necessary.</line>
-				<line img="" ref="">The system has a set of timeouts and defaults that allow it to recover quiescent resources.</line>
+				<line img="" ref="">However, we have noticed that users feel a need to log out, even when they are told explicitly that it is not necessary.</line>
 				<line img="" ref="">We have therefore provided a command to give the user the illusion of logging out.</line>
 			</section>
 			<section name="The Usage of User Preferences">
+				<line img="" ref="">It is often assumed that preferences in applications are not of significant utility because few users actually change them.</line>
 				<line img="" ref="">If we look at active users, whom we define as those who have executed at least 50 commands, we find that some 41% of our users have changed at least one preference.</line>
-				<line img="7" ref="">Figure 5 plots the distribution of the number preferences modified against the number of requests performed by each user.</line>
 				<line img="" ref="">Some preferences have been modified by only one user, one has been set by 47 users.</line>
 				<line img="7" ref="">Figure 5. The average number of preference variables set by each user plotted against the total number of non-trivial requests made by each user to our server.</line>
 				</section>
@@ -181,16 +181,16 @@
 		<line img="" ref="">Certainly, had Java been ready for serious use a year ago we would have been very tempted to use it to get around some of the severe constraints of HTML.</line>
 		<line img="" ref="">In this section, we detail some of the issues surrounding the use of client-side applets, and we then enumerate some of the simple changes that could be made to HTML to make this sort of application much easier and better.</line>
 		<section name="Java and Client-Side Scripting">
+			<line img="" ref="">Although Java allows one to embed applications within a browser, there is currently no documented, cross-platform and cross-browser API that allows one to interface to the browser.</line>
 			<line img="" ref="">Using Java would allow one to circumvent a number of the constraints in the widget set that HTML imposes.</line>
-			<line img="" ref="">It would have to be supported by a wide variety of browsers, from Netscape and NetCruiser to Lynx.</line>
 			<line img="" ref="">If we were to make Java an important part of our application, we would either exclude such users or we would have to support both plain HTML interaction and Java as well, which would result in a duplication of effort, and increased development and maintenance costs.</line>
-			<line img="" ref="">Moreover, the ephemeral connections of HTML/HTTP provide a certain degree of resiliency that would be lost by the need to keep open persistent network connections over possibly unreliable networks.</line>
-		</section>
+			<line img="" ref="">The use of Java to do anything non-trivial would probably require establishing an extra stream between the client and server machines above and beyond the HTTP connection.</line>
+			</section>
 		<section name="Html: Problems and Solutions">
-			<line img="" ref="">Selecting one of these options would take the user to red.html, green.html, or blue.html respectively.</line>
+			<line img="" ref="">In the early days of HTML this was adequate because URLs typically named documents, and the names of those documents usually gave some hint as to the content.</line>
 			<line img="" ref="">A major problem with delivering a complex application over the web is that almost everything on the page is anchored.</line>
 			<line img="" ref="">This means that the size of the document that is actually transmitted to the user in bytes is typically very much larger than would be expected for a document of that apparent size.</line>
-			<line img="" ref="">This could greatly compress the HTML generated by a complex application.</line>
+			<line img="" ref="">However, HTML is an intrinsically verbose protocol, and some aspects of the protocol actively punish users of more complex user interfaces.</line>
 			</section>
 	</section>
 	<section name="Conclusions">

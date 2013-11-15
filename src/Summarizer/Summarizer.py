@@ -8,6 +8,8 @@ import xml.etree.ElementTree as ET
 import sys
 from sklearn.feature_extraction.text import TfidfVectorizer
 import numpy as np
+from nltk import word_tokenize
+from nltk.stem import WordNetLemmatizer
 
 class Summarizer(object):
     '''
@@ -104,8 +106,7 @@ class Summarizer(object):
         lines = element.findall(".//line")
         return " ".join([line.text for line in lines])
         
-    def computeTFIDFScores(self, corpus, strings_list):
-        # TODO: Use NLTK Stemming, lemmatizing (rgirdhar) 
+    def computeTFIDFScores(self, corpus, strings_list): 
         # http://scikit-learn.org/stable/modules/feature_extraction.html
         '''
         @param corpus: String. A corpus to compare each string in the list
@@ -113,7 +114,7 @@ class Summarizer(object):
         @return: List<Tuple<score, index>>. Sorted in reverse, index wrt
                  original list
         '''
-        vect = TfidfVectorizer(min_df=1)
+        vect = TfidfVectorizer(min_df=1, tokenizer=LemmaTokenizer())
         all_strings = strings_list + [corpus]
         tfidf = vect.fit_transform(all_strings)
         corpus_vec = tfidf.A[len(strings_list)]
@@ -123,8 +124,15 @@ class Summarizer(object):
                          i) )
         # sort descending by score, ascending by index
         return sorted(res, key = lambda x: (-x[0], x[1]))
+
+class LemmaTokenizer(object):
+    def __init__(self):
+        self.wnl = WordNetLemmatizer()
+            
+    def __call__(self, doc):
+        return [self.wnl.lemmatize(t) for t in word_tokenize(doc)]
    
 if __name__ == '__main__':     
     ob = Summarizer("../../test/Parser/Rice/jpr_txt.xml")
     ob.summarize()
-    print ob.computeTFIDFScores("corpus is this is ", ["corpus ", "corpus corpus"]);
+    print ob.computeTFIDFScores("he has shown", ["shown", "seen"]);
