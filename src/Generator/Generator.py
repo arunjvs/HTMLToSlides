@@ -84,9 +84,16 @@ class Generator(object):
         return collection
 
     def escape_special_characters(self, text):
-        character_mapping = ["%", "#"]
+        character_mapping = {"%": "\\%", 
+                             "#": "\\#", 
+                             "&quot": "\"", 
+                             "&amp": "&", 
+                             "&lt": "<", 
+                             "&gt": ">",
+                             "&apos": "'"
+                            }
         for character in character_mapping:
-            text = text.replace(character, "\\" + character)
+            text = text.replace(character, character_mapping[character])
         return text
 
     def get_slides_for_lines(self, title, lines):
@@ -94,22 +101,32 @@ class Generator(object):
         number_of_lines = len(lines)
         total_chars = 0
         lines_considered = []
+        image_ids = []
         for line in lines:
-            line_length = len(line)
+            line_text = self.escape_special_characters(line.text);
+            if line_text is None or len(line_text) == 0:
+                continue
+            line_length = len(line_text)
+            image_id = line.get("img")
+            if not image_id is None and len(image_id) != 0:
+                image_ids += image_id.split(",")
             if total_chars + line_length > self.MAXIMUM_CHARS_PER_SLIDE:
                 slide = Slide(title,
                               [BulletList(lines_considered)]
                              )
                 slides += [slide]
+                slides += self.get_slides_for_images(image_ids)
                 lines_considered = []
                 total_chars = 0
-            total_chars = total_chars + len(line)
-            lines_considered += [line]
+                image_ids = []
+            total_chars = total_chars + line_length
+            lines_considered += [line_text]
         if len(lines_considered) > 0:
             slide = Slide(title,
                           [BulletList(lines_considered)]
                          )
             slides += [slide]
+            slides += self.get_slides_for_images(image_ids)
         return slides
 
     def get_slides_for_images(self, image_ids):
@@ -129,14 +146,8 @@ class Generator(object):
         image_ids = []
         slides = []
         title = section_element.get("name")
-        for line in section_element.findall("line"):
-            image_id = line.get("img")
-            if image_id is not None and len(image_id) != 0:
-                image_ids += image_id.split(",")
-            if line.text is not None and len(line.text) != 0:
-                lines += [self.escape_special_characters(line.text)]
+        lines = section_element.findall("line")
         slides += self.get_slides_for_lines(title, lines)
-        slides += self.get_slides_for_images(image_ids)
         for subsection_element in section_element.findall("section"):
             sub_title = subsection_element.get("name")
             subsection = SubSection(title=sub_title)
@@ -151,6 +162,6 @@ def main(xml_file_path):
 
 if __name__ == "__main__":
     if(len(sys.argv)!=2):
-        print("usage: %s xmlFile" %sys.argv[0])
+        print("usage: %s <xmlFile>" %sys.argv[0])
         exit(-1)
     main(sys.argv[1])
