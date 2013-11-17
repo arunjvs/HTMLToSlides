@@ -17,7 +17,8 @@ class Summarizer(object):
     Class to take XML specification of the HTML paper, and creates a new similar
     XML after selecting important sentences
     '''
-
+    
+    imgBoost = 3  # Multiplicative boost in score to lines with images
 
     def __init__(self, xml_file_path):
         '''
@@ -96,6 +97,11 @@ class Summarizer(object):
         lines = element.findall("line")
         lines_str = [line.text for line in lines]
         scores = self.computeTFIDFScores(ref_text, lines_str)
+        # boost lines with image reference
+        for i in range(len(scores)):
+            if lines[scores[i][1]].get("img").strip():
+                scores[i] = (scores[i][0] * Summarizer.imgBoost, scores[i][1])
+        scores = sorted(scores, key = lambda x: (-x[0], x[1]))
         for score in scores[topn:]:
             element.remove(lines[score[1]])
     

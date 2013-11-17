@@ -170,7 +170,7 @@
 			<section name="The Usage of User Preferences">
 				<line img="" ref="">It is often assumed that preferences in applications are not of significant utility because few users actually change them.</line>
 				<line img="" ref="">If we look at active users, whom we define as those who have executed at least 50 commands, we find that some 41% of our users have changed at least one preference.</line>
-				<line img="" ref="">Some preferences have been modified by only one user, one has been set by 47 users.</line>
+				<line img="7" ref="">Figure 5 plots the distribution of the number preferences modified against the number of requests performed by each user.</line>
 				<line img="7" ref="">Figure 5. The average number of preference variables set by each user plotted against the total number of non-trivial requests made by each user to our server.</line>
 				</section>
 		</section>
