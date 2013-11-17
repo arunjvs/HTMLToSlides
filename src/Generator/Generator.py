@@ -25,7 +25,8 @@ class Generator(object):
         self.images = self.get_image_details()
         self.references = self.get_references_details()
         self.MAXIMUM_CHARS_PER_SLIDE = 440
-        
+        self.new_command = """{\\newauthor}[2]{\parbox{0.26\\textwidth}{\\texorpdfstring{\centering #1 \\\\{\scriptsize{\urlstyle{same}\url{#2}\urlstyle{tt}}}}{#1}}}"""
+
     def generate(self):
         title = self.get_title()
         author_and_inst = self.get_authors_details()
@@ -37,7 +38,8 @@ class Generator(object):
                               header_footer=True,
                               beamer_theme="shadow",
                               short_author=short_author,
-                              short_title=short_title
+                              short_title=short_title,
+                              newcommands=[self.new_command]
                              )
 
         collection = self.get_collection()
@@ -69,6 +71,7 @@ class Generator(object):
         authors_details = []
         about_element = self.xml_root.find("about")
         authors_element = about_element.find("authors")
+        """
         authors = [author.get("name") for author in authors_element.findall("author")]
         emails = [author.get("email") for author in authors_element.findall("author")]
         organs = [author.get("organization") for author in authors_element.findall("author")]
@@ -80,16 +83,18 @@ class Generator(object):
         spaces = "\\ "*((maxCharsPerLine-(sum([len(x) for x in organs])))/(len(organs)-1))
         line3 = spaces.join(organs)
         authors_details = [(line1,line2+'\\newline '+line3)]
-        a='''
+        """
+        for author in authors_element.findall("author"):
             author_name = author.get("name")
             email = author.get("email")
             author_and_email = self.get_author_and_email(author_name, email)
-            details = [author_and_email]
+            #details = [author_and_email]
+            details = ["\\newauthor{" + author.get("name") + "}{" + email + "}"]
             #details = [author.get("name")]# + "\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Email: " + "email@email.com"]
             #details = ["\\texorpdfstring{Author\\newline\url{email@email.com}}{Author}"]
             details += author.get("organization").split()
             authors_details += [tuple(details)]
-        '''
+        
         #authors = authors_element.findall("author")
         #authors_details = [tuple(["Author1","a@b.com    c@d.com"])]
         #authors_details += [tuple(['Author1\\newline Author2',""])]
