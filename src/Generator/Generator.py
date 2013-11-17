@@ -11,10 +11,15 @@ from latexslides import *
 class Generator(object):
     """ Generator Class to generate slides from a XML file """
 
-    def __init__(self, xml_file_path, tmp_dir_path):
+    def __init__(self, xml_file_path, out_dir_path):
+        self.MAXIMUM_CHARS_PER_SLIDE = 550
+        self.MAXIMUM_CHARS_IN_CAPTION = 110
         self.xml_file_path = xml_file_path
-        self.tmp_dir_path = tmp_dir_path
+        self.out_dir_path = out_dir_path
+        self.tmp_dir_path = os.path.join(self.out_dir_path, "tmp")
         try:
+            if not os.path.exists(self.out_dir_path):
+                os.makedirs(self.out_dir_path)
             if not os.path.exists(self.tmp_dir_path):
                 os.makedirs(self.tmp_dir_path)
         except:
@@ -24,21 +29,24 @@ class Generator(object):
         self.xml_root = self.xml_tree.getroot()
         self.images = self.get_image_details()
         self.references = self.get_references_details()
-        self.MAXIMUM_CHARS_PER_SLIDE = 440
+        self.number_of_sections = self.get_number_of_sections()
         self.new_command = """{\\newauthor}[2]{\parbox{0.26\\textwidth}{\\texorpdfstring{\centering #1 \\\\{\scriptsize{\urlstyle{same}\url{#2}\urlstyle{tt}}}}{#1}}}"""
 
     def generate(self):
         title = self.get_title()
         author_and_inst = self.get_authors_details()
-        short_title = self.get_short_title()
-        short_author = self.get_short_author()
-        #BeamerThemes: shadow, simula, hpl1, 
-        #ColorThemes: default, seahorse
+        toc_heading = "Sections"
+        if self.number_of_sections > 15:
+            toc_heading = None
+        short_title = "" #self.get_short_author()
+        short_author = " " #self.get_short_author()
+        #BeamerThemes: shadow, simula, hpl1, Pittsburgh, Rochester, Montpellier, CambridgeUS, Bergen, Antibes
+        #ColorThemes: default, seahorse, beaver, lily, orchid
         slides = BeamerSlides(title=title,
                               author_and_inst=author_and_inst,
-                              toc_heading="Sections",
+                              toc_heading=toc_heading,
                               header_footer=True,
-                              beamer_theme="Madrid",
+                              beamer_theme="Antibes",
                               beamer_colour_theme="default",
                               short_author=short_author,
                               short_title=short_title,
@@ -51,9 +59,14 @@ class Generator(object):
         # Dump to file
         output_file_name = os.path.basename(self.xml_file_path)
         output_file_name = os.path.splitext(output_file_name)[0] + ".tex"
+        output_file_name = os.path.join(self.out_dir_path, output_file_name)
         slides.write(output_file_name)
+    
+    def get_number_of_sections(self):
+        return len(self.xml_root.findall("section"))
 
     def get_short_title(self):
+        return ""
         return datetime.date.today().strftime("%B %d, %Y")
 
     def get_short_author(self):
@@ -62,8 +75,7 @@ class Generator(object):
         authors_element = about_element.find("authors")
         for author in authors_element.findall("author"):
             short_author += [author.get("name").split()[0]]
-        return "dgfsgfgh"
-        return " and ".join(short_author)
+        return ", ".join(short_author)
 
     def get_title(self):
         about_element = self.xml_root.find("about")
@@ -128,8 +140,10 @@ class Generator(object):
             if image_file.mode != "RGB":
                 image_file = image_file.convert("RGB")
             image_file.save(new_img_name, "JPEG")
-            _src = new_img_name
+            _src = os.path.join("tmp", img_name + ".jpeg")
             _caption = image.get("caption")
+            if len(_caption) > self.MAXIMUM_CHARS_IN_CAPTION:
+                _caption = ""
             _alt = image.get("alt")
             images[_id] = {"src": _src,
                            "caption": _caption,
@@ -155,7 +169,12 @@ class Generator(object):
             section = Section(title=title, short_title=short_title)
             collection += [section]
             collection += self.get_slides_for_section(section_element)
+        collection += [self.get_end_slide()]
         return collection
+    
+    def get_end_slide(self):
+        slide = RawSlide(rawtext="\\begin{frame}\Huge{\centerline{Thank You!}}\end{frame}")
+        return slide
 
     def escape_special_characters(self, text):
         character_mapping = {"%": "\\%", 
@@ -241,12 +260,12 @@ class Generator(object):
         return slides
 
 
-def main(xml_file_path, tmp_dir_path):
-    generator = Generator(xml_file_path, tmp_dir_path)
+def main(xml_file_path, out_dir_path):
+    generator = Generator(xml_file_path, out_dir_path)
     generator.generate()
 
 if __name__ == "__main__":
     if(len(sys.argv) != 3):
-        print("usage: %s <xmlFile> <tmpDir>" %sys.argv[0])
+        print("usage: %s <xmlFile> <outDir>" %sys.argv[0])
         exit(-1)
     main(sys.argv[1], sys.argv[2])
