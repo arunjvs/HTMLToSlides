@@ -20,12 +20,13 @@ class Summarizer(object):
     
     imgBoost = 3  # Multiplicative boost in score to lines with images
 
-    def __init__(self, xml_file_path):
+    def __init__(self, xml_file_path, output_file_path):
         '''
         Constructor
         '''
         try:
             self.tree = ET.parse(xml_file_path)
+            self.outputFPath = output_file_path
         except Exception, e:
             sys.stderr.write("""Summarizer::__init__:
             Unable to parse XML file : """ + str(e))
@@ -47,7 +48,7 @@ class Summarizer(object):
                                conclusion_elt]:
                 self.sumModelSection(section)
         
-        self.tree.write("../../test/Summarizer/result.xml")
+        self.tree.write(self.outputFPath)
     
     def sumIntro(self, abstract_text, intro_element):
         '''
@@ -181,7 +182,3 @@ class LemmaTokenizer(object):
     def __call__(self, doc):
         return [self.wnl.lemmatize(t) for t in word_tokenize(doc)]
    
-if __name__ == '__main__':     
-    ob = Summarizer("../../test/Parser/Rice/jpr_txt.xml")
-    ob.summarize()
-    print ob.computeTFIDFScores("he has shown", ["shown", "seen"]);
