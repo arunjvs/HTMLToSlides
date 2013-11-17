@@ -5,7 +5,7 @@ Created on Nov 11, 2013
 '''
 
 import xml.etree.ElementTree as ET
-import sys
+import sys, re
 from sklearn.feature_extraction.text import TfidfVectorizer
 import numpy as np
 from nltk import word_tokenize
@@ -96,6 +96,8 @@ class Summarizer(object):
             self.sumSectionsRecursive(ref_text, subsec, topn)
         lines = element.findall("line")
         lines_str = [line.text for line in lines]
+        if self.tryFindNumberedPoints(lines, element):
+            return
         scores = self.computeTFIDFScores(ref_text, lines_str)
         # boost lines with image reference
         for i in range(len(scores)):
@@ -104,6 +106,45 @@ class Summarizer(object):
         scores = sorted(scores, key = lambda x: (-x[0], x[1]))
         for score in scores[topn:]:
             element.remove(lines[score[1]])
+    
+    def tryFindNumberedPoints(self, lines, element):
+        '''
+        @param lines: List<etree.Element>. All the lines in this subsection
+        @param element: etree.Element. The current section element
+        @return: boolean. True if its able to find numbering in lines, 
+        then just keep those lines. Else  return false.
+        '''
+        lines_str = [line.text.strip() for line in lines]
+        
+#         # Only for debugging
+#         lines_str = []
+#         lines_str.append("1. This is a point 1")
+#         lines_str.append("Not a point")
+#         lines_str.append("2. This is point 2")
+        
+        regex = "^(\d{1,3})[.),:\s]"
+        matches = [re.match(regex, line) for line in lines_str]
+        pts_list = []
+        line_no = -1
+        for match in matches:
+            line_no += 1
+            if not match:
+                continue
+            pts_list.append((int(match.group(1)), line_no))
+        if not pts_list: 
+            # i.e, empty
+            return False  # this method fails
+        # check if the numbering is consecutive
+        for i in range(len(pts_list) - 1):
+            if pts_list[i][0] + 1 != pts_list[i + 1][0]:
+                return False
+        # checked. Now got the points for this section,
+        # just remove the rest of lines and return true
+        not_del = [item[1] for item in pts_list]
+        for i in range(len(lines)):
+            if i not in not_del:
+                element.remove(lines[i])
+        return True
     
     def mergeLines(self, element):
         '''
