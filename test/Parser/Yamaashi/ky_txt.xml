@@ -160,7 +160,7 @@
 			<line ref="" img="">Because users cannot accurately select a desired position with the pan-tilt strategy, this method often requires more operations than the zoom-out strategy.</line>
 			<line ref="" img="">The same pan-tilt strategy was used when the global view was provided, but not linked to the detail view.</line>
 			<line ref="" img="">For the remaining three conditions, users were able to identify the letters with only a single camera operation.</line>
-			<line ref="" img="1,9,10">Figure 9 and Figure 10 present the results of our user study, indicating the average number of camera operations users required to identify each letter, as well as the average completion time with 95% confidence error bars, with each of the six experimental conditions.</line>
+			<line ref="" img="9,10">Figure 9 and Figure 10 present the results of our user study, indicating the average number of camera operations users required to identify each letter, as well as the average completion time with 95% confidence error bars, with each of the six experimental conditions.</line>
 			<line ref="" img="">Analysis of variance (ANOVA) showed that both number of operations and trial completion times were significantly affected by the experimental conditions.</line>
 			<line ref="" img="">For number of operations, F(5, 30)=55.2, p&lt;0.001.</line>
 			<line ref="" img="">For completion time, F(5, 30)=40.1, p&lt;0.001.</line>
