@@ -3,6 +3,7 @@
 import os
 import re
 import sys
+import datetime
 import xml.etree.ElementTree as ET
 from PIL import Image
 from latexslides import *
@@ -28,12 +29,15 @@ class Generator(object):
     def generate(self):
         title = self.get_title()
         author_and_inst = self.get_authors_details()
+        short_title = self.get_short_title()
+        short_author = self.get_short_author()
         slides = BeamerSlides(title=title,
                               author_and_inst=author_and_inst,
                               toc_heading="Sections",
                               header_footer=True,
                               beamer_theme="shadow",
-                              short_author="dsgfksdgk"
+                              short_author=short_author,
+                              short_title=short_title
                              )
 
         collection = self.get_collection()
@@ -43,6 +47,17 @@ class Generator(object):
         output_file_name = os.path.basename(self.xml_file_path)
         output_file_name = os.path.splitext(output_file_name)[0] + ".tex"
         slides.write(output_file_name)
+
+    def get_short_title(self):
+        return datetime.date.today().strftime("%B %d, %Y")
+
+    def get_short_author(self):
+        short_author = []
+        about_element = self.xml_root.find("about")
+        authors_element = about_element.find("authors")
+        for author in authors_element.findall("author"):
+            short_author += [author.get("name").split()[0]]
+        return " and ".join(short_author)
 
     def get_title(self):
         about_element = self.xml_root.find("about")
@@ -54,12 +69,42 @@ class Generator(object):
         authors_details = []
         about_element = self.xml_root.find("about")
         authors_element = about_element.find("authors")
-        for author in authors_element.findall("author"):
-            details = [author.get("name")]# + "\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Email: " + "email@email.com"]
+        authors = [author.get("name") for author in authors_element.findall("author")]
+        emails = [author.get("email") for author in authors_element.findall("author")]
+        organs = [author.get("organization") for author in authors_element.findall("author")]
+        maxCharsPerLine = 50
+        spaces = "\\ "*((maxCharsPerLine-(sum([len(x) for x in authors])))/(len(authors)-1))
+        line1 = spaces.join(authors)
+        spaces = "\\ "*((maxCharsPerLine-(sum([len(x) for x in emails])))/(len(emails)-1))
+        line2 = spaces.join(emails)
+        spaces = "\\ "*((maxCharsPerLine-(sum([len(x) for x in organs])))/(len(organs)-1))
+        line3 = spaces.join(organs)
+        authors_details = [(line1,line2+'\\newline '+line3)]
+        a='''
+            author_name = author.get("name")
+            email = author.get("email")
+            author_and_email = self.get_author_and_email(author_name, email)
+            details = [author_and_email]
+            #details = [author.get("name")]# + "\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Email: " + "email@email.com"]
             #details = ["\\texorpdfstring{Author\\newline\url{email@email.com}}{Author}"]
             details += author.get("organization").split()
             authors_details += [tuple(details)]
+        '''
+        #authors = authors_element.findall("author")
+        #authors_details = [tuple(["Author1","a@b.com    c@d.com"])]
+        #authors_details += [tuple(['Author1\\newline Author2',""])]
         return authors_details
+
+    def get_author_and_email(self, author_name, email):
+        spaces_inbetween = 6
+        total_spaces = 60 - (len(author_name) + len(email) + spaces_inbetween)
+        author_and_email = author_name
+        for i in range(spaces_inbetween):
+            author_and_email += "\ "
+        author_and_email += email
+        for i in range(total_spaces):
+            author_and_email = "\ " + author_and_email
+        return author_and_email
 
     def get_image_details(self):
         images = {}
@@ -88,7 +133,7 @@ class Generator(object):
         references_element = self.xml_root.find("references")
         for reference in references_element.findall("reference"):
             _id = reference.get("id")
-            _text = reference.get("text")
+            _text = reference.text
             references[_id] = {"text": _text}
         return references
 
@@ -122,28 +167,39 @@ class Generator(object):
         total_chars = 0
         lines_considered = []
         image_ids = []
+        references = "\\bigskip"
         for line in lines:
             line_text = self.escape_special_characters(line.text);
             if line_text is None or len(line_text) == 0:
                 continue
             line_length = len(line_text)
-            if total_chars + line_length > self.MAXIMUM_CHARS_PER_SLIDE:
+            current_references = []
+            reference_ids = line.get("ref").split(",")
+            for reference_id in reference_ids:
+                if not reference_id is None and len(reference_id) != 0 and len(self.references[reference_id]["text"]) != 0:
+                    current_references += ["\\tiny{" + self.references[reference_id]["text"] + "}"]
+            #reference = "\\\\\n".join(current_references)
+            reference = "\\vspace*{1\\baselineskip}".join(current_references)
+            if total_chars + line_length + len(reference)/2 > self.MAXIMUM_CHARS_PER_SLIDE:
                 slide = Slide(title,
-                              [BulletList(lines_considered)]
+                              [BulletList(lines_considered), Text(text=references)]
                              )
                 slides += [slide]
                 slides += self.get_slides_for_images(image_ids)
                 lines_considered = []
                 total_chars = 0
                 image_ids = []
+                references = "\\bigskip"
             total_chars = total_chars + line_length
             lines_considered += [line_text]
             image_id = line.get("img")
+            if not reference is None and len(reference) != 0:
+                references = references + "\\vspace*{1\\baselineskip}" + reference
             if not image_id is None and len(image_id) != 0:
                 image_ids += image_id.split(",")
         if len(lines_considered) > 0:
             slide = Slide(title,
-                          [BulletList(lines_considered)]
+                          [BulletList(lines_considered), Text(text=references)]
                          )
             slides += [slide]
             slides += self.get_slides_for_images(image_ids)
