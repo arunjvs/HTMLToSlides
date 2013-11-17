@@ -25,20 +25,23 @@ class Generator(object):
         self.references = self.get_references_details()
         self.MAXIMUM_CHARS_PER_SLIDE = 440
         
-    def generate(self, output_file_name="presentation"):
+    def generate(self):
         title = self.get_title()
         author_and_inst = self.get_authors_details()
         slides = BeamerSlides(title=title,
                               author_and_inst=author_and_inst,
-                              toc_heading=None,
+                              toc_heading="Sections",
                               header_footer=True,
-                              beamer_theme="shadow"
+                              beamer_theme="shadow",
+                              short_author="dsgfksdgk"
                              )
 
         collection = self.get_collection()
         slides.add_slides(collection)
 
         # Dump to file
+        output_file_name = os.path.basename(self.xml_file_path)
+        output_file_name = os.path.splitext(output_file_name)[0] + ".tex"
         slides.write(output_file_name)
 
     def get_title(self):
@@ -52,7 +55,8 @@ class Generator(object):
         about_element = self.xml_root.find("about")
         authors_element = about_element.find("authors")
         for author in authors_element.findall("author"):
-            details = [author.get("name")]
+            details = [author.get("name")]# + "\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Email: " + "email@email.com"]
+            #details = ["\\texorpdfstring{Author\\newline\url{email@email.com}}{Author}"]
             details += author.get("organization").split()
             authors_details += [tuple(details)]
         return authors_details
@@ -174,7 +178,7 @@ class Generator(object):
 
 def main(xml_file_path, tmp_dir_path):
     generator = Generator(xml_file_path, tmp_dir_path)
-    generator.generate("sample.tex")
+    generator.generate()
 
 if __name__ == "__main__":
     if(len(sys.argv) != 3):
