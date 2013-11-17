@@ -32,11 +32,14 @@ class Generator(object):
         author_and_inst = self.get_authors_details()
         short_title = self.get_short_title()
         short_author = self.get_short_author()
+        #BeamerThemes: shadow, simula, hpl1, 
+        #ColorThemes: default, seahorse
         slides = BeamerSlides(title=title,
                               author_and_inst=author_and_inst,
                               toc_heading="Sections",
                               header_footer=True,
-                              beamer_theme="shadow",
+                              beamer_theme="Madrid",
+                              beamer_colour_theme="default",
                               short_author=short_author,
                               short_title=short_title,
                               newcommands=[self.new_command]
@@ -59,6 +62,7 @@ class Generator(object):
         authors_element = about_element.find("authors")
         for author in authors_element.findall("author"):
             short_author += [author.get("name").split()[0]]
+        return "dgfsgfgh"
         return " and ".join(short_author)
 
     def get_title(self):
