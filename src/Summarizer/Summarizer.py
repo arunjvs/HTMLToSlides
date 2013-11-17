@@ -10,6 +10,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 import numpy as np
 from nltk import word_tokenize
 from nltk.stem import WordNetLemmatizer
+from KeywordExpander import KeywordExpander
 
 class Summarizer(object):
     '''
@@ -31,6 +32,7 @@ class Summarizer(object):
     def summarize(self):
         root_element = self.tree.getroot();
         self.keywords = self.getAllKeywords(root_element)
+        self.keywords = KeywordExpander.expandSet(self.keywords, root_element)
         intro_element = root_element.find(".//section[@name='Introduction']")
         abstract_element = root_element.find(".//section[@name='Abstract']")
         abstract_text = self.mergeLines(abstract_element)
@@ -74,10 +76,10 @@ class Summarizer(object):
     
     def getAllKeywords(self, root_element):
         '''
-        @return: A list of all keywords specified in the paper
+        @return: Set. A set of all keywords specified in the paper
         '''
         kwd_elt = root_element.find("keywords")
-        return [kwd.text for kwd in kwd_elt]
+        return set([kwd.text for kwd in kwd_elt])
     
     def sumSectionsRecursive(self, ref_text, element, topn):
         '''
@@ -115,7 +117,7 @@ class Summarizer(object):
                  original list
         '''
         vect = TfidfVectorizer(min_df=1, tokenizer=LemmaTokenizer())
-        all_strings = strings_list + [corpus]
+        all_strings = [string.lower() for string in strings_list] + [corpus.lower()]
         tfidf = vect.fit_transform(all_strings)
         corpus_vec = tfidf.A[len(strings_list)]
         res = []

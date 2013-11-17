@@ -189,8 +189,8 @@
 		<section name="Html: Problems and Solutions">
 			<line img="" ref="">In the early days of HTML this was adequate because URLs typically named documents, and the names of those documents usually gave some hint as to the content.</line>
 			<line img="" ref="">A major problem with delivering a complex application over the web is that almost everything on the page is anchored.</line>
-			<line img="" ref="">This means that the size of the document that is actually transmitted to the user in bytes is typically very much larger than would be expected for a document of that apparent size.</line>
 			<line img="" ref="">However, HTML is an intrinsically verbose protocol, and some aspects of the protocol actively punish users of more complex user interfaces.</line>
+			<line img="" ref="">HTTP very much needs a way to solve this problem, either by requiring compliant clients to take notice of the above header fields, or by at least having a header field that would announce to the server what the user's cache preference setting is.</line>
 			</section>
 	</section>
 	<section name="Conclusions">
