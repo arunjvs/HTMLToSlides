@@ -13,6 +13,7 @@ class KeywordExpander(object):
     '''
     Algorithm to expand a set of keywords
     '''
+    verbose = True
     
     @staticmethod
     def expandSet(kwd_set, root_elt):
@@ -37,5 +38,8 @@ class KeywordExpander(object):
         top_pairs = [pair for pair, freq in Counter(all_pairs).iteritems()
                      if freq >= 2]
         for pair in top_pairs:
+            if KeywordExpander.verbose and pair[1] not in kwd_set:
+                print "Expanding kwd with : ", pair[1]
             kwd_set.add(pair[1]);
+            
         return kwd_set
