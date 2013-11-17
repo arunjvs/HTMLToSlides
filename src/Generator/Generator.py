@@ -4,13 +4,21 @@ import os
 import re
 import sys
 import xml.etree.ElementTree as ET
+from PIL import Image
 from latexslides import *
 
 class Generator(object):
     """ Generator Class to generate slides from a XML file """
 
-    def __init__(self, xml_file_path):
+    def __init__(self, xml_file_path, tmp_dir_path):
         self.xml_file_path = xml_file_path
+        self.tmp_dir_path = tmp_dir_path
+        try:
+            if not os.path.exists(self.tmp_dir_path):
+                os.makedirs(self.tmp_dir_path)
+        except:
+            sys.stderr.write("%s is not a Valid Directory" % (self.tmp_dir_path))
+            sys.exit(1)
         self.xml_tree = ET.parse(self.xml_file_path)
         self.xml_root = self.xml_tree.getroot()
         self.images = self.get_image_details()
@@ -54,7 +62,15 @@ class Generator(object):
         images_element = self.xml_root.find("images")
         for image in images_element.findall("image"):
             _id = image.get("id")
-            _src = image.get("src")
+            img_src = image.get("src")
+            img_name = os.path.basename(img_src)
+            img_name = os.path.splitext(img_name)[0]
+            new_img_name = os.path.join(self.tmp_dir_path, img_name + ".jpeg")
+            image_file = Image.open(img_src)
+            if image_file.mode != "RGB":
+                image_file = image_file.convert("RGB")
+            image_file.save(new_img_name, "JPEG")
+            _src = new_img_name
             _caption = image.get("caption")
             _alt = image.get("alt")
             images[_id] = {"src": _src,
@@ -107,9 +123,6 @@ class Generator(object):
             if line_text is None or len(line_text) == 0:
                 continue
             line_length = len(line_text)
-            image_id = line.get("img")
-            if not image_id is None and len(image_id) != 0:
-                image_ids += image_id.split(",")
             if total_chars + line_length > self.MAXIMUM_CHARS_PER_SLIDE:
                 slide = Slide(title,
                               [BulletList(lines_considered)]
@@ -121,6 +134,9 @@ class Generator(object):
                 image_ids = []
             total_chars = total_chars + line_length
             lines_considered += [line_text]
+            image_id = line.get("img")
+            if not image_id is None and len(image_id) != 0:
+                image_ids += image_id.split(",")
         if len(lines_considered) > 0:
             slide = Slide(title,
                           [BulletList(lines_considered)]
@@ -156,12 +172,12 @@ class Generator(object):
         return slides
 
 
-def main(xml_file_path):
-    generator = Generator(xml_file_path)
+def main(xml_file_path, tmp_dir_path):
+    generator = Generator(xml_file_path, tmp_dir_path)
     generator.generate("sample.tex")
 
 if __name__ == "__main__":
-    if(len(sys.argv)!=2):
-        print("usage: %s <xmlFile>" %sys.argv[0])
+    if(len(sys.argv) != 3):
+        print("usage: %s <xmlFile> <tmpDir>" %sys.argv[0])
         exit(-1)
-    main(sys.argv[1])
+    main(sys.argv[1], sys.argv[2])
