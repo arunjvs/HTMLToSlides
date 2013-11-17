@@ -11,12 +11,15 @@ from latexslides import *
 class Generator(object):
     """ Generator Class to generate slides from a XML file """
 
-    def __init__(self, xml_file_path, tmp_dir_path):
+    def __init__(self, xml_file_path, out_dir_path):
         self.MAXIMUM_CHARS_PER_SLIDE = 550
         self.MAXIMUM_CHARS_IN_CAPTION = 110
         self.xml_file_path = xml_file_path
-        self.tmp_dir_path = tmp_dir_path
+        self.out_dir_path = out_dir_path
+        self.tmp_dir_path = os.path.join(self.out_dir_path, "tmp")
         try:
+            if not os.path.exists(self.out_dir_path):
+                os.makedirs(self.out_dir_path)
             if not os.path.exists(self.tmp_dir_path):
                 os.makedirs(self.tmp_dir_path)
         except:
@@ -56,6 +59,7 @@ class Generator(object):
         # Dump to file
         output_file_name = os.path.basename(self.xml_file_path)
         output_file_name = os.path.splitext(output_file_name)[0] + ".tex"
+        output_file_name = os.path.join(self.out_dir_path, output_file_name)
         slides.write(output_file_name)
     
     def get_number_of_sections(self):
@@ -136,7 +140,7 @@ class Generator(object):
             if image_file.mode != "RGB":
                 image_file = image_file.convert("RGB")
             image_file.save(new_img_name, "JPEG")
-            _src = new_img_name
+            _src = os.path.join("tmp", img_name + ".jpeg")
             _caption = image.get("caption")
             if len(_caption) > self.MAXIMUM_CHARS_IN_CAPTION:
                 _caption = ""
@@ -256,12 +260,12 @@ class Generator(object):
         return slides
 
 
-def main(xml_file_path, tmp_dir_path):
-    generator = Generator(xml_file_path, tmp_dir_path)
+def main(xml_file_path, out_dir_path):
+    generator = Generator(xml_file_path, out_dir_path)
     generator.generate()
 
 if __name__ == "__main__":
     if(len(sys.argv) != 3):
-        print("usage: %s <xmlFile> <tmpDir>" %sys.argv[0])
+        print("usage: %s <xmlFile> <outDir>" %sys.argv[0])
         exit(-1)
     main(sys.argv[1], sys.argv[2])
