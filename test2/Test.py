@@ -14,7 +14,7 @@ Papers = [
   "Papers/Levy/lev_txt.htm",
   "Papers/Yamaashi/ky_txt.htm",
   "Papers/Bowers/jb_txt.htm",
-  "Papers/Raman/paper.html",
+  "Papers/Raman/paper.html",                     #BAD FORMAT: Multipage document
   "Papers/Mereu/rnk-txt.htm",
   "Papers/Robertson/spr_txt.htm",
   "Papers/Chatty/sc_txt.htm",
@@ -30,15 +30,15 @@ Papers = [
   "Papers/Marx/mtm_txt.htm",
   "Papers/Roy/paper.html",
   "Papers/Eisenberg/me_txt.htm",
-  "Papers/Soloway/es_txt.htm",
+  "Papers/Soloway/es_txt.htm",                   #BAD FORMAT: No heading hierarchy
   "Papers/Pane/jfp_txt.htm",
   "Papers/Koenemann/jk1_txt.htm",
   "Papers/Pirolli/pp_txt.htm",
-  "Papers/Plaisant/cps1txt.htm",
+  "Papers/Plaisant/cps1txt.htm",                 #BAD FORMAT: Bad heading hierarchy
   "Papers/Hartson/hrh_txt.htm",
   "Papers/Virzi/RAVtext.htm",
   "Papers/Kasik/djk_txt.htm",
-  "Papers/Wolber/dww_txt.htm",
+  "Papers/Wolber/dww_txt.htm",                   #BAD FORMAT: No author details
   "Papers/Myers/bam_com.htm",
   "Papers/Ackerman/ack_txt.htm",
   "Papers/Whittaker/sw_txt.htm",
@@ -53,9 +53,9 @@ Papers = [
   "Papers/Ishizaki/si_bdy.htm",
   "Papers/Terveen/lgt_txt.htm",
   "Papers/Gale/srg_txt.htm",
-  "Papers/Miller/am_txt.htm",
+  "Papers/Miller/am_txt.htm",                    #BAD FORMAT: No heading hierarchy
   "Papers/Sawyer/ps_txt.htm",
-  "Papers/Kamba/tk_txt.htm",
+  "Papers/Kamba/tk_txt.htm",                     #BAD FORMAT: No author email; Abstract & Keywords not in a heading
   "Papers/Harrison/blh_txt.htm",
   "Papers/Douglas/sad_txt.htm",
   "Papers/Tweedie/lt1txt.htm",
@@ -65,7 +65,7 @@ Papers = [
 
 
 ParserExecutable = "../src/Parser/Parser.py"
-SummarizerExecutable = "../src/Summarizer/Summarizer.py"
+SummarizerExecutable = "../src/Summarizer/Main.py"
 GeneratorExecutable = "../src/Generator/Generator.py"
 
 def printUsage():
@@ -73,6 +73,8 @@ def printUsage():
 	exit(-1)
 
 def runHTMLToSlides(fileName):
+	sys.stdout.write(fileName+": ")
+	sys.stdout.flush()
 	#Parser
 	ParserTarget = re.sub("^Papers\/", "Parser/",fileName)
 	ParserTarget = re.sub("\.html?$", ".xml", ParserTarget)
@@ -84,7 +86,7 @@ def runHTMLToSlides(fileName):
 	SummarizerTarget = re.sub("\.html?$", ".xml", SummarizerTarget)
 	SummarizerTargerDir = os.path.dirname(SummarizerTarget)
 	os.system("mkdir -p '%s'"%SummarizerTargerDir)
-	os.system("%s '%s' '%s'"%(SummarizerExecutable, ParserTarget, SummarizerTarget))
+	#os.system("%s '%s' '%s'"%(SummarizerExecutable, ParserTarget, SummarizerTarget))
 	#Generator
 
 if(len(sys.argv)==2):
@@ -92,7 +94,7 @@ if(len(sys.argv)==2):
 	elif(sys.argv[1]=="list"): print("\n".join(Papers))
 	elif(sys.argv[1]=="runall"):
 		for fileName in Papers: runHTMLToSlides(fileName)
-	elif(sys.argv[1]=="clean"): os.system("rm -rf Papers Parser Summazier Generator")
+	elif(sys.argv[1]=="clean"): os.system("rm -rf Papers Parser Summarizer Generator")
 	else: printUsage()
 elif(len(sys.argv)==3 and sys.argv[1]=="run"):
 	runHTMLToSlides(sys.argv[2])

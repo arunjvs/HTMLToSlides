@@ -59,14 +59,17 @@ class Parser(object):
     s = re.sub('\s+', ' ', s)
     #Remove dirty html tags
     removeTags = [["a",""],
+                  ["address","\n"],
                   ["b",""],
                   ["br","\n"],
                   ["center", "\n"],
                   ["div","\n"],
+                  ["em",""],
                   ["font", ""],
                   ["hr", "\n"],
                   ["i", ""],
                   ["p", "\n"],
+                  ["strong",""],
                   ["table", "\n"],
                   ["thead", "\n"],
                   ["tbody", "\n"],
@@ -185,8 +188,16 @@ class Parser(object):
 
   def authorSplitter(self, s):
     emails = []
-    for email in re.finditer('\s([a-zA-Z0-9\-\_\.\{\}\s]+)\s*\@\s*([a-zA-Z0-9\-\_\.\{\}\s]+)[\s\,$]', s):
-      print(email.group(1), email.group(2))
+    s = re.sub("\<h[1-9].*$", "", s, flags=re.DOTALL|re.IGNORECASE)
+    for email in re.finditer('[\s\,^]([a-zA-Z0-9\-\_\.]+)\s*\@\s*([a-zA-Z0-9\-\_\.]+)[\s\,\;$]', s):
+      emails += [(email.group(1)+'@'+email.group(2), email.start(), email.end())]
+    for email in re.finditer('[\s\,^](\{|\&lt\;)([a-zA-Z0-9\-\_\.\,\s]+)(\}|\&gt\;)\s*\@\s*([a-zA-Z0-9\-\_\.]+)[\s\,\;$]', s):
+      for chunk in email.group(2).split(","):
+        emails += [(chunk.strip()+'@'+email.group(4), email.start(), email.end())]
+    #print("\n")
+    #if(re.search("keywords",s,flags=re.IGNORECASE)): print("key")
+    #if(re.search("abstract",s,flags=re.IGNORECASE)): print("abs")
+    #print(emails)
     authors = [["author1","author1@example.com","MIT"], ["author2","author2@example.com","CMU"]]
     for author in authors:
       self.xmlFileHandle.write('\t\t\t<author name="%s" email="%s" organization="%s"/>\n'%(author[0],author[1],author[2]))
