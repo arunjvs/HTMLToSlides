@@ -1,0 +1,247 @@
+\documentclass[10pt,twocolumn,letterpaper]{article}
+
+\usepackage{cvpr}
+\usepackage{times}
+\usepackage{epsfig}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+% Include other packages here, before hyperref.
+
+% If you comment hyperref and then uncomment it, you should delete
+% egpaper.aux before re-running latex.  (Or just hit 'q' on the first latex
+% run, let it finish, and you should be clear).
+\usepackage[breaklinks=true,bookmarks=false]{hyperref}
+
+\cvprfinalcopy % *** Uncomment this line for the final submission
+
+\def\cvprPaperID{****} % *** Enter the CVPR Paper ID here
+\def\httilde{\mbox{\tt\raisebox{-.5ex}{\symbol{126}}}}
+
+% Pages are numbered in submission mode, and unnumbered in camera-ready
+%\ifcvprfinal\pagestyle{empty}\fi
+\setcounter{page}{1}
+\begin{document}
+
+%%%%%%%%% TITLE
+\title{Generating Slides from HTML pages}
+
+\author{Arun JVS\\
+IIIT-H\\
+{\tt\small firstauthor@i1.org}
+% For a paper whose authors are all at the same institution,
+% omit the following lines up until the closing ``}''.
+% Additional authors and addresses can be added with ``\and'',
+% just like the second author.
+% To save space, use either the email address or home page, not both
+\and
+Rohit Girdhar\\
+IIIT-H\\
+{\tt\small secondauthor@i2.org}
+\and
+Sudheer Kumar\\
+IIIT-H\\
+{\tt\small secondauthor@i2.org}
+}
+
+\maketitle
+%\thispagestyle{empty}
+
+%%%%%%%%% ABSTRACT
+\begin{abstract}
+    some abstract TODO
+    \vspace{40mm}
+\end{abstract}
+
+%%%%%%%%% BODY TEXT
+\section{Motivation}
+
+Presenting information using slides is an effective way for audience retention.
+Presenters take the aid of slides for presenting research papers in conferences, for
+explaining them in classrooms and for other academic purposes. But creating slides from
+the research papers is a time consuming task for the presenter. So, it would be a great
+benefit for them if there is an easy way for generating the slides from the research
+papers. Also, sometimes people want to go through the research papers just to understand
+the overview of them. Slides provide an easier way for them to understand the overview of
+the topic. This gives rise to need for a tool which automatically generates slides from
+research papers. Automatic generation of slides from research paper is an easier task
+compared to generation of slides from some random document because research papers have
+an almost similar structure and we can address the problem of automatic generation of slides
+from research papers by exploiting the structure of the research papers. Once this problem
+is addressed, this work can be easily extended to automatically generate slides from other
+structured entities like book chapters etc.
+
+\section{Problem Definition}
+Given an HTML version of a research paper which is in accordance with the conference/journal
+proceedings, a slideshow is created which contains an summarized version of the paper.
+This Slideshow will contain the important points, tables, graphs, figures which helps to
+explain the paper. This may not serve as a final presentation but provides a good starting
+point for preparing it.
+
+\section{Related Work}
+There has been limited work that addresses the problem of automatic slides generation.
+Previous works include approaches like section-wise summarization \cite{sravanthi},
+alignment methods for matching document regions with presentation regions \cite{brandon},
+extracting topics and itemized elaborations from tagged documents.
+Many of these systems use multiple ideas from Information Retrieval, such as TF-IDF weights,
+query expansion, query-specific summarization, POS-tagging, etc..
+Some of them are purely generative, while others learn models from an existing corpus of
+document-presentation pairs. These systems are tuned to work with different input formats
+such as PDF, XML, \LaTeX\ and PPT, each of which preserve a varying amount of semantic and
+structural information about the original text. In the following two subsections, we review
+two papers \cite{sravanthi},\cite{brandon} which particularly deal with technical papers.
+
+\subsection{SlidesGen}
+The first work we review is by Sravanthi et al. \cite{sravanthi}. They propose an
+novel framework for automatic generation of presentation slides for technical papers.
+They take \LaTeX\ documents of research papers as input, and return the presentation slides.
+Their method depends on the assumption that by and large, conference papers have a similar structure:
+an abstract, followed by sections that can be broadly classified as introduction, related work,
+actual work (model), experiments, conclusion/results and bibliography.
+A slide in their system contains a title and some bulleted points that are important in 
+that section. They evaluate the system by surveying the response of people who use their system.
+
+Their system is divided into multiple stages. The first stage is pre-processing stage.
+In this step, the \LaTeX\ documents are converted into XML using a public domain converter
+LaTeXML. 
+
+Next, the generate what they call "configuration file", which contains configuration
+parameters for each section (since each section has a different point of view and writing style).
+This involves categorization of the section and extraction of key phrases from the section
+which are then stored in the configuration file.
+For example, a section with large number of cite tags, or with title containing words such as
+"related work" or "literature survey" is categorized as related works section.
+
+The next step is of extracting key phrases.	Most research papers have associated key phrases 
+that can be help categorize the content in paper, and contain important concepts introduced
+in the paper. They are mostly related to model and experiments section, and can be used to 
+summarize the same. So, the keywords given at the beginning are added to keyphrases for those
+sections in the configuration file. Also, few other phrases as the names of subsections etc 
+are also added to the configuration file.
+
+Next, they use QueSTS summarizer to summarize the model, experiment and conclusions section.
+QueSTS represents the text as a Integrated Graph where sentence is a node, and edge exists 
+between 2 sentences if the sentences are similar. The edge weight is defined as the 
+cosine similarity between the 2 sentences (above a given minimum threshold)
+Given the keyphrases computed previously, they are tokenized and 
+a centrality based (to the query phrase) node weight is computed for the node corresponding to each token.
+Thus, they get query specific node weights and query independent edge weights.
+
+From the above graph, they construct a Contextual Tree for each term $q$ and node $r$.
+All the trees at node $r$ are merged into a Summary Graph at $r$. The SGraphs generated
+from each node are ranked using a scoring model, and the one with best rank is returned as
+the summary.
+
+The final step of this procedure is slide generation from the XML and configuration file.
+The introduction slides are generated by comparing introduction sentence with the abstract 
+using consine similarity and ones with high similarity are placed in the slides.
+They give a similar method for generating slides from related work section as well.
+From model and experiments section, the slides are generated using the above QueSTS
+mechanism. Similarly, conclusion slides are generated using comparison with keywords
+such as "proposed", "concluded" etc.
+
+Another important aspect in slides is graphics. Graphics are added along with sentences 
+that either refer to it or is present along with it.
+
+The paper finally discusses the issues in alignment of sentences and generation of slides.
+They also evaluate their slides manually with multiple users, taking their feedback.
+Most users gave a satisfaction level of more than 8/10 to the slides generated.
+
+\subsection{Alignment Methods}
+This paper by Brandon et. al. \cite{brandon} takes a different approach to slide generation,
+inspired by the human throught process while making a slide out of a paper.
+They focus their efforts on \textit{alignment} methods - first breaking up the document and
+presentation into regions and then performing a matching on them.
+\textit{Slide regions} include bullets, headings, and other text spans, while \textit{Paper regions}
+include paragraphs, section headings, and list items.
+
+They generate their corpus of 296 paper-presentation pairs from workshops of technical conferences,
+through simple searching. The papers were PDF format, and presentation were a mixture of PDF and PPT.
+Before working with them, they convert them into custom XML formats, which represent relevant parts of
+the original data as logical regions (orthographic boundaries). They prefer such physical regions over
+semantic regions for its simplicity to implement and verify.
+
+The alignment problem now reduces to an IR query, where the query is a slide region (which is the
+section/subsection the slide is related to), and the documents are the target regions from the paper.
+They compare two TF-IDF based scoring methods, with and without query expansion, resulting in 4
+alignment methods.
+
+The procedure of scoring is as follows. For each token in each region TF-IDF is computed, where TF is
+the frequency of the token in the region and DF is the number of regions containing the token's stem.
+The slide region is tokenized and POS tagged to remove non-content words. Each token in the query is
+stemmed and then may or may not be query-expanded depending on the method. A score is then calculated
+for each target region with the query. Two scoring methods were used - one uses the average TF-IDF
+score of the search terms relative to the target region, and the other uses the quantity of the matched
+terms.
+
+The evaluation of their methods gives critical insights. First, a vast majority of the slide regions are
+not alignable (zero score with all target regions) - meaning that a lot of information in slides is not
+present in the paper - contrary to their hypothesis. Then they define an \textit{alignable} accuracy against
+the \textit{raw} accuracy, considering only alignable slide regions. They find that the best algorithm
+on an average gives an average 75\% alignable accuracy, but only 50\% raw accuracy. Query expansion seems
+to have little or negative impact on the aligners and that the second scoring method is better than
+the first.
+
+After more results, they conclude that the data indicates that the task of presentation generation
+is highly dependent on the end purpose the presentation will serve, as well as the target audience and other
+factors. Also query expansion generally degraded performance, possibly because authors tend to use wording in
+slides similar to their paper, and that using synonyms for query expansion is not aggressive enough, and may
+require hypernyms, immediate hyponyms, and other semantically related terms. Also a possible loss of accuracy
+could be polysemy of words, causing query expansion to be incorrect and insensitive to context.
+
+
+%\begin{figure}[t]
+%\begin{center}
+%\fbox{\rule{0pt}{2in} \rule{0.9\linewidth}{0pt}}
+%   %\includegraphics[width=0.8\linewidth]{egfigure.eps}
+%\end{center}
+%   \caption{Example of caption.  It is set in Roman so that mathematics
+%   (always set in Roman: $B \sin A = A \sin B$) may be included without an
+%   ugly clash.}
+%\label{fig:long}
+%\label{fig:onecol}
+%\end{figure}
+
+\section{Approach}
+
+
+\begin{figure*}
+\begin{center}
+\fbox{\rule{0pt}{2in} \rule{.9\linewidth}{0pt}}
+\end{center}
+   \caption{Block Diagram of the system}
+\label{fig:short}
+\end{figure*}
+
+\input{text/approach_intro}
+\input{text/approach_parse}
+\input{text/approach_sum}
+\input{text/approach_gen}
+
+\section{Datasets}
+\input{text/dataset}
+
+\section{Experimental Results}
+\input{text/exp_results}
+
+\section{Analysis of Results}
+\input{text/analysis}
+
+\section{Discussion}
+\input{text/discussion}
+
+\section{Conclusion}
+\input{text/conclusion}
+
+\section{Future Work}
+\input{text/future}
+
+
+
+{\small
+\bibliographystyle{ieee}
+\bibliography{ref}
+}
+
+\end{document}

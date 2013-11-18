@@ -3,8 +3,10 @@
 	<about>
 		<title>Using the Web Instead of a Window System</title>
 		<authors>
-			<author name="author1" email="author1@example.com" organization="MIT"/>
-			<author name="author2" email="author2@example.com" organization="CMU"/>
+			<author name="James Rice" email="rice@ksl.stanford.edu" organization=""/>
+			<author name="" email="axf@ksl.stanford.edu" organization=""/>
+			<author name="Philippe Piernot" email="piernot@ksl.stanford.edu" organization=""/>
+			<author name="Thomas Gruber" email="gruber@ksl.stanford.edu" organization=""/>
 		</authors>
 	</about>
 	<section name="Abstract">

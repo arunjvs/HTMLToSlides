@@ -42,33 +42,34 @@ class Parser(object):
     #Remove comments
     s = re.sub('\<\!\-\-.*?\-\-\>', '', s, flags=re.DOTALL)
     #Extract body
-    s = re.search('\<\s*[bB][oO][dD][yY](\s+[^\>]*)?\>(.*?)\<\s*\/\s*[bB][oO][dD][yY]\s*\>', s, re.DOTALL)
+    s = re.search('\<\s*body(\s+[^\>]*)?\>(.*?)\<\s*\/\s*body\s*\>', s, flags=re.DOTALL|re.IGNORECASE)
     if (not s): return ""
     s = s.group(2)
     #Remove dirty header
     removeTagsWithInnerHTMLAtBeginning = ["table"]
     for tag in removeTagsWithInnerHTMLAtBeginning:
-      caseInvariantRegex = ''.join(['['+c+c.upper()+']' for c in tag])
-      regex = '^\s*\<\s*'+caseInvariantRegex+'(\s+[^\>]*)?\>(.*?)\<\s*\/\s*'+caseInvariantRegex+'\s*\>'
-      s = re.sub(regex, ' ', s, flags=re.DOTALL)
+      regex = '^\s*\<\s*'+tag+'(\s+[^\>]*)?\>(.*?)\<\s*\/\s*'+tag+'\s*\>'
+      s = re.sub(regex, ' ', s, flags=re.DOTALL|re.IGNORECASE)
     #Remove dirty html with inner text
     removeTagsWithInnerHTML = ["blockquote", "pre", "script", "sup", "sub"]
     for tag in removeTagsWithInnerHTML:
-      caseInvariantRegex = ''.join(['['+c+c.upper()+']' for c in tag])
-      regex = '\<\s*'+caseInvariantRegex+'(\s+[^\>]*)?\>(.*?)\<\s*\/\s*'+caseInvariantRegex+'\s*\>'
-      s = re.sub(regex, ' ', s, flags=re.DOTALL)
+      regex = '\<\s*'+tag+'(\s+[^\>]*)?\>(.*?)\<\s*\/\s*'+tag+'\s*\>'
+      s = re.sub(regex, ' ', s, flags=re.DOTALL|re.IGNORECASE)
     #Condense multiple whitespaces to single space
     s = re.sub('\s+', ' ', s)
     #Remove dirty html tags
     removeTags = [["a",""],
+                  ["address","\n"],
                   ["b",""],
                   ["br","\n"],
                   ["center", "\n"],
                   ["div","\n"],
+                  ["em",""],
                   ["font", ""],
                   ["hr", "\n"],
                   ["i", ""],
                   ["p", "\n"],
+                  ["strong",""],
                   ["table", "\n"],
                   ["thead", "\n"],
                   ["tbody", "\n"],
@@ -86,14 +87,13 @@ class Parser(object):
                   ["dd","\n"]
                  ]
     for tag in removeTags:
-      caseInvariantRegex = ''.join(['['+c+c.upper()+']' for c in tag[0]])
-      regex = '\<\s*\/?\s*' + caseInvariantRegex + '(\s+[^\>]*)?\>'
-      s = re.sub(regex, tag[1], s)
+      regex = '\<\s*\/?\s*' + tag[0] + '(\s+[^\>]*)?\>'
+      s = re.sub(regex, tag[1], s, flags=re.IGNORECASE)
     #Get images and captions
     imageCaptions = ["figure", "image", "fig", "graph", "table"]
-    imageCaptionsRegex = "|".join(["".join(['['+c+c.upper()+']' for c in cap]) for cap in imageCaptions])
-    regex = '\<\s*\/?\s*[iI][mM][gG](\s+[^\>]*)?\/?\>(\s*((' + imageCaptionsRegex + ')\s*[\.0-9a-zA-Z])+[^\n]*)?'
-    s = re.sub(regex, self.imgSplitter, s)
+    imageCaptionsRegex = "|".join(imageCaptions)
+    regex = '\<\s*\/?\s*img(\s+[^\>]*)?\/?\>(\s*((' + imageCaptionsRegex + ')\s*[\.0-9a-zA-Z])+[^\n]*)?'
+    s = re.sub(regex, self.imgSplitter, s, flags=re.IGNORECASE)
     #Condense multiple spaces and newlines independently to preserve semantic seperation
     s = re.sub(' +', ' ', s)
     s = re.sub('\s*\n\s*', '\n', s)
@@ -153,11 +153,10 @@ class Parser(object):
     return self.xmlNormalizer(" ".join(title))
 
   def sectionSplitter(self, s, hLevel, sLevel):
-    caseInvariantRegex='[hH]'+str(hLevel)
-    regex = '\<\s*'+caseInvariantRegex+'(\s+[^\>]*)?\>(.*?)\<\s*\/\s*'+caseInvariantRegex+'\s*\>'
+    regex = '\<\s*h'+str(hLevel)+'(\s+[^\>]*)?\>(.*?)\<\s*\/\s*h'+str(hLevel)+'\s*\>'
     sections=[]
     sections_start=0
-    for section in re.finditer(regex,s, flags=re.DOTALL):
+    for section in re.finditer(regex,s, flags=re.DOTALL|re.IGNORECASE):
       if(len(sections)>0): sections[-1][2] = section.start()
       else: sections_start = section.start()
       sections += [[self.titleNormalizer(section.group(2)), section.end(), len(s)]]
@@ -187,8 +186,43 @@ class Parser(object):
         self.sectionSplitter(s[section[1]:section[2]], hLevel+1, sLevel+1)
         self.xmlFileHandle.write('\t'*sLevel+'</section>\n')
 
-  def authorSplitter(self, s):#Use xmlnormalizer
-    authors = [["author1","author1@example.com","MIT"], ["author2","author2@example.com","CMU"]]
+  def authorEmailNameMatcher(self, email, name):
+    if(email in name): return True
+    return False
+
+  def authorNameSearcher(self, email, s, skips):
+    for phrase in re.finditer('(.+?)([\n\;\,\*]|and)', s):
+      if(self.authorEmailNameMatcher((email.split('@')[0]).lower(), phrase.group(1).lower())):
+        return phrase.group(1).strip()
+    return ""
+
+  def authorSplitter(self, s):
+    emails = []
+    authors = []
+    s = re.sub("\<h[1-9].*$", "", s, flags=re.DOTALL|re.IGNORECASE)
+    for email in re.finditer('[\s\,^]([a-zA-Z0-9\-\_\.]+)\s*\@\s*([a-zA-Z0-9\-\_\.]+)[\s\,\;$]', s):
+      emails += [(email.group(1)+'@'+email.group(2), email.start(), email.end())]
+    for email in re.finditer('[\s\,^](\{|\&lt\;)([a-zA-Z0-9\-\_\.\,\s]+)(\}|\&gt\;)\s*\@\s*([a-zA-Z0-9\-\_\.]+)[\s\,\;$]', s):
+      for chunk in email.group(2).split(","):
+        emails += [(chunk.strip()+'@'+email.group(4), email.start(), email.end())]
+    emails = sorted(emails, key=lambda x: x[1])
+    search_limits = [0, len(s)]
+    search_skips = 0
+    for i in range(len(emails)):
+      if(i==0):
+        search_limits = [0, emails[i][1]]
+        search_skips = 0
+      elif(emails[i-1][2]+5<emails[i][1]):
+        jump_limits = [emails[i-1][2], emails[i][1]]
+        if(re.search('\S{5}', s[jump_limits[0]:jump_limits[1]])):
+          search_limits = list(jump_limits)
+          search_skips = 0
+        else:
+          search_skips += 1
+      else:
+        search_skips += 1
+      name = self.authorNameSearcher(emails[i][0], s[search_limits[0]:search_limits[1]], search_skips)
+      authors += [[name, emails[i][0], ""]]
     for author in authors:
       self.xmlFileHandle.write('\t\t\t<author name="%s" email="%s" organization="%s"/>\n'%(author[0],author[1],author[2]))
 
@@ -208,7 +242,7 @@ class Parser(object):
 
   def imgLineMatcher(self, imgAlt, line):
     if(imgAlt==""): return False
-    if(imgAlt.lower() in line.lower()): return True
+    if(re.search(re.escape(imgAlt.lower())+'([^0-9]|$)',line.lower())): return True
     return False
 
   def lineRefSplitter(self, r):
@@ -245,9 +279,9 @@ class Parser(object):
     imgSrc = ""
     imgAlt = ""
     imgCaption = ""
-    imgSrcMatch = re.search('[sS][rR][cC]\s*=\s*[\'"]([^\'"]*)[\'"]', r.group(1))
+    imgSrcMatch = re.search('src\s*=\s*[\'"]([^\'"]*)[\'"]', r.group(1), flags=re.IGNORECASE)
     if(imgSrcMatch): imgSrc = imgSrcMatch.group(1).replace('"','&quot;')
-    imgAltMatch = re.search('[aA][lL][tT]\s*=\s*[\'"]([^\'"]*)[\'"]', r.group(1))
+    imgAltMatch = re.search('alt\s*=\s*[\'"]([^\'"]*)[\'"]', r.group(1), flags=re.IGNORECASE)
     if(imgAltMatch): imgAlt = self.xmlNormalizer(imgAltMatch.group(1))
     if(r.group(2)): imgCaption = self.xmlNormalizer(r.group(2))
     if(r.group(3) and imgAlt==""): imgAlt = self.xmlNormalizer(re.sub('\.','',r.group(3)))
