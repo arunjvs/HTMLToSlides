@@ -11,7 +11,7 @@ from latexslides import *
 class Generator(object):
     """ Generator Class to generate slides from a XML file """
 
-    def __init__(self, xml_file_path, out_dir_path):
+    def __init__(self, xml_file_path, out_dir_path, img_dir_path):
         self.MAXIMUM_CHARS_PER_SLIDE = 550
         self.MAXIMUM_CHARS_IN_CAPTION = 110
         self.xml_file_path = xml_file_path
@@ -25,6 +25,7 @@ class Generator(object):
         except:
             sys.stderr.write("%s is not a Valid Directory" % (self.tmp_dir_path))
             sys.exit(1)
+        self.img_dir_path = img_dir_path
         self.xml_tree = ET.parse(self.xml_file_path)
         self.xml_root = self.xml_tree.getroot()
         self.images = self.get_image_details()
@@ -132,7 +133,7 @@ class Generator(object):
         images_element = self.xml_root.find("images")
         for image in images_element.findall("image"):
             _id = image.get("id")
-            img_src = image.get("src")
+            img_src = os.path.join(self.img_dir_path, image.get("src"))
             img_name = os.path.basename(img_src)
             img_name = os.path.splitext(img_name)[0]
             new_img_name = os.path.join(self.tmp_dir_path, img_name + ".jpeg")
@@ -260,12 +261,12 @@ class Generator(object):
         return slides
 
 
-def main(xml_file_path, out_dir_path):
-    generator = Generator(xml_file_path, out_dir_path)
+def main(xml_file_path, out_dir_path, img_dir_path):
+    generator = Generator(xml_file_path, out_dir_path, img_dir_path)
     generator.generate()
 
 if __name__ == "__main__":
-    if(len(sys.argv) != 3):
-        print("usage: %s <xmlFile> <outDir>" %sys.argv[0])
+    if(len(sys.argv) != 4):
+        print("usage: %s <xmlFile> <outDir> <imgDir>" %sys.argv[0])
         exit(-1)
-    main(sys.argv[1], sys.argv[2])
+    main(sys.argv[1], sys.argv[2], sys.argv[3])
