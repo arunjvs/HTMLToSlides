@@ -5,8 +5,8 @@ __author__ = "Arun JVS"
 
 import os,sys,re
 
-# Paper List
-# Generated using: awk 'BEGIN{ RS="<A *HREF *= *\""} NR>2 {sub(/".*/,"");print; }' papers.htm
+# Paper List. Generated using:
+# awk 'BEGIN{ RS="<A *HREF *= *\""} NR>2 {sub(/".*/,"");print; }' papers.htm
 Papers = [
   "Papers/Weisband/sw_txt.htm",
   "Papers/Button/jpd_txt.htm",
@@ -65,21 +65,27 @@ Papers = [
 
 
 ParserExecutable = "../src/Parser/Parser.py"
-SummarizerExecutable = "../src/Parser/Summarizer.py"
-GeneratorExecutable = "../src/Parser/Generator.py"
-
+SummarizerExecutable = "../src/Summarizer/Summarizer.py"
+GeneratorExecutable = "../src/Generator/Generator.py"
 
 def printUsage():
 	sys.stderr.write("Usage %s extract | list | runall | run <InputHTML> | clean\n"%sys.argv[0])
 	exit(-1)
 
-
 def runHTMLToSlides(fileName):
+	#Parser
 	ParserTarget = re.sub("^Papers\/", "Parser/",fileName)
 	ParserTarget = re.sub("\.html?$", ".xml", ParserTarget)
 	ParserTargerDir = os.path.dirname(ParserTarget)
 	os.system("mkdir -p '%s'"%ParserTargerDir)
 	os.system("%s '%s' '%s'"%(ParserExecutable, fileName, ParserTarget))
+	#Summarizer
+	SummarizerTarget = re.sub("^Papers\/", "Summarizer/",fileName)
+	SummarizerTarget = re.sub("\.html?$", ".xml", SummarizerTarget)
+	SummarizerTargerDir = os.path.dirname(SummarizerTarget)
+	os.system("mkdir -p '%s'"%SummarizerTargerDir)
+	os.system("%s '%s' '%s'"%(SummarizerExecutable, ParserTarget, SummarizerTarget))
+	#Generator
 
 if(len(sys.argv)==2):
 	if(sys.argv[1]=="extract"): os.system("tar xf Papers.tar.gz")
@@ -92,4 +98,3 @@ elif(len(sys.argv)==3 and sys.argv[1]=="run"):
 	runHTMLToSlides(sys.argv[2])
 else:
 	printUsage()
-
