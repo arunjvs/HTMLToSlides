@@ -92,6 +92,8 @@ class Summarizer(object):
         @param element: etree.Element. The tree of elements to summarize
         @return: void
         '''
+        if not element:
+            return
         subsecs = element.findall("section")
         for subsec in subsecs:
             self.sumSectionsRecursive(ref_text, subsec, topn)
