@@ -186,19 +186,43 @@ class Parser(object):
         self.sectionSplitter(s[section[1]:section[2]], hLevel+1, sLevel+1)
         self.xmlFileHandle.write('\t'*sLevel+'</section>\n')
 
+  def authorEmailNameMatcher(self, email, name):
+    if(email in name): return True
+    return False
+
+  def authorNameSearcher(self, email, s, skips):
+    for phrase in re.finditer('(.+?)([\n\;\,\*]|and)', s):
+      if(self.authorEmailNameMatcher((email.split('@')[0]).lower(), phrase.group(1).lower())):
+        return phrase.group(1).strip()
+    return ""
+
   def authorSplitter(self, s):
     emails = []
+    authors = []
     s = re.sub("\<h[1-9].*$", "", s, flags=re.DOTALL|re.IGNORECASE)
     for email in re.finditer('[\s\,^]([a-zA-Z0-9\-\_\.]+)\s*\@\s*([a-zA-Z0-9\-\_\.]+)[\s\,\;$]', s):
       emails += [(email.group(1)+'@'+email.group(2), email.start(), email.end())]
     for email in re.finditer('[\s\,^](\{|\&lt\;)([a-zA-Z0-9\-\_\.\,\s]+)(\}|\&gt\;)\s*\@\s*([a-zA-Z0-9\-\_\.]+)[\s\,\;$]', s):
       for chunk in email.group(2).split(","):
         emails += [(chunk.strip()+'@'+email.group(4), email.start(), email.end())]
-    #print("\n")
-    #if(re.search("keywords",s,flags=re.IGNORECASE)): print("key")
-    #if(re.search("abstract",s,flags=re.IGNORECASE)): print("abs")
-    #print(emails)
-    authors = [["author1","author1@example.com","MIT"], ["author2","author2@example.com","CMU"]]
+    emails = sorted(emails, key=lambda x: x[1])
+    search_limits = [0, len(s)]
+    search_skips = 0
+    for i in range(len(emails)):
+      if(i==0):
+        search_limits = [0, emails[i][1]]
+        search_skips = 0
+      elif(emails[i-1][2]+5<emails[i][1]):
+        jump_limits = [emails[i-1][2], emails[i][1]]
+        if(re.search('\S{5}', s[jump_limits[0]:jump_limits[1]])):
+          search_limits = list(jump_limits)
+          search_skips = 0
+        else:
+          search_skips += 1
+      else:
+        search_skips += 1
+      name = self.authorNameSearcher(emails[i][0], s[search_limits[0]:search_limits[1]], search_skips)
+      authors += [[name, emails[i][0], ""]]
     for author in authors:
       self.xmlFileHandle.write('\t\t\t<author name="%s" email="%s" organization="%s"/>\n'%(author[0],author[1],author[2]))
 
