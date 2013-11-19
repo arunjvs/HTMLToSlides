@@ -1,3 +1,84 @@
 \subsection{Summarization}
-\newpage
-\vspace{40mm}
+
+The second step in the slide generation process is that of summarization of the text
+as present in the complete research paper. The parsing step returns the structure of
+the paper in our predefined XML format, with all the lines lines, sections, subsections
+in the hierarchical order, and the objective of this stage is to select only those lines
+that are most informative, and would be most relevant for a presentation. We applied 
+different heuristic techniques to summarize different parts of the paper, as discussed
+in following sections.
+
+\subsubsection{Summarizing Introduction}
+Introduction is an important section that introduces the problem, the motivation to solving it
+and gives an overall direction towards the solution, along with discussion an overview of
+the contributions. Abstract of the paper also summarizes the paper, albeit in a more succinct 
+format. Hence, we use the approach as proposed in \cite{sravanthi}. For each sentence 
+in introduction, we compute it's TF-IDF based cosine similarity with the complete abstract
+text, and select the the top $n$ sentences with highest scores.
+
+\subsubsection{Summarizing Model}
+We consider the central part of the paper, with the approach, results, analysis etc.
+to be the model part of the paper, that contains the bulk of information content.
+The information itself may be divided into multiple subsections and bulleted points,
+and may contain images, tables, mathematical proofs/expressions etc.
+
+Based on our experiments, we observed that the sections tree structure as extracted
+by the parser is an important part of the paper, and we include each of the sections
+and subsections in the final set of slides in the same hierarchy as detected
+in original paper. However, we summarize the text content in each of those sections
+recursively. We use the following set of heuristics for summarizing lines in each:
+\begin{enumerate}
+	\item \textbf{Bulleted Points} Some sections in the papers itself contain a set of
+	points in bulleted fashion, or with numbering. Such points might also be spread
+	across with text in between, but have continuous numbering. In such a case, we
+	only take those points to be representative text for that section.
+	\item \textbf{Other Text} In case the section does not contain bullets, we manually
+	select a subset of the lines from that section. We determine a score for every line
+	by computing its TF-IDF score with the set of keywords relevant to the paper. 
+	Lines with frequent occurance of keywords is usually more relevant, and 
+	we tend to select such sentences.
+	\item \textbf{Boosting image references} Since images are an important 
+	part of presentations, we boost the score of lines with image references.
+	That increases the possibility of that line getting included, and hence 
+	of the associated image getting included in the slides as well.
+\end{enumerate}
+
+\paragraph{Keyword Set Expansion}
+The model section summarization depends heavily on the set of keywords, which we
+mostly extract from the keywords section of the paper itself. However, this
+set is usually very small, and sometimes ineffective for selection of best
+subset of sentences, hence we propose an algorithm to expand that set 
+using the paper itself. We use co-occurrence probabilities to compute the
+other potential keywords, according to Algorithm \ref{algo_set_expand}. 
+
+\begin{algorithm}[H]\label{algo_set_expand}
+ \SetLine % For v3.9
+ \KwData{allLinesSet, keywordsSet }
+ \KwResult{expandedKeywordsSet }
+ pairs = []
+ \For{line in lines}{
+  \If{line contains any keyword}{
+    \For{token in line.tokenized}{
+	  $pairs \leftarrow (token, keyword)$
+	}
+  }
+  \For{pair in pairs}{
+	\If{frequency $>$ threshold}{
+		$expandedKeywordsSet \leftarrow pair.token$
+	}  
+  }
+ }
+ \caption{Keyword Set Expansion}
+\end{algorithm}
+
+\subsubsection{Summarizing Conclusion}
+Summarizing conclusion requires us to select sentences that mention the
+major contributions of the paper, along with its consequences and implications.
+Here we use the approach as proposed in \cite{sravanthi}. We define a set of words	
+such as ["proposed", "shown", "contributed", concluded"] and so on, that 
+are present in important sentences in conclusion. We compute TF-IDF based cosine similarity of
+each conclusion sentence with the above set, and select the top  $n$.
+
+\subsubsection{Selecting images, references}
+We select graphics for display in the slides only if the sentence referring to that graphic
+gets selected.
