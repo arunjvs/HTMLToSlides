@@ -29,10 +29,13 @@ class Summarizer(object):
             self.outputFPath = output_file_path
         except Exception, e:
             sys.stderr.write("""Summarizer::__init__:
-            Unable to parse XML file : """ + str(e))
+            Unable to parse XML file \n""")
+            raise e
     
     def summarize(self):
         root_element = self.tree.getroot();
+        if root_element is None:
+            return
         self.keywords = self.getAllKeywords(root_element)
         self.keywords = KeywordExpander.expandSet(self.keywords, root_element)
         intro_element = root_element.find(".//section[@name='Introduction']")
@@ -92,7 +95,9 @@ class Summarizer(object):
         @param element: etree.Element. The tree of elements to summarize
         @return: void
         '''
-        if not element:
+        if element is None:
+            return
+        if ref_text is None:
             return
         subsecs = element.findall("section")
         for subsec in subsecs:
@@ -155,6 +160,8 @@ class Summarizer(object):
         @return: string. All the lines (even in subsecs) concatinated with " "
         '''
         # all line elements under it (even in subsections)
+        if element is None:
+            return ""
         lines = element.findall(".//line")
         return " ".join([line.text for line in lines])
         
@@ -168,7 +175,11 @@ class Summarizer(object):
         '''
         vect = TfidfVectorizer(min_df=1, tokenizer=LemmaTokenizer())
         all_strings = [string.lower() for string in strings_list] + [corpus.lower()]
-        tfidf = vect.fit_transform(all_strings)
+        tfidf = None
+        try:
+            tfidf = vect.fit_transform(all_strings)
+        except Exception,e:
+            return [(0, i) for i in range(len(strings_list))]
         corpus_vec = tfidf.A[len(strings_list)]
         res = []
         for i in range(len(strings_list)):

@@ -2,6 +2,7 @@
 
 import sys
 import os
+import shutil
 
 __all__ = []
 __version__ = 0.1
@@ -24,8 +25,14 @@ def main(argv=None): # IGNORE:C0111
         return
     input_fname = argv[1]
     output_fname = argv[2]
-    ob = Summarizer(input_fname, output_fname)
-    ob.summarize()
+    try:
+        ob = Summarizer(input_fname, output_fname)
+        ob.summarize()
+    except Exception,e:
+        sys.stderr.write(">>Summarization Failed : %s<<\n" % str(e))
+        shutil.copyfile(input_fname, output_fname)
+        return
+    sys.stdout.write("Summarization Successful\n")
     
 if __name__ == "__main__":
     sys.exit(main())
