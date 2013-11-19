@@ -105,6 +105,8 @@ class Parser(object):
     remapEncodings = [
       #These stay as it is (http://en.wikipedia.org/wiki/List_of_XML_and_HTML_character_entity_references):
       ['"', '&quot;'],['\'', '&apos;'],['& ', '&amp; '],['<', '&lt;'],['>', '&gt;'],
+      #Lower case convert
+      ['&quot;', '&quot;'],['&apos;', '&apos;'],['&amp;', '&amp;'],['&lt;', '&lt;'],['&gt;', '&gt;'],
       #These get replaced with closest ascii:
       ['&#128;', 'E'],
       ['&#129;', ' '],
@@ -139,10 +141,11 @@ class Parser(object):
     ]
     for remap in remapEncodings:
       s = re.sub(re.escape(remap[0]), remap[1], s, flags=re.IGNORECASE)
-    errorEncodings = [ '(\&quot)([^\;])', '(\&apos)([^\;])','(\&amp)([^\;])','(\&lt)([^\;])', '(\&gt)([^\;])']
+    errorEncodings = [ '(\&quot)([^\;$])', '(\&apos)([^\;$])','(\&amp)([^\;$])','(\&lt)([^\;$])', '(\&gt)([^\;$])']
     for error in errorEncodings:
       s = re.sub(error, lambda x: x.group(1)+';'+x.group(2), s, flags=re.IGNORECASE)
     s = re.sub('\s+', ' ', s).strip()
+    #s = re.sub('&', '', s, flags=re.IGNORECASE)
     #ASCII Printable Characters Filter
     fs = ''
     for c in s:
@@ -287,7 +290,7 @@ class Parser(object):
     imgAlt = ""
     imgCaption = ""
     imgSrcMatch = re.search('src\s*=\s*[\'"]([^\'"]*)[\'"]', r.group(1), flags=re.IGNORECASE)
-    if(imgSrcMatch): imgSrc = imgSrcMatch.group(1).replace('"','&quot;')
+    if(imgSrcMatch): imgSrc = self.xmlNormalizer(imgSrcMatch.group(1))
     imgAltMatch = re.search('alt\s*=\s*[\'"]([^\'"]*)[\'"]', r.group(1), flags=re.IGNORECASE)
     if(imgAltMatch): imgAlt = self.xmlNormalizer(imgAltMatch.group(1))
     if(r.group(2)): imgCaption = self.xmlNormalizer(r.group(2))
