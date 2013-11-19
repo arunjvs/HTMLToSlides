@@ -26,7 +26,11 @@ class Generator(object):
             sys.stderr.write("%s is not a Valid Directory" % (self.tmp_dir_path))
             sys.exit(1)
         self.img_dir_path = img_dir_path
-        self.xml_tree = ET.parse(self.xml_file_path)
+        try:
+            self.xml_tree = ET.parse(self.xml_file_path)
+        except Exception, e:
+            print "Generator: Parsing Failed"
+            raise e
         self.xml_root = self.xml_tree.getroot()
         self.images = self.get_image_details()
         self.images_considered = []
@@ -154,6 +158,8 @@ class Generator(object):
             if image_file.mode != "RGB":
                 image_file = image_file.convert("RGB")
             image_file.save(new_img_name, "JPEG")
+            new_image_file = Image.open(new_img_name)
+            width, height = new_image_file.size
             _src = os.path.join("tmp", img_name + ".jpeg")
             _caption = image.get("caption")
             if len(_caption) > self.MAXIMUM_CHARS_IN_CAPTION:
@@ -163,7 +169,7 @@ class Generator(object):
                            "caption": _caption,
                            "alt": _alt,
                            "width": width,
-                           "height": height
+                           "height": height,
                           }
         return images
 
@@ -265,9 +271,11 @@ class Generator(object):
         for image_id in image_ids:
             title = self.escape_special_characters(self.images[image_id]["caption"])
             figure_path = self.images[image_id]["src"]
-            figure_fraction_width = 217.0/self.images[image_id]["height"]
+            #print image_id, self.images[image_id]["width"], self.images[image_id]["height"]
+            figure_fraction_width = 0.9*217.0/self.images[image_id]["height"]
             figure_fraction_width = min(figure_fraction_width, 312.0/self.images[image_id]["width"])
             figure_fraction_width = min(figure_fraction_width, 1)
+            #print figure_fraction_width
             slide = Slide(title=title,
                           figure=figure_path,
                           figure_fraction_width = figure_fraction_width,
@@ -291,8 +299,11 @@ class Generator(object):
 
 
 def main(xml_file_path, out_dir_path, img_dir_path):
-    generator = Generator(xml_file_path, out_dir_path, img_dir_path)
-    generator.generate()
+    try:
+        generator = Generator(xml_file_path, out_dir_path, img_dir_path)
+        generator.generate()
+    except:
+        return
 
 if __name__ == "__main__":
     if(len(sys.argv) != 4):
