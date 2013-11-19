@@ -86,8 +86,12 @@ def runHTMLToSlides(fileName):
 	SummarizerTarget = re.sub("\.html?$", ".xml", SummarizerTarget)
 	SummarizerTargerDir = os.path.dirname(SummarizerTarget)
 	os.system("mkdir -p '%s'"%SummarizerTargerDir)
-	#os.system("%s '%s' '%s'"%(SummarizerExecutable, ParserTarget, SummarizerTarget))
+	os.system("%s '%s' '%s'"%(SummarizerExecutable, ParserTarget, SummarizerTarget))
 	#Generator
+	GeneratorTarget = re.sub("^Papers\/", "Generator/",fileName)
+	GeneratorTarget = os.path.dirname(GeneratorTarget)
+	os.system("mkdir -p '%s'"%GeneratorTarget)
+	os.system("%s '%s' '%s' '%s'"%(GeneratorExecutable,SummarizerTarget,GeneratorTarget, os.path.dirname(fileName)))
 
 if(len(sys.argv)==2):
 	if(sys.argv[1]=="extract"): os.system("tar xf Papers.tar.gz")
