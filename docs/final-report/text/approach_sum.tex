@@ -55,7 +55,7 @@ other potential keywords, according to Algorithm \ref{algo_set_expand}.
  \SetLine % For v3.9
  \KwData{allLinesSet, keywordsSet }
  \KwResult{expandedKeywordsSet }
- pairs = []
+ pairs = []\\
  \For{line in lines}{
   \If{line contains any keyword}{
     \For{token in line.tokenized}{
@@ -81,4 +81,5 @@ each conclusion sentence with the above set, and select the top  $n$.
 
 \subsubsection{Selecting images, references}
 We select graphics for display in the slides only if the sentence referring to that graphic
-gets selected.
+gets selected. However, since images an integral part of presentations, we boost
+the score of 

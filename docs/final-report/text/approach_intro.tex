@@ -1,2 +1,11 @@
-This is the approach introduction
-\vspace{30mm}
+Our approach consists of 3 stages, parsing, summarization
+and slides generation. Parsing converts the HTML into a clean,
+well-defined XML format that is used for further processing.
+Summarization prunes the XML using a series of heuristics, 
+to select the sections/lines that would be most relevant for
+the presentation. Finally, generator stage converts the
+pruned XML into \LaTeX Beamer presentation. Each of the 
+stages have an intermediate output, that can optionally be
+tweaked manually by user to achieve better results later, such
+as tweaking the set of keywords extracted after parsing stage
+can help summarization work better. We discuss each stage in detail next.
