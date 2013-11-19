@@ -139,8 +139,15 @@ class Parser(object):
     ]
     for remap in remapEncodings:
       s = re.sub(re.escape(remap[0]), remap[1], s, flags=re.IGNORECASE)
+    errorEncodings = [ '(\&quot)([^\;])', '(\&apos)([^\;])','(\&amp)([^\;])','(\&lt)([^\;])', '(\&gt)([^\;])']
+    for error in errorEncodings:
+      s = re.sub(error, lambda x: x.group(1)+';'+x.group(2), s, flags=re.IGNORECASE)
     s = re.sub('\s+', ' ', s).strip()
-    return s
+    #ASCII Printable Characters Filter
+    fs = ''
+    for c in s:
+      if(32<=ord(c) and ord(c)<=126): fs += c
+    return fs
 
   def titleNormalizer(self, s):
     nonTitles = {"a", "and", "at", "by", "for", "from", "in", "is", "of", "on", "the", "to"}
@@ -222,7 +229,7 @@ class Parser(object):
       else:
         search_skips += 1
       name = self.authorNameSearcher(emails[i][0], s[search_limits[0]:search_limits[1]], search_skips)
-      authors += [[name, emails[i][0], ""]]
+      authors += [[self.xmlNormalizer(name), self.xmlNormalizer(emails[i][0]), ""]]
     for author in authors:
       self.xmlFileHandle.write('\t\t\t<author name="%s" email="%s" organization="%s"/>\n'%(author[0],author[1],author[2]))
 
