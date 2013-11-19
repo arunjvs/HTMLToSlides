@@ -3,8 +3,10 @@
 	<about>
 		<title>Beating the Limitations of Camera-Monitor Mediated Telepresence With Extra Eyes</title>
 		<authors>
-			<author name="author1" email="author1@example.com" organization="MIT"/>
-			<author name="author2" email="author2@example.com" organization="CMU"/>
+			<author name="Kimiya Yamaashi" email="yamaashi@hrl.hitachi.co.jp" organization=""/>
+			<author name="Jeremy R. Cooperstock" email="jer@dgp.toronto.edu" organization=""/>
+			<author name="" email="tracyn@dgp.toronto.edu" organization=""/>
+			<author name="" email="bbuxton@aw.sgi.com" organization=""/>
 		</authors>
 	</about>
 	<section name="Abstract">
