@@ -288,7 +288,7 @@ class Generator(object):
             title = self.escape_special_characters(self.images[image_id]["caption"])
             figure_path = self.images[image_id]["src"]
             #print image_id, self.images[image_id]["width"], self.images[image_id]["height"]
-            figure_fraction_width = 0.9*217.0/self.images[image_id]["height"]
+            figure_fraction_width = 0.7*217.0/self.images[image_id]["height"]
             figure_fraction_width = min(figure_fraction_width, 312.0/self.images[image_id]["width"])
             figure_fraction_width = min(figure_fraction_width, 1)
             #print figure_fraction_width
