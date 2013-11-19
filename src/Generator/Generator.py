@@ -201,7 +201,8 @@ class Generator(object):
                              "<": "$<$",
                              ">": "$>$",
                              "&apos;": "'",
-                             "&": "\&"
+                             "&": "\&",
+                             "$": "\\$"
                             }
         for character in character_mapping:
             text = text.replace(character, character_mapping[character])
