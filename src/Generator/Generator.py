@@ -149,6 +149,7 @@ class Generator(object):
             new_img_name = os.path.join(self.tmp_dir_path, img_name + ".jpeg")
             image_file = Image.open(img_src)
             width, height = image_file.size
+            #print width, height
             #image_file = image_file.resize((300, 260), Image.ANTIALIAS)
             if image_file.mode != "RGB":
                 image_file = image_file.convert("RGB")
@@ -266,6 +267,7 @@ class Generator(object):
             figure_path = self.images[image_id]["src"]
             figure_fraction_width = 217.0/self.images[image_id]["height"]
             figure_fraction_width = min(figure_fraction_width, 312.0/self.images[image_id]["width"])
+            figure_fraction_width = min(figure_fraction_width, 1)
             slide = Slide(title=title,
                           figure=figure_path,
                           figure_fraction_width = figure_fraction_width,
