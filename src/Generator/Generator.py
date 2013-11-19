@@ -12,6 +12,7 @@ class Generator(object):
     """ Generator Class to generate slides from a XML file """
 
     def __init__(self, xml_file_path, out_dir_path, img_dir_path):
+        self.new_command = """{\\newauthor}[2]{\parbox{0.26\\textwidth}{\\texorpdfstring{\centering #1 \\\\{\scriptsize{\urlstyle{same}\url{#2}\urlstyle{tt}}}}{#1}}}"""
         self.MAXIMUM_CHARS_PER_SLIDE = 550
         self.MAXIMUM_CHARS_IN_CAPTION = 110
         self.xml_file_path = xml_file_path
@@ -36,7 +37,6 @@ class Generator(object):
         self.images_considered = []
         self.references = self.get_references_details()
         self.number_of_sections = self.get_number_of_sections()
-        self.new_command = """{\\newauthor}[2]{\parbox{0.26\\textwidth}{\\texorpdfstring{\centering #1 \\\\{\scriptsize{\urlstyle{same}\url{#2}\urlstyle{tt}}}}{#1}}}"""
 
     def generate(self):
         title = self.get_title()
@@ -48,6 +48,7 @@ class Generator(object):
         short_author = " " #self.get_short_author()
         #BeamerThemes: shadow, simula, hpl1, Pittsburgh, Rochester, Montpellier, CambridgeUS, Bergen, Antibes
         #ColorThemes: default, seahorse, beaver, lily, orchid
+        #print author_and_inst
         slides = BeamerSlides(title=title,
                               author_and_inst=author_and_inst,
                               toc_heading=toc_heading,
@@ -78,20 +79,26 @@ class Generator(object):
     def get_short_author(self):
         short_author = []
         about_element = self.xml_root.find("about")
+        if about_element == None:
+            return ""
         authors_element = about_element.find("authors")
         for author in authors_element.findall("author"):
-            short_author += [author.get("name").split()[0]]
+            short_author += [self.escape_special_characters(author.get("name").split()[0])]
         return ", ".join(short_author)
 
     def get_title(self):
         about_element = self.xml_root.find("about")
+        if about_element == None:
+            return "Title"
         title_element = about_element.find("title")
-        title = title_element.text
+        title = self.escape_special_characters(title_element.text)
         return title
 
     def get_authors_details(self):
         authors_details = []
         about_element = self.xml_root.find("about")
+        if about_element == None:
+            return [("Author", "Organization")]
         authors_element = about_element.find("authors")
         """
         authors = [author.get("name") for author in authors_element.findall("author")]
@@ -110,6 +117,7 @@ class Generator(object):
             author_name = author.get("name")
             if len(author_name.strip()) == 0:
                 author_name = "Author"
+            author_name = self.escape_special_characters(author_name)
             email = author.get("email")
             if len(email.strip()) == 0:
                 email = "email@email.com"
@@ -129,6 +137,8 @@ class Generator(object):
         #authors = authors_element.findall("author")
         #authors_details = [tuple(["Author1","a@b.com    c@d.com"])]
         #authors_details += [tuple(['Author1\\newline Author2',""])]
+        if len(authors_details) == 0:
+            return [("Author", "Organization")]
         return authors_details
 
     def get_author_and_email(self, author_name, email):
@@ -145,6 +155,8 @@ class Generator(object):
     def get_image_details(self):
         images = {}
         images_element = self.xml_root.find("images")
+        if images_element == None:
+            return images
         for image in images_element.findall("image"):
             _id = image.get("id")
             img_src = os.path.join(self.img_dir_path, image.get("src"))
@@ -176,6 +188,8 @@ class Generator(object):
     def get_references_details(self):
         references = {}
         references_element = self.xml_root.find("references")
+        if references_element == None:
+            return references
         for reference in references_element.findall("reference"):
             _id = reference.get("id")
             _text = reference.text
@@ -231,7 +245,7 @@ class Generator(object):
             current_references = []
             reference_ids = line.get("ref").split(",")
             for reference_id in reference_ids:
-                if not reference_id is None and len(reference_id) != 0 and len(self.references[reference_id]["text"]) != 0 and reference_id not in reference_ids_considered:
+                if not reference_id is None and len(reference_id) != 0 and reference_id in self.references and len(self.references[reference_id]["text"]) != 0 and reference_id not in reference_ids_considered:
                     current_references += ["\\tiny{" + self.escape_special_characters(self.references[reference_id]["text"]) + "}"]
                     reference_ids_considered += [reference_id]
             #reference = "\\\\\n".join(current_references)
@@ -269,6 +283,8 @@ class Generator(object):
     def get_slides_for_images(self, image_ids):
         slides = []
         for image_id in image_ids:
+            if image_id not in self.images:
+                continue
             title = self.escape_special_characters(self.images[image_id]["caption"])
             figure_path = self.images[image_id]["src"]
             #print image_id, self.images[image_id]["width"], self.images[image_id]["height"]
