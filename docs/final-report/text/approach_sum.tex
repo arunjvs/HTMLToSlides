@@ -63,7 +63,7 @@ other potential keywords, according to Algorithm \ref{algo_set_expand}.
 	}
   }
   \For{pair in pairs}{
-	\If{frequency > threshold}{
+	\If{frequency $>$ threshold}{
 		$expandedKeywordsSet \leftarrow pair.token$
 	}  
   }
@@ -72,8 +72,13 @@ other potential keywords, according to Algorithm \ref{algo_set_expand}.
 \end{algorithm}
 
 \subsubsection{Summarizing Conclusion}
+Summarizing conclusion requires us to select sentences that mention the
+major contributions of the paper, along with its consequences and implications.
+Here we use the approach as proposed in \cite{sravanthi}. We define a set of words	
+such as ["proposed", "shown", "contributed", concluded"] and so on, that 
+are present in important sentences in conclusion. We compute TF-IDF based cosine similarity of
+each conclusion sentence with the above set, and select the top  $n$.
 
-\subsection{Selecting images, references}
-
-\newpage
-\vspace{40mm}
+\subsubsection{Selecting images, references}
+We select graphics for display in the slides only if the sentence referring to that graphic
+gets selected.
