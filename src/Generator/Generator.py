@@ -29,6 +29,7 @@ class Generator(object):
         self.xml_tree = ET.parse(self.xml_file_path)
         self.xml_root = self.xml_tree.getroot()
         self.images = self.get_image_details()
+        self.images_considered = []
         self.references = self.get_references_details()
         self.number_of_sections = self.get_number_of_sections()
         self.new_command = """{\\newauthor}[2]{\parbox{0.26\\textwidth}{\\texorpdfstring{\centering #1 \\\\{\scriptsize{\urlstyle{same}\url{#2}\urlstyle{tt}}}}{#1}}}"""
@@ -103,13 +104,22 @@ class Generator(object):
         """
         for author in authors_element.findall("author"):
             author_name = author.get("name")
+            if len(author_name.strip()) == 0:
+                author_name = "Author"
             email = author.get("email")
+            if len(email.strip()) == 0:
+                email = "email@email.com"
             author_and_email = self.get_author_and_email(author_name, email)
             #details = [author_and_email]
-            details = ["\\newauthor{" + author.get("name") + "}{" + email + "}"]
+            details = ["\\newauthor{" + author_name + "}{" + email + "}"]
             #details = [author.get("name")]# + "\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Email: " + "email@email.com"]
             #details = ["\\texorpdfstring{Author\\newline\url{email@email.com}}{Author}"]
-            details += author.get("organization").split()
+            organizations = []
+            if len(author.get("organization").strip()) == 0:
+                organizations = ["Organization"]
+            else:
+                organizations = author.get("organization").split()
+            details += organizations
             authors_details += [tuple(details)]
         
         #authors = authors_element.findall("author")
@@ -138,6 +148,8 @@ class Generator(object):
             img_name = os.path.splitext(img_name)[0]
             new_img_name = os.path.join(self.tmp_dir_path, img_name + ".jpeg")
             image_file = Image.open(img_src)
+            width, height = image_file.size
+            #image_file = image_file.resize((300, 260), Image.ANTIALIAS)
             if image_file.mode != "RGB":
                 image_file = image_file.convert("RGB")
             image_file.save(new_img_name, "JPEG")
@@ -148,7 +160,9 @@ class Generator(object):
             _alt = image.get("alt")
             images[_id] = {"src": _src,
                            "caption": _caption,
-                           "alt": _alt
+                           "alt": _alt,
+                           "width": width,
+                           "height": height
                           }
         return images
 
@@ -180,11 +194,14 @@ class Generator(object):
     def escape_special_characters(self, text):
         character_mapping = {"%": "\\%", 
                              "#": "\\#", 
-                             "&quot": "\"", 
-                             "&amp": "&", 
-                             "&lt": "<", 
-                             "&gt": ">",
-                             "&apos": "'"
+                             "&quot;": "\"", 
+                             "&amp;": "\\&", 
+                             "&lt;": "$<$", 
+                             "&gt;": "$>$",
+                             "<": "$<$",
+                             ">": "$>$",
+                             "&apos;": "'",
+                             "&": "\&"
                             }
         for character in character_mapping:
             text = text.replace(character, character_mapping[character])
@@ -197,6 +214,7 @@ class Generator(object):
         lines_considered = []
         image_ids = []
         references = "\\bigskip"
+        reference_ids_considered = []
         for line in lines:
             line_text = self.escape_special_characters(line.text);
             if line_text is None or len(line_text) == 0:
@@ -205,8 +223,9 @@ class Generator(object):
             current_references = []
             reference_ids = line.get("ref").split(",")
             for reference_id in reference_ids:
-                if not reference_id is None and len(reference_id) != 0 and len(self.references[reference_id]["text"]) != 0:
-                    current_references += ["\\tiny{" + self.references[reference_id]["text"] + "}"]
+                if not reference_id is None and len(reference_id) != 0 and len(self.references[reference_id]["text"]) != 0 and reference_id not in reference_ids_considered:
+                    current_references += ["\\tiny{" + self.escape_special_characters(self.references[reference_id]["text"]) + "}"]
+                    reference_ids_considered += [reference_id]
             #reference = "\\\\\n".join(current_references)
             reference = "\\vspace*{1\\baselineskip}".join(current_references)
             if total_chars + line_length + len(reference)/2 > self.MAXIMUM_CHARS_PER_SLIDE:
@@ -219,13 +238,18 @@ class Generator(object):
                 total_chars = 0
                 image_ids = []
                 references = "\\bigskip"
+                reference_ids_considered = []
             total_chars = total_chars + line_length
             lines_considered += [line_text]
             image_id = line.get("img")
             if not reference is None and len(reference) != 0:
                 references = references + "\\vspace*{1\\baselineskip}" + reference
             if not image_id is None and len(image_id) != 0:
-                image_ids += image_id.split(",")
+                current_image_ids = image_id.split(",")
+                for current_image_id in current_image_ids:
+                    if current_image_id not in self.images_considered:
+                        image_ids += [current_image_id]
+                        self.images_considered += [current_image_id]
         if len(lines_considered) > 0:
             slide = Slide(title,
                           [BulletList(lines_considered), Text(text=references)]
@@ -239,9 +263,11 @@ class Generator(object):
         for image_id in image_ids:
             title = self.escape_special_characters(self.images[image_id]["caption"])
             figure_path = self.images[image_id]["src"]
+            figure_fraction_width = 217.0/self.images[image_id]["height"]
+            figure_fraction_width = min(figure_fraction_width, 312.0/self.images[image_id]["width"])
             slide = Slide(title=title,
                           figure=figure_path,
-                          figure_fraction_width = 0.5
+                          figure_fraction_width = figure_fraction_width,
                          )
             slides += [slide]
         return slides
