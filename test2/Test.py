@@ -14,34 +14,34 @@ Papers = [
   "Papers/Levy/lev_txt.htm",
   "Papers/Yamaashi/ky_txt.htm",
   "Papers/Bowers/jb_txt.htm",
-  "Papers/Raman/paper.html",                     #BAD FORMAT: Multipage document
+  #"Papers/Raman/paper.html",                     #BAD FORMAT: Multipage document
   "Papers/Mereu/rnk-txt.htm",
   "Papers/Robertson/spr_txt.htm",
   "Papers/Chatty/sc_txt.htm",
-  "Papers/Oviatt/slo_txt.htm",
+  #"Papers/Oviatt/slo_txt.htm",                   #BAD FORMAT: Multipage document
   "Papers/Rice/jpr_txt.htm",
-  "Papers/Card/skc1txt.html",
+  #"Papers/Card/skc1txt.html",                    #BAD FORMAT: Incompletely downloaded html
   "Papers/Pirolli_2/pp2.html",
   "Papers/Noma/nh_txt.html",
   "Papers/Stafford-Fraser/qsf_txt.htm",
   "Papers/Darken/Rpd_txt.htm",
   "Papers/Karsenty/lk_txt.htm",
   "Papers/Hansen/hb_txt.html",
-  "Papers/Marx/mtm_txt.htm",
+  #"Papers/Marx/mtm_txt.htm",                     #BAD FORMAT: No heading hierarchy
   "Papers/Roy/paper.html",
   "Papers/Eisenberg/me_txt.htm",
-  "Papers/Soloway/es_txt.htm",                   #BAD FORMAT: No heading hierarchy
+  #"Papers/Soloway/es_txt.htm",                   #BAD FORMAT: No heading hierarchy
   "Papers/Pane/jfp_txt.htm",
   "Papers/Koenemann/jk1_txt.htm",
   "Papers/Pirolli/pp_txt.htm",
-  "Papers/Plaisant/cps1txt.htm",                 #BAD FORMAT: Bad heading hierarchy
-  "Papers/Hartson/hrh_txt.htm",
+  #"Papers/Plaisant/cps1txt.htm",                 #BAD FORMAT: Bad heading hierarchy
+  #"Papers/Hartson/hrh_txt.htm",                  #BAD FORMAT: Heading Tag Nesting Broken
   "Papers/Virzi/RAVtext.htm",
   "Papers/Kasik/djk_txt.htm",
-  "Papers/Wolber/dww_txt.htm",                   #BAD FORMAT: No author details
-  "Papers/Myers/bam_com.htm",
+  #"Papers/Wolber/dww_txt.htm",                   #BAD FORMAT: No author details
+  #"Papers/Myers/bam_com.htm",                    #BAD FORMAT: No author email
   "Papers/Ackerman/ack_txt.htm",
-  "Papers/Whittaker/sw_txt.htm",
+  #"Papers/Whittaker/sw_txt.htm",                 #BAD FORMAT: Incompletely downloaded html
   "Papers/Kraut/rek_txt.htm",
   "Papers/Graham/edg_txt.htm",
   "Papers/Mithal/Akm_txt.htm",
@@ -50,12 +50,12 @@ Papers = [
   "Papers/Kitajima/mk_txt.htm",
   "Papers/Bhavnani/bs_txt.htm",
   "Papers/Page/srp_txt.htm",
-  "Papers/Ishizaki/si_bdy.htm",
+  #"Papers/Ishizaki/si_bdy.htm",                  #BAD FORMAT: No heading hierarchy
   "Papers/Terveen/lgt_txt.htm",
   "Papers/Gale/srg_txt.htm",
-  "Papers/Miller/am_txt.htm",                    #BAD FORMAT: No heading hierarchy
+  #"Papers/Miller/am_txt.htm",                    #BAD FORMAT: No heading hierarchy
   "Papers/Sawyer/ps_txt.htm",
-  "Papers/Kamba/tk_txt.htm",                     #BAD FORMAT: No author email; Abstract & Keywords not in a heading
+  #"Papers/Kamba/tk_txt.htm",                     #BAD FORMAT: No author email; Abstract & Keywords not in a heading
   "Papers/Harrison/blh_txt.htm",
   "Papers/Douglas/sad_txt.htm",
   "Papers/Tweedie/lt1txt.htm",
@@ -73,7 +73,7 @@ def printUsage():
 	exit(-1)
 
 def runHTMLToSlides(fileName):
-	sys.stdout.write(fileName+": ")
+	sys.stdout.write(fileName+"\n")
 	sys.stdout.flush()
 	#Parser
 	ParserTarget = re.sub("^Papers\/", "Parser/",fileName)
@@ -86,12 +86,12 @@ def runHTMLToSlides(fileName):
 	SummarizerTarget = re.sub("\.html?$", ".xml", SummarizerTarget)
 	SummarizerTargerDir = os.path.dirname(SummarizerTarget)
 	os.system("mkdir -p '%s'"%SummarizerTargerDir)
-	os.system("%s '%s' '%s'"%(SummarizerExecutable, ParserTarget, SummarizerTarget))
+	#os.system("%s '%s' '%s'"%(SummarizerExecutable, ParserTarget, SummarizerTarget))
 	#Generator
 	GeneratorTarget = re.sub("^Papers\/", "Generator/",fileName)
 	GeneratorTarget = os.path.dirname(GeneratorTarget)
 	os.system("mkdir -p '%s'"%GeneratorTarget)
-	os.system("%s '%s' '%s' '%s'"%(GeneratorExecutable,SummarizerTarget,GeneratorTarget, os.path.dirname(fileName)))
+	#os.system("%s '%s' '%s' '%s'"%(GeneratorExecutable,SummarizerTarget,GeneratorTarget, os.path.dirname(fileName)))
 
 if(len(sys.argv)==2):
 	if(sys.argv[1]=="extract"): os.system("tar xf Papers.tar.gz")

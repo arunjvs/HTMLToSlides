@@ -36,6 +36,7 @@ class Parser(object):
     self.xmlFileHandle.write('\t</references>\n')
     self.xmlFileHandle.write('</doc>\n')
     self.xmlFileHandle.close()
+    sys.stdout.write("Parsing Successful\n")
     return 0
 
   def htmlNormalizer(self, s):
@@ -92,7 +93,7 @@ class Parser(object):
     #Get images and captions
     imageCaptions = ["figure", "image", "fig", "graph", "table"]
     imageCaptionsRegex = "|".join(imageCaptions)
-    regex = '\<\s*\/?\s*img(\s+[^\>]*)?\/?\>(\s*((' + imageCaptionsRegex + ')\s*[\.0-9a-zA-Z])+[^\n]*)?'
+    regex = '\<\s*\/?\s*img(\s+[^\>]*)?\/?\>(\s*((' + imageCaptionsRegex + ')\s*[\.0-9a-zA-Z]+)[^\n]*)?'
     s = re.sub(regex, self.imgSplitter, s, flags=re.IGNORECASE)
     #Condense multiple spaces and newlines independently to preserve semantic seperation
     s = re.sub(' +', ' ', s)
@@ -102,11 +103,10 @@ class Parser(object):
 
   def xmlNormalizer(self, s):
     s = re.sub('\<[^\>]*\>', '', s)
-    remapEncodings = [
+    unescapeEncodings = [
       #These stay as it is (http://en.wikipedia.org/wiki/List_of_XML_and_HTML_character_entity_references):
-      ['"', '&quot;'],['\'', '&apos;'],['& ', '&amp; '],['<', '&lt;'],['>', '&gt;'],
-      #Lower case convert
-      ['&quot;', '&quot;'],['&apos;', '&apos;'],['&amp;', '&amp;'],['&lt;', '&lt;'],['&gt;', '&gt;'],
+      #First unescape them
+      ['&quot;', '"'],['&apos;', '\''],['&amp;', '&'],['&lt;', '<'],['&gt;', '>'],
       #These get replaced with closest ascii:
       ['&#128;', 'E'],
       ['&#129;', ' '],
@@ -137,15 +137,17 @@ class Parser(object):
       ['&nbsp;', ' '],
       ['&ouml;', 'o'],
       ['&szlig;', 'B'],
-      ['&uuml;', 'u']
+      ['&uuml;', 'u'],
     ]
-    for remap in remapEncodings:
+    for remap in unescapeEncodings:
+      s = re.sub(re.escape(remap[0])+'?', remap[1], s, flags=re.IGNORECASE)
+    #Escape stray ampersands
+    s = re.sub('\&', '&amp;', s)
+    #Re-escape them
+    escapeEncodings = [['"', '&quot;'], ['\'', '&apos;'], ['<', '&lt;'], ['>', '&gt;']]
+    for remap in escapeEncodings:
       s = re.sub(re.escape(remap[0]), remap[1], s, flags=re.IGNORECASE)
-    errorEncodings = [ '(\&quot)([^\;$])', '(\&apos)([^\;$])','(\&amp)([^\;$])','(\&lt)([^\;$])', '(\&gt)([^\;$])']
-    for error in errorEncodings:
-      s = re.sub(error, lambda x: x.group(1)+';'+x.group(2), s, flags=re.IGNORECASE)
     s = re.sub('\s+', ' ', s).strip()
-    #s = re.sub('&', '', s, flags=re.IGNORECASE)
     #ASCII Printable Characters Filter
     fs = ''
     for c in s:
@@ -154,7 +156,8 @@ class Parser(object):
 
   def titleNormalizer(self, s):
     nonTitles = {"a", "and", "at", "by", "for", "from", "in", "is", "of", "on", "the", "to"}
-    s = re.sub('^[^a-zA-Z]*','',s)
+    s = re.sub('^[^a-zA-Z]*','',s.strip())
+    s = re.sub('\:$','',s)
     s = re.sub('\s+', ' ', s)
     title = []
     for word in s.strip().split():
