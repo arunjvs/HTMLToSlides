@@ -14,6 +14,7 @@
 % egpaper.aux before re-running latex.  (Or just hit 'q' on the first latex
 % run, let it finish, and you should be clear).
 \usepackage[breaklinks=true,bookmarks=false]{hyperref}
+\newcommand*\samethanks[1][\value{footnote}]{\footnotemark[#1]}
 
 \cvprfinalcopy % *** Uncomment this line for the final submission
 
@@ -27,22 +28,19 @@
 %%%%%%%%% TITLE
 \title{Generating Slides from HTML pages}
 
-\author{Arun JVS\\
-IIIT-H\\
-{\tt\small firstauthor@i1.org}
+\author{Arun JVS\thanks{IIIT, Hyderabad}\\
+{\tt\small arun.jvs\thanks{@students.iiit.ac.in}}
 % For a paper whose authors are all at the same institution,
 % omit the following lines up until the closing ``}''.
 % Additional authors and addresses can be added with ``\and'',
 % just like the second author.
 % To save space, use either the email address or home page, not both
 \and
-Rohit Girdhar\\
-IIIT-H\\
-{\tt\small secondauthor@i2.org}
+Rohit Girdhar\samethanks[1]\\
+{\tt\small rohit.girdhar\samethanks[2] }
 \and
-Sudheer Kumar\\
-IIIT-H\\
-{\tt\small secondauthor@i2.org}
+Sudheer Kumar\samethanks[1]\\
+{\tt\small sai.shanka\samethanks[2] }
 }
 
 \maketitle
