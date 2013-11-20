@@ -1,4 +1,57 @@
 \subsection{Parsing}
-Some cool stuff about parsing
-\newpage
-\vspace{50mm}
+
+The parser is the frontend of the system as a whole, and requires to be robust
+against a wide range of input HTML styles. While broken html tag structure
+itself can be repaired upto some extent by tools like tidylib, the need to
+construct a structured xml from the HTML itself required us to write our own
+parser. This is because a standard parser will either output a stream of HTML
+tags or a DOM tree - both of which make it difficult for the parser to see a
+continuous context of data, split across too many tokens or tag depths. The
+parser would then become a complex state machine travelling the tag stream or
+the DOM tree back and forth, simply blowing up the complexity. Instead, our
+self-written parser does a constant number of stateless runs, each linear in
+the size of the HTML data. The parser can handle a variety of non-uniform heading
+hierarchies, match images with neighbouring captions, smoothly identify lines from
+paragraphs, and tag lines with images and references they refer to. In each of the
+continuing subsection we will see how each pass of the parser accomplishes one or
+more of these tasks.
+
+\subsubsection{HTML Sanitizing and Image Extraction}
+
+In this run we apply various filters to clean the input HTML. This includes
+removing comments, scripts, cropping to the body tag only, removing non-emphasizing
+font modifiers and condensing multiple whitespaces and whitespace tags.
+We also identify images and search for possible captions in their spacial
+neighbourhood. All these are kept in an in-memory list, containing their id, source
+path, their "alt" text and the caption text. This list will be used later, to tag
+lines inside paragraphs with images they refer to.
+
+\subsubsection{Recursive Section Hierarchy Construction}
+
+In this run, we take the cleaned HTML, and search for all instances of heading
+tags (starting at Level1 - $<$h1$>$), extract the heading name, and range of text
+inside the heading. We start a new section tag in the xml, and write the list of lines
+under this heading, and then recursively do this for the next heading level (Level2 - $<$h2$>$),
+and then close the tag. The first section is searched for the title of the paper, as well as
+author details like their name, email, etc.. The keywords section is handled specially, and put
+at the end in a seperate keywords tag in the xml, due to its importance in summarization.
+The actual recursion is slightly more complex and two-dimensional due to the need to maintain
+two heading levels - the literal HTML tag level, and the structural level. This handles the
+non-uniform heading hierarchy problem.
+
+\subsubsection{Line Splitting and Tagging}
+
+After obtaining appropriate section splits, we tokenize them into lines, reducing the job of the
+summarizer to a selection algorithm on these lines, keeping the most informative and important
+content. Lines are first speculatively split using the string ". " (i.e. a dot followed by a space).
+However it causes broken lines in many situations - like after acronyms (e.g. , v.s., ), inside
+names (John L. Peterson), sentences inside quotations ("), numbered points (1. ), etc.. A line
+smoothener uses various features like the length of previous sentence and current sentences,
+the number of words in previous sentence and current sentence, the parity of the count or the matching
+of quotations, apostrophies or paranthesis in the previous line, etc.. to suggest a merger of the two
+lines. This kind of smoothening ensures that only complete and sensible lines appear in the final
+presentation, adding to both its completeness and aesthetics.
+
+Lines are also searched for references to images, by comparing them with the image alt texts
+or captions, and matching image IDs are added as their attributes. References inside lines
+(number sequences inside square brackets), are removed and also added as attributes.
