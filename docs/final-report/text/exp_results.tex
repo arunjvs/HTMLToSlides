@@ -1,2 +1,84 @@
 what metric was used for evaluation, experimental settings, accuracy, plots (if any), tables.
-\clearpage
+
+Since the quality of the output of our solution is defined
+in highly subjective terms, we couldn't use any quantitative metric
+directly to evaluate our results. Hence we did user evaluation by reading
+the papers and rating the presentations generated for those papers.
+We selected a set of 10 papers randomly, and gave scores (out of 10) on following 
+parameters:
+\begin{itemize}
+	\item Q1: Information coverage by presentation
+	\item Q2: Coherence between slides
+	\item Q3: Amount of change required (to finalize)
+	\item Q4: Overall satisfaction
+\end{itemize}
+The average response is summarized in Table~\ref{tbl1:users}.
+
+\begin{table}
+\begin{center}
+\caption{User Satisfaction Survey}
+\begin{tabular}{| l | l | l | l | l |}
+\hline
+User & Q1 & Q2 & Q3 & Q4 \\ \hline
+User 1 & X & X & X & X \\ 
+User 2 & X & X & X & X \\ 
+User 3 & X & X & X & X \\ \hline
+Average & X & X & X & X \\ \hline
+\end{tabular}
+\label{tbl1:users}
+\end{center}
+\end{table}	
+
+
+\subsection{Inter-Judge Similarity}
+We use the Fleiss' $\kappa$ measure to estimate the inter judge similarity
+(since the common Cohen's $\kappa$ measure only works for binary categorization
+of input, whereas we want to give scores out of 10).
+Each cell of the table gives the number of users who gave score $i$ on 
+parameter $j$. Let $N$ be the total number of parameters
+and $n$ be the number of ratings for each parameters, and $n_{ij}$
+represents number of raters who gave score $i$ on parameter $j$.
+For each row, $P_j$, proportion of assignments to $j^{th}$ score, is defined as:
+\[
+	P_j = \frac{1}{Nn} \sum_{i=1}^{N} n_{ij}
+\]
+For each column, $P_i$ gives the extent to which the raters agree for $i^{th}$ subject
+\[
+	P_i = \frac{1}{n(n-1)} \left[ \left( \sum_{j=1}^{k} n_{ij}^{2} \right) - \left( n \right) \right]
+\]
+The above values are summarized in Table~\ref{tbl1:kappa}.
+Now, to calculate $\kappa$, we need,
+\[
+	\bar{P} = \frac{1}{N} \sum_{i=1}^{N} P_i = \frac{1}{10} \left( add + add + \cdots add \right) = res
+\]
+and
+\[
+	\bar{P_e} = \sum_{1}^{k} P_j^2 = add + add + \cdots + add = res	
+\]
+Hence, 
+\[
+	\kappa = \frac {\bar{P} - \bar{P_e}} {1 - \bar{P_e}} = \frac{val - val}{1 - val} = res
+\]
+This value of $\kappa$ shows there was good agreement between the judges.
+
+\begin{table}
+\begin{center}
+\caption{Inter-Judge Agreement}
+\begin{tabular}{| l || l | l | l | l || l | l |}
+\hline
+Score & Q1 & Q2 & Q3 & Q4 & Total & $P_j$\\ \hline
+1 & 0 & 0 & 0 & 0 & 0 & X \\ 
+2 & 0 & X & X & X & X & X \\
+3 & X & X & X & X & X & X \\
+4 & X & X & X & X & X & X \\
+5 & X & X & X & X & X & X \\
+6 & X & X & X & X & X & X \\
+7 & X & X & X & X & X & X \\
+8 & X & X & X & X & X & X \\
+9 & X & X & X & X & X & X \\
+10 & X & X & X & X & X & X \\ \hline
+$P_i$ & X & X & X & X &  &  \\ \hline
+\end{tabular}
+\label{tbl1:kappa}
+\end{center}
+\end{table}	
