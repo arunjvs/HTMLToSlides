@@ -1,2 +1,48 @@
 \subsection{Slides Generation}
-\newpage
+
+The third step in the slide generation process is generation of slides using 
+the content returned by the summarizing step. The summarizing step summarizes 
+the content of the paper and returns the important sentences to be included in the slides.
+The Generator takes these sentences along with the images and references, which these
+sentences are referring to, and creates slides using them.
+
+The number of slides will depend on the total number of characters in the sentences selected.
+We ensure that there is atleast one dedicated slide for each section and subsection.
+The order of slides is same as the order of sections/subsections in the paper.
+All the slides are assigned same title as their corresponding section title.
+If there is a slide having a sentence which is referring to any graphical element, then
+corresponding element will be displayed in the slide next to this. And if in a slide,
+there are lines referring to other documents/links, then these references are displayed
+at the bottom of the same slide. An overview of how the lines are included in the
+slides is presented in the Algorithm \ref{slide_generation}.
+
+\begin{algorithm}[H]\label{slide_generation}
+ \SetLine % For v3.9
+ \KwData{selectedLinesSet, title }
+ \KwResult{sequenceOfSlides }
+ \caption{Slide Generation}
+ $n$ = maximum number of characters per slide\\
+ $linesConsideredSet$ = []\\
+ $imagesSet$ = []\\
+ $referencesSet$ = []\\
+ \For{line in selectedLinesSet}{
+ 	\If{len(linesConsideredSet + line) $>$ n}{
+ 		Create a $slide$\\
+ 		Set the $title$ of the $slide$\\
+ 		Add the $linesConsideredSet$ to the $slide$\\
+ 		Add the $referencesSet$ at the bottom of the $slide$\\
+ 		Append the $slide$ to the output presentation\\
+ 	\For{image in imagesSet}{
+ 		Create a $slide$ for the image\\
+ 		Append the $slide$ to the output presentation\\
+	} 	
+ 	}
+ 	$linesConsidered \leftarrow line$\\
+ 	$referencesSet \leftarrow $ references, the line citing to\\
+ 	$imagesSet \leftarrow $ images, the line referring to
+ }
+ \If{linesConsideredSet is not Empty}{
+ 	create a $slide$ for the lines remaining in the $linesConsideredSet$\\
+ 	Append the $slide$ to the output presentation
+ }
+\end{algorithm}
