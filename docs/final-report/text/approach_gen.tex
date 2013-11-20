@@ -16,11 +16,11 @@ there are lines referring to other documents/links, then these references are di
 at the bottom of the same slide. An overview of how the lines are included in the
 slides is presented in the Algorithm \ref{slide_generation}.
 
-\begin{algorithm}[H]\label{slide_generation}
+\begin{algorithm}[H]
  \SetLine % For v3.9
  \KwData{selectedLinesSet, title }
  \KwResult{sequenceOfSlides }
- \caption{Slide Generation}
+ \caption{Slide Generation}\label{slide_generation}
  $n$ = maximum number of characters per slide\\
  $linesConsideredSet$ = []\\
  $imagesSet$ = []\\
