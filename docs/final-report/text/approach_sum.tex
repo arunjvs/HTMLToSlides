@@ -8,6 +8,27 @@ that are most informative, and would be most relevant for a presentation. We app
 different heuristic techniques to summarize different parts of the paper, as discussed
 in following sections.
 
+\begin{algorithm}[H]\label{algo_set_expand}
+ \SetLine % For v3.9
+ \KwData{allLinesSet, keywordsSet }
+ \KwResult{expandedKeywordsSet }
+ pairs = []\\
+ \For{line in lines}{
+  \If{line contains any keyword}{
+    \For{token in line.tokenized}{
+	  $pairs \leftarrow (token, keyword)$
+	}
+  }
+  \For{pair in pairs}{
+	\If{frequency $>$ threshold}{
+		$expandedKeywordsSet \leftarrow pair.token$
+	}  
+  }
+ }
+ \caption{Keyword Set Expansion}
+\end{algorithm}
+
+
 \subsubsection{Summarizing Introduction}
 Introduction is an important section that introduces the problem, the motivation to solving it
 and gives an overall direction towards the solution, along with discussion an overview of
@@ -21,6 +42,8 @@ We consider the central part of the paper, with the approach, results, analysis 
 to be the model part of the paper, that contains the bulk of information content.
 The information itself may be divided into multiple subsections and bulleted points,
 and may contain images, tables, mathematical proofs/expressions etc.
+
+
 
 Based on our experiments, we observed that the sections tree structure as extracted
 by the parser is an important part of the paper, and we include each of the sections
@@ -51,25 +74,6 @@ subset of sentences, hence we propose an algorithm to expand that set
 using the paper itself. We use co-occurrence probabilities to compute the
 other potential keywords, according to Algorithm \ref{algo_set_expand}. 
 
-\begin{algorithm}[H]\label{algo_set_expand}
- \SetLine % For v3.9
- \KwData{allLinesSet, keywordsSet }
- \KwResult{expandedKeywordsSet }
- pairs = []\\
- \For{line in lines}{
-  \If{line contains any keyword}{
-    \For{token in line.tokenized}{
-	  $pairs \leftarrow (token, keyword)$
-	}
-  }
-  \For{pair in pairs}{
-	\If{frequency $>$ threshold}{
-		$expandedKeywordsSet \leftarrow pair.token$
-	}  
-  }
- }
- \caption{Keyword Set Expansion}
-\end{algorithm}
 
 \subsubsection{Summarizing Conclusion}
 Summarizing conclusion requires us to select sentences that mention the

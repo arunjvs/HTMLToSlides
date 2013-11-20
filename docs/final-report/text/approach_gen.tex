@@ -13,36 +13,4 @@ All the slides are assigned same title as their corresponding section title.
 If there is a slide having a sentence which is referring to any graphical element, then
 corresponding element will be displayed in the slide next to this. And if in a slide,
 there are lines referring to other documents/links, then these references are displayed
-at the bottom of the same slide. An overview of how the lines are included in the
-slides is presented in the Algorithm \ref{slide_generation}.
-
-\begin{algorithm}[H]
- \SetLine % For v3.9
- \KwData{selectedLinesSet, title }
- \KwResult{sequenceOfSlides }
- \caption{Slide Generation}\label{slide_generation}
- $n$ = maximum number of characters per slide\\
- $linesConsideredSet$ = []\\
- $imagesSet$ = []\\
- $referencesSet$ = []\\
- \For{line in selectedLinesSet}{
- 	\If{len(linesConsideredSet + line) $>$ n}{
- 		Create a $slide$\\
- 		Set the $title$ of the $slide$\\
- 		Add the $linesConsideredSet$ to the $slide$\\
- 		Add the $referencesSet$ at the bottom of the $slide$\\
- 		Append the $slide$ to the output presentation\\
- 	\For{image in imagesSet}{
- 		Create a $slide$ for the image\\
- 		Append the $slide$ to the output presentation\\
-	} 	
- 	}
- 	$linesConsidered \leftarrow line$\\
- 	$referencesSet \leftarrow $ references, the line citing to\\
- 	$imagesSet \leftarrow $ images, the line referring to
- }
- \If{linesConsideredSet is not Empty}{
- 	create a $slide$ for the lines remaining in the $linesConsideredSet$\\
- 	Append the $slide$ to the output presentation
- }
-\end{algorithm}
+at the bottom of the same slide.
