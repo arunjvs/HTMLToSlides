@@ -1,5 +1,6 @@
-HTML to Slides
-==============
+HTMLToSlides
+============
+Automatically summarize HTML Paper to Presentation
 
 Requirements
 ------------
